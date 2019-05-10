@@ -1,49 +1,52 @@
-
-
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button>
-        <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
-      </ion-menu-button>
-    </ion-buttons>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button>
+                <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+            </ion-menu-button>
+        </ion-buttons>
 
-    <ion-buttons slot="end">
-     
-      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
-        <ion-icon name="cart"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+        <ion-buttons slot="end">
 
-    <ion-title>Home</ion-title>
-  </ion-toolbar>
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+                <ion-icon name="cart"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+        <ion-title>Início</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 
-<ion-content fullscreen *ngIf = "shops">
+<ion-content fullscreen *ngIf="shops">
 
 
-<div class="movies-flex" *ngIf="shops">
-    <div class="movie" *ngFor="let cats of shops" >
-      <div class="poster" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">
-   
-		<img  class="poster-effect" [src]="cats.firebase_url">
-      </div>
-      <div class="title" >{{cats.title }}
-	  
-			 <div class="vote1"><ion-icon name="phone-portrait" expand="icon-only" (click)="call(cats)"></ion-icon></div>
-	  <div class="vote2"><ion-icon name="locate" expand="icon-only" [routerLink]="['/restaurant-map', {lat: cats.lat, long: cats.long,img: cats.img,title: cats.title, id: cats.id}]"></ion-icon></div>
-	  <div class="vote3"><ion-icon name="chatbubbles" expand="icon-only" (click)="chat(cats)"></ion-icon></div>
-	  <div class="vote4"><ion-icon name="time" expand="icon-only"></ion-icon></div>
-	  
-	  
-	  </div>
-      <div class="year" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">{{ cats.title}}</div>
-	  
-     
-	  
-	  
-	  <!--
+    <div class="movies-flex" *ngIf="shops">
+        <div class="movie" *ngFor="let cats of shops">
+            <div class="poster" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">
+
+                <img class="poster-effect" [src]="cats.firebase_url">
+            </div>
+            <div class="title">{{cats.title }}</div>
+            <div class="vote1">
+                <ion-icon name="phone-portrait" expand="icon-only" (click)="call(cats)"></ion-icon>
+            </div>
+            <div class="vote2">
+                <ion-icon name="locate" expand="icon-only" [routerLink]="['/restaurant-map', {lat: cats.lat, long: cats.long,img: cats.img,title: cats.title, id: cats.id}]"></ion-icon>
+            </div>
+            <div class="vote3">
+                <ion-icon name="chatbubbles" expand="icon-only" (click)="chat(cats)"></ion-icon>
+            </div>
+            <div class="vote4">
+                <ion-icon name="time" expand="icon-only"></ion-icon>
+            </div>
+
+            <div class="year" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">{{ cats.title}}</div>
+
+
+
+
+            <!--
 	  <div class="vote">
 			<ion-icon name="phone-portrait" expand="icon-only" color="light" (click)="call(cats)"> </ion-icon>
 			<ion-icon name="locate" expand="icon-only" color="light" [routerLink]="['/restaurant-map', {lat: cats.lat, long: cats.long,img: cats.img,title: cats.title, id: cats.id}]"> </ion-icon>
@@ -52,12 +55,12 @@
 			
 		</div>
 	  -->
+        </div>
     </div>
-  </div>
-  
-  
-  
-  <!--
+
+
+
+    <!--
   
   <div class="top-slide" *ngFor="let cats of shops">
 		<div class="wrap-slide" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">
@@ -93,8 +96,8 @@
 	</div>
 	
 	-->
-	
-	<!--
+
+    <!--
   
   <div class="top-slide" *ngFor="let cats of shops">
 		<div class="wrap-slide">
@@ -119,9 +122,9 @@
 	</div>
 
 	-->
-	
-	
-	<!--
+
+
+    <!--
 	
 	<ion-grid no-padding *ngIf="shops">
 	
@@ -161,9 +164,9 @@
   </ion-grid>
   
   -->
-  
-  
-  <!--
+
+
+    <!--
 	
 
   <ion-row>
@@ -236,6 +239,6 @@
 
 
 
-	
+
 
 </ion-content>

@@ -1,28 +1,35 @@
-.item-cart{
-	display: flex;
-	align-items: center;
-	border-bottom: 1px solid #ebebeb;
-	.thumb{
-		width: 60px;
-		height: 70px;
-		img{
-			height: 100%;
-			min-width: 100%;
-		}
-	}
-	.description{
-		flex: 10;
-	}
-	.quantity{
-		flex: 1;
-		input{
-			width: 30px;
-			margin-top: 6px;
-			margin-bottom: 6px;
-		}
-	}
+.item-cart {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ebebeb;
+    .thumb {
+        width: 60px;
+        height: 70px;
+        img {
+            height: 100%;
+            min-width: 100%;
+        }
+    }
+    .description {
+        flex: 10;
+    }
+    .quantity {
+        flex: 1;
+        input {
+            width: 30px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+    }
 }
-.transaction-fee{
-	display: flex;
-	align-items: center;
+
+.transaction-fee {
+    display: flex;
+    align-items: center;
+}
+
+.centered {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }

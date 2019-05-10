@@ -31,17 +31,17 @@ export const environment = {
 		name: 'Restaurants',
 		path: '/home',
 		component: 'HomePage',
-		icon: 'restaurant',
+		icon: 'md-home',
 	},{
 		name: 'MyCart',
 		path: '/cart',
 		component: 'CartPage',
-		icon: 'md-basket',
+		icon: 'md-cart',
 	},{
 		name: 'FoodSearch',
 		path: '/food-search',
 		component: 'FoodSearchPage',
-		icon: 'pizza',
+		icon: 'md-search',
 	},{
 		name: 'MyOrder',
 		path: '/orders',
@@ -51,7 +51,7 @@ export const environment = {
 		name: 'Map',
 		path: '/map',
 		component: 'MapPage',
-		icon: 'compass',
+		icon: 'md-compass',
 	},{
 		name: 'WishList',
 		path: '/wishlist',
@@ -61,7 +61,7 @@ export const environment = {
 		name: 'MyAddresses',
 		path: '/my-address',
 		component: 'MyAddressPage',
-		icon: 'create',
+		icon: 'md-create',
 	},{
 		name: 'ChatList',
 		path: '/chat-list',
@@ -71,7 +71,7 @@ export const environment = {
 		name: 'MyProfile',
 		path: '/profile',
 		component: 'ProfilePage',
-		icon: 'construct',
+		icon: 'md-person',
 	},{
 		name: 'ForgotPassword',
 		path: '/forgot',

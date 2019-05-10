@@ -153,7 +153,7 @@ export class AppComponent {
 	
 	let userLang = navigator.language.split('-')[0];
     userLang = /(english|deutsch)/gi.test(userLang) ? userLang : 'english';
-    this.translate.use(userLang);
+    this.translate.use('portuguese');
   }
 
   ionViewWillEnter(){

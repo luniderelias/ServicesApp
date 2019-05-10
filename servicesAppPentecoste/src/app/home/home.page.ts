@@ -82,7 +82,7 @@ export class HomePage {
 
 	async presentLoading() {
 		this.loading = await this.loadingCtrl.create({
-			message: 'waiting',
+			message: 'Carregando',
 			duration: 2000
 		});
 		return await this.loading.present();
@@ -156,7 +156,7 @@ export class HomePage {
 
 	async presentToast() {
 		const toast = await this.toastCtrl.create({
-			message: 'added success',
+			message: 'Adicionado com Sucesso!',
 			duration: 2000,
 			position: 'top'
 		});
@@ -193,7 +193,7 @@ export class HomePage {
 					  subtitle:  snap.val().info,
 					  backgroundImage: snap.val().firebase_url,
 					  icon: "ios-arrow-dropright",
-					  iconText: "ReadMore",
+					  iconText: "Saiba Mais",
 					  phonenumber: snap.val().phonenumber,
 					  lat: snap.val().lat,
 					  long: snap.val().long,

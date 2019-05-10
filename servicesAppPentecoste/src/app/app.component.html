@@ -1,65 +1,65 @@
 <ion-app>
-  <ion-split-pane>
-    <ion-menu>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>
-            Multi Restaurant 
-          </ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
+    <ion-split-pane>
+        <ion-menu>
+            <ion-header>
+                <ion-toolbar>
+                    <ion-title>
+                        VAVA PEÇAS E SERVIÇOS
+                    </ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <ion-content>
 
-        <br>
-        <br>
+                <br>
+                <br>
 
-        <div class="profile-menu-wrap" text-center *ngIf="user || user != null">
-          <div class="wrap-top">
-            
-            <div class="avt-thumb">
-              <img src="{{(user.avt != '' && user.avt != null)? user.avt : 'assets/imgs/profile.jpg' }}">
-            </div>
-           <h2 class="spacing-1 mgb-15 fs-20 capitalize txt1 fw-600">{{user.username}} {{user.fullname}}</h2>
-		   
-          </div>
-        
-        </div>
+                <div class="profile-menu-wrap" text-center *ngIf="user || user != null">
+                    <div class="wrap-top">
+
+                        <div class="avt-thumb">
+                            <img src="{{(user.avt != '' && user.avt != null)? user.avt : 'assets/imgs/profile2.jpg' }}">
+                        </div>
+                        <h2 class="spacing-1 mgb-15 fs-20 capitalize txt1 fw-600">{{user.username}} {{user.fullname}}</h2>
+
+                    </div>
+
+                </div>
 
 
-        <div class="main-menu bg-l1 pdl-20">
-          
-          <br>
-          
-          <ion-list class="lst-no-background" no-margin no-lines>
-            <ion-menu-toggle auto-hide="false" *ngFor="let p of menu">
-              <ion-item [routerDirection]="'root'" [routerLink]="[p.path]" class="txt1">
-                <ion-icon slot="start" [name]="p.icon"></ion-icon>
-                <ion-label>{{p.name | translate}}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-          </ion-list>
-		  
-		    <ion-list class="lst-no-background" no-margin no-lines>
-			
-			<ion-menu-toggle auto-hide="false">
-              <ion-item class="txt1" (click)="logout()">
-                <ion-icon name="md-log-out"></ion-icon>
-                <ion-label style ="margin-left:30px;">{{'Logout' | translate}}</ion-label>
-              </ion-item>
-            </ion-menu-toggle>
-         
-          </ion-list>
+                <div class="main-menu bg-l1 pdl-20">
 
-          <br>
-          <br>
-        
-        </div>
+                    <br>
 
-		
-	
+                    <ion-list class="lst-no-background" no-margin no-lines>
+                        <ion-menu-toggle auto-hide="false" *ngFor="let p of menu">
+                            <ion-item [routerDirection]="'root'" [routerLink]="[p.path]" class="txt1">
+                                <ion-icon slot="start" [name]="p.icon"></ion-icon>
+                                <ion-label>{{p.name | translate}}</ion-label>
+                            </ion-item>
+                        </ion-menu-toggle>
+                    </ion-list>
 
-      </ion-content>
-    </ion-menu>
-    <ion-router-outlet main></ion-router-outlet>
-  </ion-split-pane>
+                    <ion-list class="lst-no-background" no-margin no-lines>
+
+                        <ion-menu-toggle auto-hide="false">
+                            <ion-item class="txt1" (click)="logout()">
+                                <ion-icon name="md-log-out"></ion-icon>
+                                <ion-label style="margin-left:30px;">{{'Logout' | translate}}</ion-label>
+                            </ion-item>
+                        </ion-menu-toggle>
+
+                    </ion-list>
+
+                    <br>
+                    <br>
+
+                </div>
+
+
+
+
+            </ion-content>
+        </ion-menu>
+        <ion-router-outlet main></ion-router-outlet>
+    </ion-split-pane>
 </ion-app>

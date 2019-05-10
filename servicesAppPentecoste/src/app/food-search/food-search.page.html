@@ -1,48 +1,48 @@
 <ion-header>
-  <ion-toolbar>
-   <ion-buttons slot="start">
-			<ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
-			<ion-menu-button>
-				<ion-icon class="fs-24 txt1" name="menu"></ion-icon>
-			</ion-menu-button>
-		</ion-buttons>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+            <ion-menu-button>
+                <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+            </ion-menu-button>
+        </ion-buttons>
 
-       <ion-buttons slot="end">
-     
-      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
-        <ion-icon name="cart"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+        <ion-buttons slot="end">
 
-    <ion-title>Food Search</ion-title>
-  </ion-toolbar>
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+                <ion-icon name="cart"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+        <ion-title>Pesquisar Produtos</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="nearestHotels">
 
-	<ion-searchbar (ionInput)="searchItem($event)" placeholder="Search restaurant here...">
+    <ion-searchbar (ionInput)="searchItem($event)" placeholder="Procure Produtos aqui...">
     </ion-searchbar>
-	
-	<div class="movies">
-    
-    <ion-virtual-scroll [items]="nearestHotels">
-      <div class="movie" *virtualItem="let category" >
-      
-        <div class="poster" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: category.id}]">
-	
-		  <img class="poster-effect" [src]="category.image_firebase_url">
-        </div>
-        <div class="data" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: category.id}]">
-          <div class="title">{{category.name }} --- {{category.restaurant_name}}</div>
-          <div class="year">{{category.price}}$</div>
-		  <div class="title">{{category.item_dis}} km away</div>
-		  
-        </div>
-      </div>
-    </ion-virtual-scroll>
-  </div>
-	
-	<!--
+
+    <div class="movies">
+
+        <ion-virtual-scroll [items]="nearestHotels">
+            <div class="movie" *virtualItem="let category">
+
+                <div class="poster" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: category.id}]">
+
+                    <img class="poster-effect" [src]="category.image_firebase_url">
+                </div>
+                <div class="data" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: category.id}]">
+                    <div class="title">{{category.name }} --- {{category.restaurant_name}}</div>
+                    <div class="year">R$ {{category.price}}</div>
+                    <div class="title">{{category.item_dis}} km distante</div>
+
+                </div>
+            </div>
+        </ion-virtual-scroll>
+    </div>
+
+    <!--
 
 	<ion-grid no-padding>
         <ion-row>
