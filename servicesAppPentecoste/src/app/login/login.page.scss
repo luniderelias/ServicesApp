@@ -1,0 +1,32 @@
+
+.form-center{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100%;
+	position: relative;
+	z-index: 100;
+	background: rgba(0,0,0,0.4);
+}
+.brand-logo{
+	height: 40px;
+	filter: contrast(0) brightness(200);
+}
+.background-image{
+	position: fixed;
+	z-index: 10;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	img{
+		height: 100%;
+		min-width: auto;
+		max-width: unset;
+	}
+}
+
+ion-list{
+	background: transparent;
+}
+

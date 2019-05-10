@@ -1,0 +1,168 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+			<ion-menu-button>
+				<ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+			</ion-menu-button>
+		</ion-buttons>
+
+		   <ion-buttons slot="end">
+     
+      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+        <ion-icon name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+		<ion-title>Choose Payment Type</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+
+
+				<div class="backdrop">
+					<img src="{{'assets/imgs/payment.png' }}">
+				  </div>
+				  <div class="backdrop-separator1"></div>
+				  <div class="backdrop-separator2"></div>
+				  
+				  <ion-list>
+					  <ion-radio-group>
+						<ion-list-header>
+						  <h2>Select Payment Method</h2>
+						</ion-list-header>
+
+						<ion-item>
+						  <ion-label>Cash on Delivery</ion-label>
+						  <ion-radio value="cod" (ionSelect)="radioChecked('cod')"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+						  <ion-label>With Bank Account</ion-label>
+						  <ion-radio value="bank" (ionSelect)="radioChecked('bank')"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+						  <ion-label>Credit Card</ion-label>
+						  <ion-radio value="cart" (ionSelect)="radioChecked('cart')"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+						  <ion-label>Proceed to Paypal</ion-label>
+						  <ion-radio value="paypal" (ionSelect)="radioChecked('paypal')"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+						  <ion-label>Stripe</ion-label>
+						  <ion-radio value="stripe" (ionSelect)="radioChecked('stripe')"></ion-radio>
+						</ion-item>
+					  </ion-radio-group>
+					</ion-list>
+
+				  
+				  <!--
+				<div class="top-slide">
+					<div class="wrap-slide">
+						<ion-slides>
+							<ion-slide *ngIf="payment_method_image">
+								<div class="thumb flex-ali-center flex-jus-center ovfl-hidden">
+									
+									
+									<img src="{{payment_method_image}}" >
+								</div>
+							</ion-slide>
+						
+				
+						</ion-slides>
+					</div>
+					
+					<ion-list>
+					  <ion-radio-group>
+						<ion-list-header>
+						  <h2>Select Payment Method</h2>
+						</ion-list-header>
+
+						<ion-item>
+						  <ion-label>Cash on Delivery</ion-label>
+						  <ion-radio value="cod" (ionSelect)="radioChecked('cod')"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+						  <ion-label>With Bank Account</ion-label>
+						  <ion-radio value="bank" (ionSelect)="radioChecked('bank')"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+						  <ion-label>Credit Card</ion-label>
+						  <ion-radio value="cart" (ionSelect)="radioChecked('cart')"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+						  <ion-label>Proceed to Paypal</ion-label>
+						  <ion-radio value="paypal" (ionSelect)="radioChecked('paypal')"></ion-radio>
+						</ion-item>
+
+						<ion-item>
+						  <ion-label>Stripe</ion-label>
+						  <ion-radio value="stripe" (ionSelect)="radioChecked('stripe')"></ion-radio>
+						</ion-item>
+					  </ion-radio-group>
+					</ion-list>
+					
+				</div>
+				
+				
+		-->
+			
+			
+	
+			
+			   <div *ngIf="cod =='stripe'" style="margin:0px;background-color:#f2f2f2;padding:10px">
+               <ion-label>Make Payment Via Stripe
+               </ion-label>
+               <form #f="ngForm">
+                  <ion-list no-margin>
+                     <ion-item style=" background-color:#f2f2f2">
+                        <ion-label style="font-size: 15px;" color="side-heading-color">StripeCardDetails
+                        </ion-label>
+                     </ion-item>
+                     <ion-item>
+                        <ion-label floating>Card Number
+                        </ion-label>
+                        <ion-input required type="text" [(ngModel)]="form.stripe_number" name="stripe_number">
+                        </ion-input>
+                     </ion-item>
+                     <ion-item>
+                        <ion-label floating>Expiry Month (MM)
+                        </ion-label>
+                        <ion-input required type="text" [(ngModel)]="form.stripe_exp_month" name="stripe_exp_month">
+                        </ion-input>
+                     </ion-item>
+                     <ion-item>
+                        <ion-label floating>Expiry Year (YYYY)
+                        </ion-label>
+                        <ion-input required type="text" [(ngModel)]="form.stripe_exp_year" name="stripe_exp_year">
+                        </ion-input>
+                     </ion-item>
+                     <ion-item>
+                        <ion-label floating>Card Code
+                        </ion-label>
+                        <ion-input required type="text" [(ngModel)]="form.stripe_code" name="stripe_code">
+                        </ion-input>
+                     </ion-item>
+                  </ion-list>
+               </form>
+               <br> 
+            </div>
+
+
+</ion-content>
+
+
+
+<ion-footer>
+  <ion-toolbar position="bottom">
+		<ion-button expand="full" color="primary" [routerLink]="['/choose-address', {cod: cod}]">Choose Address</ion-button>
+	</ion-toolbar>
+</ion-footer>

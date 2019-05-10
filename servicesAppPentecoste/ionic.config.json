@@ -1,0 +1,8 @@
+{
+  "name": "servicesAppPentecoste",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "814c62b5"
+}

@@ -1,0 +1,108 @@
+<section class="row mt-5">
+  <div class="col">
+
+			<ul class = "list-group">
+
+				<div class="row" >
+					  <div class="col-xs-12 col-md-12" >
+					  
+					  <div class="panel panel-default" >
+						  <!-- Table -->
+						  <table class="table">
+							<tr>
+								
+								<td style = "width:10%;">
+									<b style = "text-align: center;">Product Image</b>
+								</td>
+								
+								<td style = "width:20%;">					
+									<b style = "text-align: center;">Customer Name</b>
+								</td>
+								
+								<td style = "width:20%;">					
+									<b style = "text-align: center;">Email Address</b>
+								</td>
+								
+							
+								<td style = "width:10%;">					
+									<b style = "text-align: center;">Total</b>
+								</td>
+								
+								<td style = "width:10%;">					
+									<b style = "text-align: center;">Status</b>
+								</td>
+								
+								<td style = "width:10%;">
+									<b style = "text-align: center;">Date</b>
+								</td>
+
+								<td style = "width:20%;text-align:center;">
+									<b style = "text-align: center;">Action</b>
+								</td>					
+								
+								
+							</tr>
+						  </table>
+						  
+						  
+						  
+						  <table class="table" *ngFor="let order of orders">
+							<tr>
+								
+								<td style = "width:10%;">
+									<img style="width:100px;height:60px;" class="thumbnail" src="{{order.items[0].image}}">
+								</td>
+								
+								<td style = "width:20%;">
+									<p style = "text-align: center;">{{order.customerDetails.displayName}}</p>
+								</td>
+								
+								
+								<td style = "width:20%;">
+									<p style = "text-align: center;">{{order.customerDetails.email}}</p>
+								</td>
+								
+								<td style = "width:10%;">					
+									<p style = "text-align: center;">{{order.total}}$</p>
+								</td>
+								
+								<td style = "width:10%;">					
+									<b style = "text-align: center;">{{order.status}}</b>
+								</td>
+								
+								<td style = "width:10%;">
+									<p style = "text-align: center;">{{order.timeStamp | date}}</p>
+								</td>
+
+								<td style = "width:20%;text-align:center;">
+									<a class = "btn btn-primary" [routerLink] = "['/order-details/'+order.$key]">View</a>
+								</td>	
+								
+								
+								
+							</tr>
+						  </table>
+						  
+						  
+					</div>
+							
+							
+							
+							
+							
+							
+							
+						
+							
+							
+					  </div>
+				</div>
+				
+				
+
+
+			</ul>
+			
+	</div>
+</section>
+

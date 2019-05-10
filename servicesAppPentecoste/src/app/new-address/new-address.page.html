@@ -1,0 +1,111 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+            <ion-menu-button>
+                <ion-icon class="fs-24 txt1" name="arrow-round-forward"></ion-icon>
+            </ion-menu-button>
+        </ion-buttons>
+
+        <ion-buttons slot="end">
+
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+                <ion-icon name="cart"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+        <ion-title>Add New Address</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <div class="wrapp-pst" padding>
+
+        <h2>Add New Address</h2>
+
+        <div class="wrapp-form mgt--50" padding>
+            <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
+                <br>
+
+
+
+
+
+                <!---
+						<ion-input #email formControlName="city" type="text" placeholder="Your name" [class.invalid]="!signupForm.controls.city.valid && signupForm.controls.city.dirty" class=""></ion-input>
+						--->
+
+                <ion-list>
+
+
+
+                    <ion-item>
+                        <ion-label>City</ion-label>
+                        <ion-select formControlName="city" okText="Okay" cancelText="Dismiss" [class.invalid]="!signupForm.controls.city.valid && signupForm.controls.city.dirty">
+                            <ion-select-option *ngFor="let item of cityName" value="{{item.name}}">{{item.name}}</ion-select-option>
+
+                        </ion-select>
+                    </ion-item>
+
+                </ion-list>
+
+
+                <div class="error-message" *ngIf="!signupForm.controls.city.valid && signupForm.controls.city.dirty">
+                    <p class="fs-11 mgt-5">Please enter a valid city.</p>
+                </div>
+                <br>
+                <ion-label stacked class="mgb-5">District</ion-label>
+                <ion-list class="ani-bottom-to-top mgb-0">
+                    <ion-item class="white-opct bdra-30">
+                        <ion-input formControlName="district" type="text" placeholder="Your Address" class=""></ion-input>
+                    </ion-item>
+                </ion-list>
+                <br>
+                <ion-label stacked class="mgb-5">Address</ion-label>
+                <ion-list class="ani-bottom-to-top mgb-0">
+                    <ion-item class="white-opct bdra-30">
+                        <ion-input #email formControlName="street" type="text" placeholder="Your address" class=""></ion-input>
+                    </ion-item>
+                </ion-list>
+                <br>
+                <ion-label stacked class="mgb-5">Building number</ion-label>
+                <ion-list class="ani-bottom-to-top mgb-0">
+                    <ion-item class="white-opct bdra-30">
+                        <ion-input #email formControlName="number" type="text" placeholder="Your address number" class=""></ion-input>
+                    </ion-item>
+                </ion-list>
+                <br>
+
+                <ion-label stacked class="mgb-5">Phone Number</ion-label>
+                <ion-list class="ani-bottom-to-top mgb-0">
+                    <ion-item class="white-opct bdra-30">
+                        <ion-input #email formControlName="phone" type="text" placeholder="Your phone number" [class.invalid]="!signupForm.controls.phone.valid && signupForm.controls.phone.dirty" class=""></ion-input>
+                    </ion-item>
+                </ion-list>
+                <br>
+
+                <ion-label stacked class="mgb-5">Complemento</ion-label>
+                <ion-list class="ani-bottom-to-top mgb-0">
+                    <ion-item class="white-opct bdra-30">
+                        <ion-input #email formControlName="complement" type="text" placeholder="Complement" class=""></ion-input>
+                    </ion-item>
+                </ion-list>
+
+                <br>
+
+
+
+
+
+                <ion-button expand="full" color="primary" type="submit">Create New Address</ion-button>
+
+
+            </form>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+    </div>
+</ion-content>

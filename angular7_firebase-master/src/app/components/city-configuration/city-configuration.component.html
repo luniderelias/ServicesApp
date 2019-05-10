@@ -1,0 +1,130 @@
+<section class="row mt-5">
+  <div class="col">
+
+
+			<div *ngIf = "cities">
+
+				<a [routerLink] = "['/orders']">Go back </a>
+				<br>
+				
+				<h2 class ="page header">City List</h2>
+
+				<div class = "row">
+					<div class = "col-md-4">
+
+					
+					</div>
+					
+					
+					 <table class="table">
+							<tr>
+								
+					
+								
+								<td style = "width:20%;">
+									<b style = "text-align: center;">City Image</b>
+								</td>
+								
+							
+								
+								<td style = "width:20%;">					
+									<b style = "text-align: center;">City ID</b>
+								</td>
+								
+							
+								<td style = "width:20%;">
+									<b style = "text-align: center;">City Name</b>
+								</td>
+				
+								
+								
+									<td style = "width:30%;">
+									<b style = "text-align: center;">Action</b>
+								</td>
+
+
+
+
+								
+							</tr>
+							
+						
+							
+						  </table>
+					
+					<div *ngFor="let item of cities" style="width:100%;">
+					
+					<div style = "background-color:#00bfff;color:white;width:100%;">
+					 
+					 </div>
+					
+					 <table class="table">
+					 
+					 
+					 
+							<tr>
+								
+								<td style = "width:20%;">
+									<img style="width:100px;height:60px;" class="thumbnail" src="https://firebasestorage.googleapis.com/v0/b/multi4ionic.appspot.com/o/categoryimages%2Fdownload.jpg?alt=media&token=395a1d9f-7707-4e8d-9830-f39201b04eb4">
+								</td>
+								
+								<td style = "width:20%;">
+									<p style = "text-align: left;">{{item.$key}}</p>
+								</td>
+								
+							
+								
+								<td style = "width:20%;">					
+									<p style = "text-align: left;">{{item.name}}</p>
+								</td>
+								
+
+								
+								<td style = "width:30%;">
+							
+							
+							<button class="btn btn-danger">
+								<a [routerLink]="['/add-new-city']" style = "text-align: center;color:white;">Add City</a>
+							</button>
+											
+							<button class="btn btn-warning" >
+							<a [routerLink]="['/edit-city/'+item.$key]" style = "text-align: center;color:white;">Edit City</a>
+							
+							
+							</button>
+								
+							<button (click)="deleteCity(item.$key)" class="btn btn-success" >
+							<a  style = "text-align: center;color:white;">Delete</a>
+							</button>
+									
+									
+									
+								</td>
+								
+							
+				
+
+
+
+								
+							</tr>
+							
+						
+							
+						  </table>
+						</div>  
+						  
+
+				</div>
+
+
+			</div>
+			
+			
+	</div>
+	
+</section>
+
+
+
+

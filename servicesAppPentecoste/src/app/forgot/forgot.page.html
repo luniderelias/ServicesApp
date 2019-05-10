@@ -1,0 +1,59 @@
+<ion-header>
+	<ion-toolbar>
+	<ion-buttons slot="start">
+			<ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+			<ion-menu-button>
+				<ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+			</ion-menu-button>
+		</ion-buttons>
+
+		<ion-title>Forgot</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+	<div class="wrapp-pst" padding>
+		
+			<div class="backdrop" *ngIf="user">
+				<img src="{{'assets/imgs/background.jpg' }}">
+			  </div>
+			  <div class="backdrop-separator1"></div>
+			  <div class="backdrop-separator2"></div>
+
+			  <div class="poster" *ngIf="user">
+				<img src="{{(user.avt != '' && user.avt != null)? user.avt : 'assets/imgs/profile.jpg' }}">
+				
+			  </div>
+			  
+			    <div class="movie-data" *ngIf="user">
+    <div class="title">{{ user.username }} {{user.fullname}}</div>
+		
+  </div>
+  
+		
+
+		<div class="wrapp-form mgt-50" padding>
+			<form [formGroup]="resetPasswordForm" (submit)="resetPassword()" novalidate>
+				
+				<ion-list class="ani-bottom-to-top mgb-0">
+					<ion-item class="white-opct bdra-30">
+					<ion-label position="fixed" class="mgb-5 pdl-10">Email</ion-label>
+						<ion-input #email formControlName="email" type="email" placeholder="Your email address" [class.invalid]="!resetPasswordForm.controls.email.valid && resetPasswordForm.controls.email.dirty" class=""></ion-input>
+					</ion-item>
+				</ion-list>
+
+				<div class="error-message" *ngIf="!resetPasswordForm.controls.email.valid && resetPasswordForm.controls.email.dirty">
+					<p class="fs-11 mgt-5">Please enter a valid email.</p>
+				</div>
+				
+				<div padding class="">
+					
+					
+					<ion-button expand="full"  color = "primary" type="submit" class="">
+						Reset your Password
+					</ion-button>
+				</div>
+			</form>
+		</div>
+	</div>
+</ion-content>

@@ -1,0 +1,138 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+      <ion-menu-button>
+        <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+		<ion-buttons slot="end">
+			<ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
+				<ion-icon name="cart">
+				
+				</ion-icon>
+				
+				<p style="color:black;margin-bottom:20px;">{{values.qty}}</p>
+			</ion-button>
+			
+		</ion-buttons>
+
+		<ion-title>Wishlist</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen *ngIf="categoryList">
+
+
+
+ <div class="results-flex" *ngIf="categoryList">
+    <div class="result" *ngFor="let item of categoryList" >
+      <div class="poster" [routerLink]="['/product-details', {id: item.id, title: item.title , owner_id: item.restaurantId , cat_id: item.id}]">
+
+		<img  class="poster-effect" [src]="item.image">
+      </div>
+      <div class="data">
+        
+        <div class="title">{{item.title }}</div>
+        <div class="subtitle">{{ item.title }}</div>
+		
+		<div class="subtitle"><ion-button (click)="removeFavItem(item)">Remove</ion-button></div>
+      
+      </div>
+    </div>
+  </div>
+
+<!--
+<ion-list>
+  <ion-item-sliding *ngFor="let item of categoryList">
+    <ion-item>
+      <img src="{{item.image}}">
+    </ion-item>
+	{{item.title}}
+
+    <ion-item-options side="end">
+      <ion-button (click)="removeFavItem(item)">Unread</ion-button>
+    </ion-item-options>
+  </ion-item-sliding>
+</ion-list>
+
+-->
+
+<!--
+	<ion-item-sliding *ngFor="let item of categoryList">
+		
+				<ion-slide>
+					<div class="thumb flex-ali-center flex-jus-center ovfl-hidden">
+						<img src="{{item.image}}">
+					</div>
+				</ion-slide>
+			
+	
+				 <ion-item-options side="end">
+				  <ion-item-option (click)="removeFavItem(item)">Remove</ion-item-option>
+				</ion-item-options>
+				
+		
+	</ion-item-sliding>
+	
+	
+	-->
+<!---
+    <ion-item-sliding *ngFor="let item of categoryList" style = "height:300px;widht:100%">
+      <ion-item no-lines >
+        <ion-grid >
+          <ion-row>
+     
+            <ion-col class="logo">
+              
+			  
+			  <ion-img [src]="item.image" style ="width:100%;height:100%;"></ion-img>
+            </ion-col>
+          </ion-row>
+       
+     
+          
+        </ion-grid>
+      </ion-item>
+
+      <ion-item-options side="end">
+     
+			
+			 <ion-item-option (click)="removeFavItem(item)">Delete</ion-item-option>
+      </ion-item-options>
+
+    </ion-item-sliding>
+	
+	-->
+  
+
+<!--
+  <ion-row>
+    <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 align-self-end>
+      <ion-list padding no-margin>
+        <ion-item-sliding margin-bottom *ngFor="let item of categoryList" #slidingItem>
+		
+		  <ion-item no-lines class="housing-image" background-size (click)="goToItem(item)" >
+            <div title-block>
+			 <ion-img [src]="item.image" style ="width:100%;height:200px;"></ion-img>
+              
+              <p item-subtitle><b>{{item.subtitle}}</b></p>
+              
+              <h1 header-title text-wrap><b>{{item.title}}</b></h1>
+            </div>
+          </ion-item>
+         
+          <ion-item-options>
+            <button ion-button text-capitalize transparent padding (click)="removeFavItem(item)">
+              Delete
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  
+  -->
+
+
+</ion-content>

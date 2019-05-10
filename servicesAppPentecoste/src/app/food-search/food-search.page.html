@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar>
+   <ion-buttons slot="start">
+			<ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+			<ion-menu-button>
+				<ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+			</ion-menu-button>
+		</ion-buttons>
+
+       <ion-buttons slot="end">
+     
+      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+        <ion-icon name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Food Search</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="nearestHotels">
+
+	<ion-searchbar (ionInput)="searchItem($event)" placeholder="Search restaurant here...">
+    </ion-searchbar>
+	
+	<div class="movies">
+    
+    <ion-virtual-scroll [items]="nearestHotels">
+      <div class="movie" *virtualItem="let category" >
+      
+        <div class="poster" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: category.id}]">
+	
+		  <img class="poster-effect" [src]="category.image_firebase_url">
+        </div>
+        <div class="data" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: category.id}]">
+          <div class="title">{{category.name }} --- {{category.restaurant_name}}</div>
+          <div class="year">{{category.price}}$</div>
+		  <div class="title">{{category.item_dis}} km away</div>
+		  
+        </div>
+      </div>
+    </ion-virtual-scroll>
+  </div>
+	
+	<!--
+
+	<ion-grid no-padding>
+        <ion-row>
+            <ion-col col-12>
+	
+			
+			
+                <ion-list no-margin *ngFor="let category of nearestHotels;let i = index;">
+				
+					 
+						  <ion-item border no-lines [ngClass]="animateClass"  >
+			
+					<ion-item no-lines class="items"  
+					style = "background-color:#D1F3E3;">
+						
+						
+						<ion-avatar item-left style="width: 40%;">
+						
+                            <img [src]="category.image_firebase_url" alt="{{category.name}}" />
+							<h3><b>{{category.name}}</b></h3>
+							<h3>{{category.price}}$</h3>
+							
+                        </ion-avatar>
+						
+						
+						<h2><b>
+						
+						
+						
+						{{category.restaurant_name}}
+						</b></h2>
+						
+						
+						<h3>{{category.item_dis}} km away</h3>
+						
+						
+							 
+							 
+							 
+							 
+							  <button ion-button full (click)="goToItem(category)"><h2>View Item</h2></button>
+							  
+							 
+							 
+							 
+							 
+							 
+							
+							 
+				
+							 
+							 
+							 
+						 </ion-item>
+					
+                       
+						
+         
+    
+						</ion-item>
+					
+				
+                
+				
+				
+                </ion-list>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+	
+	-->
+
+</ion-content>

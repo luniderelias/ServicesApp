@@ -1,0 +1,138 @@
+<section class="row mt-5">
+  <div class="col">
+  
+		
+
+				<div *ngIf = "buildings">
+
+					<a [routerLink] = "['/orders']">Go back </a>
+					<br>
+					
+					<h2 class ="page header">Restaurant Building </h2>
+
+					<div class = "row">
+						<div class = "col-md-4">
+
+						
+						</div>
+						
+						
+						 <table class="table">
+								<tr>
+									
+						
+									
+									<td style = "width:20%;">
+										<b style = "text-align: center;">District Image</b>
+									</td>
+									
+								
+									
+									<td style = "width:20%;">					
+										<b style = "text-align: center;">District ID</b>
+									</td>
+									
+								
+									<td style = "width:20%;">
+										<b style = "text-align: center;">District Name</b>
+									</td>
+					
+									
+									
+										<td style = "width:30%;">
+										<b style = "text-align: center;">Action</b>
+									</td>
+
+
+
+
+									
+								</tr>
+								
+							
+								
+							  </table>
+						
+						<div *ngFor="let item of buildings" style="width:100%;">
+						
+						<div style = "background-color:#00bfff;color:white;width:100%;">
+						 
+						 </div>
+						
+						 <table class="table">
+						 
+						 
+						 
+								<tr>
+									
+									<td style = "width:20%;">
+										<img style="width:100px;height:60px;" class="thumbnail" src="https://firebasestorage.googleapis.com/v0/b/multi4ionic.appspot.com/o/categoryimages%2Fthe-kelvin-apartments-exterior.jpg?alt=media&token=3d1ff60f-7522-4da0-a0c6-b4103aadac23">
+									</td>
+									
+									<td style = "width:20%;">
+										<p style = "text-align: left;">{{item.$key}}</p>
+									</td>
+									
+								
+									
+									<td style = "width:20%;">					
+										<p style = "text-align: left;">{{item.name}}</p>
+									</td>
+									
+
+									
+									<td style = "width:30%;">
+											<!---					
+										<a [routerLink]="['/edit-extra-food/' + item.$key]" class = "btn btn-warning" >Edit</a>
+										---->
+						
+						<!--
+										<a (click)="onExtraItemEdit(item.$key)" class = "btn btn-warning" >Edit</a>
+										
+										<a (click)="onExtraItemDelete(item.$key)" class = "btn btn-danger" >Delete</a>
+										-->
+								
+								<button class="btn btn-danger">
+									<a [routerLink]="['/add-new-building']" style = "text-align: center;color:white;">Add Building</a>
+								</button>
+
+								
+								<button class="btn btn-warning" >
+								<a [routerLink]="['/edit-building/'+item.$key]" style = "text-align: center;color:white;">Edit Building</a>
+								
+								
+								</button>
+									
+								<button (click)="deleteBuilding(item.$key)" class="btn btn-success" >
+								<a  style = "text-align: center;color:white;">Delete</a>
+								</button>
+										
+										
+										
+									</td>
+									
+								
+					
+
+
+
+									
+								</tr>
+								
+							
+								
+							  </table>
+							</div>  
+							  
+
+					</div>
+
+
+				</div>
+
+
+
+  
+  </div>
+  
+</section>

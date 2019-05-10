@@ -1,0 +1,83 @@
+<ion-header>
+	<ion-toolbar>
+	
+	
+	<ion-buttons slot="start">
+      <ion-menu-button>
+        <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+		   <ion-buttons slot="end">
+     
+      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+        <ion-icon name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+		<ion-title>Order List</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content padding >
+
+		<div class="your-cart bg-thime" *ngIf="!myOrderList">
+			You don't have any orders.
+		</div>
+
+		
+		
+		<div class="your-cart bg-thime" *ngIf="myOrderList">
+		
+		
+        <ion-card *ngFor="let orders of myOrderList">
+            <ion-card-content [routerLink]="['/order-details', {id: orders.id}]">
+                <ion-row *ngFor="let post of orders.items">
+                    
+					
+						
+						<ion-col col-3>
+						<div *ngIf="post.image" class="img-box">
+                            <img data-src="{{post.image}}">
+                        </div>
+                        <div *ngIf="!post.image" class="img-box">
+                            <img src="assets/imgs/suit_PNG8132.png">
+							
+							</div>
+							
+							</ion-col>
+							
+							
+							
+							
+							<ion-col col-9>
+						
+							 <p item-title><b>Name: {{post.name}}</b></p>
+							 <p item-title><b>Price: {{post.price}}$</b></p>
+							 <p item-title><b>Quantity: {{post.quantity}}</b></p>
+							 
+							 </ion-col>
+							 
+					
+					
+					
+                        
+                        
+                    
+                    
+                       
+                    
+                </ion-row>
+				
+				  <p  item-title style ="text-align:right;"><b>Status:{{orders.status}}</b></p>
+						
+						 <p  item-title style ="text-align:right;"><b>Total:{{1 * orders.total}}$</b></p>
+            </ion-card-content>
+        </ion-card>
+
+
+      
+    </div>
+
+
+</ion-content>

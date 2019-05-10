@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+			<ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+			<ion-menu-button>
+				<ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+			</ion-menu-button>
+		</ion-buttons>
+
+    <ion-buttons slot="end">
+     
+      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+        <ion-icon name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>My Chat List</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+	 <ion-grid no-padding>
+        <ion-row>
+            <ion-col col-12>
+			
+			
+			
+				<ion-list>
+			<ion-item *ngFor="let chat of userChatList"  lines="none">
+		
+			  <div class="listSection" (click)="goToChat(chat)">
+				<div class="UserimgSection">
+				  <ion-avatar class="chatImage" slot="start">
+					<ion-img [src]="chat.restaurantImage" ></ion-img>
+					
+				  </ion-avatar>
+				</div>
+				<div class="usernameSection" padding-start padding >
+				  <ion-badge>
+	
+					 {{chat.restaurantName}}
+					</ion-badge>
+				  <p class="descText" no-margin no-padding  ><b>{{chat.lastMessage}}</b> --- <b> Date: {{chat.timeStamp| date}}</b></p>
+				</div>
+			  </div>
+			
+			  
+			</ion-item>
+		</ion-list>
+
+<!--
+
+                <ion-list no-margin *ngFor="let chat of userChatList;let i = index;">
+
+
+						<div (click)="goToChat(chat)">
+                                <ion-item border no-lines [ngClass]="animateClass"  >
+
+                                          <ion-item no-lines class="items"
+                                          style = "background-color:#D1F3E3;">
+
+
+                                            <ion-avatar item-left>
+                                                            <img [src]="chat.restaurantImage" alt="{{chat.id}}" />
+
+                                                            
+                                                        </ion-avatar>
+
+                                            <h2 ><b>{{chat.restaurantName}}</b></h2>
+											
+											<p>{{chat.lastMessage}}</p>
+											
+											<p><b>Date: {{chat.timeStamp| date}}</b></p>
+                                   
+
+                                            </ion-item>
+
+                              </ion-item>
+							  
+					</div>
+
+
+
+
+
+                </ion-list>
+				
+				
+				--->
+				
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-content>

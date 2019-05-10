@@ -1,0 +1,124 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+			<ion-menu-button>
+				<ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+			</ion-menu-button>
+		</ion-buttons>
+
+		<ion-buttons slot="end">
+			<ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
+				<ion-icon name="cart">
+				
+				</ion-icon>
+				
+				<p style="color:black;margin-bottom:20px;">{{values.qty}}</p>
+			</ion-button>
+			
+		</ion-buttons>
+
+		<ion-title>Product Details</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+
+
+	<div class="top-slide" *ngIf="params">
+		<div class="wrap-slide">
+			<ion-slides>
+				<ion-slide *ngIf="params">
+					<div class="thumb flex-ali-center flex-jus-center ovfl-hidden">
+						<img src="{{params.data.image_firebase_url}}">
+					</div>
+				</ion-slide>
+			
+	
+			</ion-slides>
+		</div>
+		<div class="title" padding>
+			<div class="wrap-txt">
+				<h3 class="txt-light fs-22 spacing-1 fw-600">{{params.data.name}}</h3>
+			</div>
+			
+								<span *ngIf="!favorite" style ="float:right;padding-right:20px;">
+
+								<ion-icon class="mgr-5" name="heart-empty" (click)="addToFavourite(params.data)" style="position:relative; font-size:2em;"></ion-icon>
+													
+
+								
+								
+								
+								</span>
+								
+								<span *ngIf="favorite" style ="float:right;padding-right:20px;">
+								<ion-icon class="mgr-5" name="heart" (click)="removeFavourite()" style="position:relative; font-size:2em;"></ion-icon>
+								
+														
+								
+								
+								
+								</span>
+		
+		</div>
+	</div>
+	
+	
+	<div class="fact pdl-25 pdr-25 pdb-15 pdt-10">
+		<div text-left class="">
+			<p class="txt3 uppercase spacing-1 fs-12">Description</p>
+			<span class="fw-600">
+				<!--
+				{{params.data.name}}
+				-->
+				
+				{{params.data.description}}
+			</span>
+			
+						
+			<!--		
+
+				<br>
+				<div class="description pdl-25 pdr-25">
+					<h5 class="uppercase fs-12 spacing-1 txt1"></h5>
+					<p class="txt3"></p>
+					<br>
+				</div>
+				
+				-->
+			
+		</div>
+		<div text-right class="price">
+			<p class="txt3 spacing-1 uppercase fs-12">Price</p>
+			<span class="fw-600" >
+				{{params.data.price}}$
+			</span>
+		
+			
+		</div>
+	</div>
+
+	
+	
+	  <ion-list class="extra-list" *ngIf="params.data.extraOptions != null">
+			  
+			<ion-list-header class="header" text-center>Add extra choice</ion-list-header>
+				
+				<ion-item *ngFor="let option of params.data.extraOptions; let i= index" class="list-item">
+					<ion-label>{{option.name}} ({{option.value}} $)</ion-label>
+					<ion-toggle [(ngModel)]="option.selected" (ionChange)="checkOptions(option)" checked="true"></ion-toggle>
+				</ion-item>
+			
+			</ion-list>
+
+
+
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar position="bottom">
+		<ion-button expand="full" color="primary" (click)="addToCart( params.data.name, params.data.price, params.data.image_firebase_url , params.data.extraOptions )">Full Button</ion-button>
+	</ion-toolbar>
+</ion-footer>

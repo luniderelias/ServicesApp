@@ -1,0 +1,60 @@
+<section class="row mt-5">
+  <div class="col">
+    <button class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modalBook">Add New Item</button>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Image</th>
+          <th scope="col">Title</th>
+          <th scope="col">Available</th>
+          <th scope="col">Description</th>
+		  <th scope="col">Price</th>
+		  <th scope="col">Stock</th>
+          <th scope="col">&nbsp;</th>
+          <th scope="col">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items; index as i">
+          <th scope="row">{{i+1}}</th>
+          <td>
+	  
+		  <img style="width:70px;height:50px;" class="thumbnail" src="{{item.image_firebase_url}}">
+		  </td>
+          <td>{{item.name}}</td>
+          <td>{{item.available}}</td>
+          <td>{{item.description}}</td>
+          <td>{{item.price}}$</td>
+		  <td>{{item.stock}}</td>
+          <td>
+		  <!--
+            <button class="btn btn-primary" data-toggle="modal" data-target="#modalBook" >Update</button>
+			-->
+			<button class="btn btn-primary" routerLink="/item-details/{{item.$key}}">More Info</button>
+          </td>
+          <ng-template #noOwner>
+            <td>
+              <button class="btn btn-secondary" disabled="true" >Update</button>
+			  
+			  
+			  
+            </td>
+          </ng-template>
+		  <!--
+          <td >
+            <button class="btn btn-danger" (click)="onRestaurantDelete(restaurant.$key)">Delete</button>
+          </td>
+          <ng-template #noAdmin>
+            <td>
+              <button class="btn btn-danger" disabled="true">Delete</button>
+            </td>
+          </ng-template>
+		  
+		  -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<app-modal [userUid]="userUid"></app-modal>

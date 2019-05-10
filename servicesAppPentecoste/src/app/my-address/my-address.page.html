@@ -1,0 +1,81 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+            <ion-menu-button>
+                <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+            </ion-menu-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+                <ion-icon name="cart"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+        <ion-title>My Addresses</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+    <div style="margin: 10px 5px;">
+        <ion-button [routerLink]="['/new-address']">
+            <ion-icon name="add-circle"></ion-icon> Add New Address</ion-button>
+    </div>
+
+    <!--saved address list-->
+
+    <ion-card *ngFor="let address of addressList">
+        <ion-card-header style="background-color: #D3C140;" color="light">
+
+            <ion-card-title>
+                <ion-icon name="compass"></ion-icon>CUSTOMER ADDRESS</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content style="background-color: #C8D488;" color="light">
+
+            <div style="padding-left:20px;">
+                <p class="show-address">ID: {{address.id}} </p>
+                <p class="show-address">City: {{address.city}} </p>
+                <p class="show-address">District: {{address.district}}</p>
+                <p class="show-address">Street: {{address.street}}</p>
+                <p class="show-address">Building Name: {{address.number}}</p>
+                <p class="show-address">Building No: {{address.phone}}</p>
+                <p class="show-address">Complemento: {{address.complement}}</p>
+
+                <ion-button [routerLink]="['/edit-address', {address: address}]">
+                    <ion-icon name="build"></ion-icon>
+                    Edit
+                </ion-button>
+
+                <ion-button (click)="deleteUserAddress(address.id)">
+                    <ion-icon name="trash"></ion-icon>
+                    Delete
+                </ion-button>
+
+
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <!--
+			<ion-list>
+				<ion-item >
+					<ion-label>
+							
+							
+					</ion-label>
+							
+										
+					</ion-item>
+					
+					
+					
+			</ion-list>
+			
+			-->
+
+
+
+</ion-content>

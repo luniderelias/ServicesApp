@@ -1,0 +1,241 @@
+
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button>
+        <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+      </ion-menu-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+     
+      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+        <ion-icon name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Home</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content fullscreen *ngIf = "shops">
+
+
+<div class="movies-flex" *ngIf="shops">
+    <div class="movie" *ngFor="let cats of shops" >
+      <div class="poster" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">
+   
+		<img  class="poster-effect" [src]="cats.firebase_url">
+      </div>
+      <div class="title" >{{cats.title }}
+	  
+			 <div class="vote1"><ion-icon name="phone-portrait" expand="icon-only" (click)="call(cats)"></ion-icon></div>
+	  <div class="vote2"><ion-icon name="locate" expand="icon-only" [routerLink]="['/restaurant-map', {lat: cats.lat, long: cats.long,img: cats.img,title: cats.title, id: cats.id}]"></ion-icon></div>
+	  <div class="vote3"><ion-icon name="chatbubbles" expand="icon-only" (click)="chat(cats)"></ion-icon></div>
+	  <div class="vote4"><ion-icon name="time" expand="icon-only"></ion-icon></div>
+	  
+	  
+	  </div>
+      <div class="year" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">{{ cats.title}}</div>
+	  
+     
+	  
+	  
+	  <!--
+	  <div class="vote">
+			<ion-icon name="phone-portrait" expand="icon-only" color="light" (click)="call(cats)"> </ion-icon>
+			<ion-icon name="locate" expand="icon-only" color="light" [routerLink]="['/restaurant-map', {lat: cats.lat, long: cats.long,img: cats.img,title: cats.title, id: cats.id}]"> </ion-icon>
+			<ion-icon name="chatbubbles" expand="icon-only" color="light" (click)="chat(cats)"> </ion-icon>
+			<ion-icon name="time" expand="icon-only" color="light"> </ion-icon>
+			
+		</div>
+	  -->
+    </div>
+  </div>
+  
+  
+  
+  <!--
+  
+  <div class="top-slide" *ngFor="let cats of shops">
+		<div class="wrap-slide" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">
+			<ion-slides>
+				<ion-slide>
+					<div class="thumb flex-ali-center flex-jus-center ovfl-hidden">
+						<img src="{{cats.firebase_url}}">
+					</div>
+				</ion-slide>
+	
+			</ion-slides>
+		</div>
+		<div class="title" padding >
+			<div class="wrap-txt" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">
+			
+				<h3 class="txt-light fs-22 spacing-1 fw-600">{{cats.title}}</h3>
+				
+			
+				
+			
+				
+			</div>
+		
+			<h1>
+			<ion-icon name="phone-portrait" expand="icon-only" color="light" (click)="call(cats)"> </ion-icon>
+			<ion-icon name="locate" expand="icon-only" color="light" [routerLink]="['/restaurant-map', {lat: cats.lat, long: cats.long,img: cats.img,title: cats.title, id: cats.id}]"> </ion-icon>
+			<ion-icon name="chatbubbles" expand="icon-only" color="light" (click)="chat(cats)"> </ion-icon>
+			<ion-icon name="time" expand="icon-only" color="light"> </ion-icon>
+			
+			</h1>
+		
+		</div>
+	</div>
+	
+	-->
+	
+	<!--
+  
+  <div class="top-slide" *ngFor="let cats of shops">
+		<div class="wrap-slide">
+		
+			
+			
+			  <ion-card>
+    
+	
+				<ion-img  class="thumb flex-ali-center flex-jus-center ovfl-hidden" [src]="cats.firebase_url" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]"></ion-img> 
+
+				
+			  </ion-card>
+			
+		</div>
+		<div class="title" padding>
+			<div class="wrap-txt">
+				<h3 class="txt-light fs-22 spacing-1 fw-600">{{cats.title}}</h3>
+			</div>
+		
+		</div>
+	</div>
+
+	-->
+	
+	
+	<!--
+	
+	<ion-grid no-padding *ngIf="shops">
+	
+	
+	<div padding class="">
+    <h5 class="uppercase fs-16 fw-600 spacing-1 txt1 mgt-0">Popular</h5>
+    <ion-row>
+      <ion-col size="12" *ngFor="let cats of shops">
+        <div class="item-prd mgb-30">
+          <div class="thumb ovfl-hidden flex-row flex-jus-center flex-ali-center">
+            <div class="discount fw-600 pdt-5 fs-12 shadow-3 white" *ngIf="cats.title">
+              - {{cats.title}}
+            </div>
+            <img src="{{cats.firebase_url}}" [routerLink]="['/detail', {id_item: cats.id}]">
+           
+          </div>
+
+          <div class="ovfl-hidden" [routerLink]="['/detail', {id_item: cats.id}]">
+            <h4 class="fs-16 fw-600 ellipsis mgb-0 mgt-10">{{cats.title}}</h4>
+            <p class="mgt-5 mgb-0">
+              
+             
+            
+            </p>
+          </div>
+          <div class="mgt-10">
+            <ion-button size="small" color="dark" (click)="addCart(cats)" class="uppercase fs-11 bdra-0 fw-600">
+              <ion-icon slot="start" name="ios-cart"></ion-icon>
+              Add to cart
+            </ion-button>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </div>
+  
+  </ion-grid>
+  
+  -->
+  
+  
+  <!--
+	
+
+  <ion-row>
+    <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 align-self-end>
+      <ion-list padding no-margin>
+        <ion-item-sliding margin-bottom *ngFor="let cats of shops" #slidingItem>
+		
+		  <ion-item no-lines class="housing-image" background-size  [ngStyle]="{'background-image': 'url(' + cats.firebase_url + ')'}">
+            <div title-block>
+              
+              
+              
+              <h1 header-title text-wrap (click)="getCategory(cats.id,cats.title,cats.owner_id)"><b>{{cats.title}}</b></h1>
+			  
+			  <p item-subtitle (click)="getCategory(cats.id,cats.title,cats.owner_id)"><b>{{cats.description}}</b></p>
+			  
+			  
+			  
+			  
+						
+			  
+			  
+			  
+			  
+			  
+			  
+            </div>
+          </ion-item>
+		  
+		  <ion-item-options>
+		  
+		  
+		  
+		  
+		  <button ion-button text-capitalize transparent padding (click)="call(cats)">
+              <ion-icon icon-big name="call" color = "white"  style="position:relative; font-size:2em;"  >
+								<span style="font-size:15px !important"></span>
+							</ion-icon>
+							
+            </button>
+            
+							
+						
+						
+			<button ion-button text-capitalize transparent padding (click)="goToMap(cats)">
+						<ion-icon icon-big  name="map" color = "white"  style="position:relative; font-size:2em;padding-left:25px;"  >
+							<span style="position:absolute;top:-.3em; left:.1em; font-size:15px !important;"></span>
+						</ion-icon>
+						</button>
+						
+						<button ion-button text-capitalize transparent padding (click)="chat(cats)">
+						<ion-icon icon-big  name="chatbubbles" color = "white" style="position:relative; font-size:2em;padding-left:25px;"  >
+							<span style="position:absolute; top:-.3em; left:.5em; font-size:15px !important"></span>
+						</ion-icon>	
+						
+						
+						
+						</button>
+          </ion-item-options>
+		  		
+          
+       
+        </ion-item-sliding>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  
+  
+  -->
+
+
+
+	
+
+</ion-content>

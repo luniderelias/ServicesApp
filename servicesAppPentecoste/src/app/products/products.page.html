@@ -1,0 +1,65 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons slot="start">
+			<ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+			<ion-menu-button>
+				<ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+			</ion-menu-button>
+		</ion-buttons>
+		   <ion-buttons slot="end">
+     
+      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+        <ion-icon name="cart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+		<ion-title>Products</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+
+
+<div class="movies" *ngIf="productsList">
+    
+    <ion-virtual-scroll [items]="productsList">
+      <div class="movie" *virtualItem="let cats" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: cats.id}]">
+        
+        <div class="poster">
+	
+		  <img class="poster-effect" [src]="cats.image">
+        </div>
+        <div class="data">
+          <div class="title">{{cats.title }}</div>
+          <div class="year">{{cats.price}}$</div>
+        </div>
+      </div>
+    </ion-virtual-scroll>
+  </div>
+
+<!--
+	  <ion-list>
+			<ion-item *ngFor="let cats of productsList"  lines="none">
+		
+			  <div class="listSection" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: cats.id}]">
+				<div class="UserimgSection">
+				  <ion-avatar class="chatImage" slot="start">
+					<ion-img [src]="cats.image" ></ion-img>
+					
+				  </ion-avatar>
+				</div>
+				<div class="usernameSection" padding-start padding >
+				  <ion-badge>
+	
+					 {{cats.title}}
+					</ion-badge>
+				  <p class="descText" no-margin no-padding  >{{cats.price}}$</p>
+				</div>
+			  </div>
+			
+			  
+			</ion-item>
+		</ion-list>
+
+-->
+</ion-content>

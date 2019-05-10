@@ -1,0 +1,82 @@
+<!--
+<section class="row mt-5">
+  <div class="col">
+    <button class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modalBook">Add New Restaurant</button>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Image</th>
+          <th scope="col">Title</th>
+          <th scope="col">Address</th>
+          <th scope="col">Phonenumber</th>
+		  <th scope="col">Latitude</th>
+		  <th scope="col">Longitude</th>
+          <th scope="col">Information</th>
+		  <th scope="col">Outlet</th>
+          <th scope="col">&nbsp;</th>
+          <th scope="col">&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let restaurant of categories; index as i">
+          <th scope="row">{{i+1}}</th>
+          <td>
+	  
+		  <img style="width:150px;height:100px;" class="thumbnail" src="{{restaurant.firebase_url}}">
+		  </td>
+          <td>{{restaurant.title}}</td>
+          <td>{{restaurant.address}}</td>
+          <td>{{restaurant.phonenumber}}</td>
+          <td>{{restaurant.lat}}</td>
+		  <td>{{restaurant.long}}</td>
+		  <td>{{restaurant.info}}</td>
+		  <td>{{restaurant.outlet}}</td>
+          <td>
+	
+			<button class="btn btn-primary" routerLink="/restaurant-details/{{restaurant.$key}}">More Info</button>
+          </td>
+          <ng-template #noOwner>
+            <td>
+              <button class="btn btn-secondary" disabled="true" >Update</button>
+			  
+			  
+			  
+            </td>
+          </ng-template>
+		
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<app-modal [userUid]="userUid"></app-modal
+
+-->
+<!--
+<ul class = "list-group" style ="padding-top:70px;">
+-->
+
+<section class="row mt-5">
+  <div class="col">
+
+	
+
+	<div class="row" >
+		  <div class="col-xs-12 col-md-3" *ngFor="let category of categories; index as i" style="padding-top:30px;">
+				
+				<a [routerLink]="['/category-details/'+category.$key]" style = "text-align: center;"><h5>{{i+1}}. {{category.cat_name}}</h5></a>
+				
+				<img style="width:100%;height:150px;" class="thumbnail" src="{{category.firebase_url}}">
+				
+		  </div>
+		  
+	</div>
+
+	</div>
+	
+</section>
+	<!--
+</ul>
+
+-->

@@ -1,0 +1,106 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+            <ion-menu-button>
+                <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+            </ion-menu-button>
+        </ion-buttons>
+
+        <ion-buttons slot="end">
+
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+                <ion-icon name="cart"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+        <ion-title>Choose Delivery Address</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+
+
+    <div class="backdrop">
+        <img src="{{'assets/imgs/delivery.jpg' }}">
+    </div>
+    <div class="backdrop-separator1"></div>
+    <div class="backdrop-separator2"></div>
+
+    <div class="title" padding>
+
+
+        <ion-button class="add" [routerLink]="['/new-address']">
+            <ion-icon name="add"></ion-icon>Add New Address</ion-button>
+
+    </div>
+    <!--
+			<div class="top-slide">
+					<div class="wrap-slide">
+						<ion-slides>
+							<ion-slide *ngIf="deliver_method_image">
+								<div class="thumb flex-ali-center flex-jus-center ovfl-hidden">
+									
+									
+									<img src="{{deliver_method_image}}" >
+								</div>
+							</ion-slide>
+						
+				
+						</ion-slides>
+					</div>
+					
+								<div class="title" padding>
+	
+											
+										<ion-button class="add" [routerLink]="['/new-address']"><ion-icon name="add"></ion-icon>Add New Address</ion-button>
+		
+								</div>
+					
+					
+		
+			
+					
+					
+			</div>
+			
+			-->
+
+    <ion-list>
+        <ion-radio-group>
+            <ion-list-header>
+                <h2>Select Delivery Address</h2>
+            </ion-list-header>
+
+            <ion-item *ngFor="let address of addressList">
+                <ion-label>
+
+                    <p class="show-address">City: {{address.city}} </p>
+                    <p class="show-address">District: {{address.district}}</p>
+                    <p class="show-address">Street: {{address.street}}</p>
+                    <p class="show-address">Building Name: {{address.number}}</p>
+                    <p class="show-address">Building No: {{address.phone}}</p>
+                    <p class="show-address">Door No: {{address.complement}}</p>
+                </ion-label>
+
+                <ion-radio (ionSelect)="selectAddress(address.id,address)"></ion-radio>
+
+
+
+            </ion-item>
+        </ion-radio-group>
+    </ion-list>
+
+
+
+
+
+</ion-content>
+
+
+
+<ion-footer>
+    <ion-toolbar position="bottom">
+        <ion-button expand="full" color="primary" (click)="placeOrder(service.cart.line_items)">Full Button</ion-button>
+    </ion-toolbar>
+</ion-footer>
