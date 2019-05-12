@@ -14,7 +14,7 @@
             </ion-button>
         </ion-buttons>
 
-        <ion-title>Order Details</ion-title>
+        <ion-title>Informações do Pedido</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -26,13 +26,13 @@
 
 
         <div class="movie-data">
-            <div class="title" style="background-color: #6899DA;">Customer Details</div>
+            <div class="title" style="background-color: #6899DA;">Informações do Cliente</div>
 
             <ion-grid style="background-color: #B8F0E6;">
                 <ion-row>
                     <ion-col>
                         <div class="overview">
-                            <p>Name: <b>{{orderDetails.customerDetails.displayName}}</b></p>
+                            <p>Nome: <b>{{orderDetails.customerDetails.displayName}}</b></p>
                         </div>
                     </ion-col>
 
@@ -43,7 +43,7 @@
 
                         <div class="overview">
 
-                            <b><p>Email Id: <b>{{orderDetails.customerDetails.email}}</b></p>
+                            <b><p>Email: <b>{{orderDetails.customerDetails.email}}</b></p>
                             </b>
 
 
@@ -58,7 +58,7 @@
                 <ion-row>
                     <ion-col>
                         <div class="overview">
-                            <p>PhoneNumber: <b>{{orderDetails.customerDetails.phone}}</b></p>
+                            <p>Telefone: <b>{{orderDetails.customerDetails.phone}}</b></p>
                         </div>
                     </ion-col>
 
@@ -67,7 +67,7 @@
                 <ion-row>
                     <ion-col>
                         <div class="overview">
-                            <p>Address: <b>{{orderDetails.customerDetails.address}}</b></p>
+                            <p>Endereço: <b>{{orderDetails.customerDetails.address}}</b></p>
                         </div>
 
                     </ion-col>
@@ -77,13 +77,13 @@
             </ion-grid>
 
 
-            <div class="title" style="background-color: #6899DA;margin-top:20px;">Delivery Info</div>
+            <div class="title" style="background-color: #6899DA;margin-top:20px;">Endereço de Entrega</div>
             <ion-grid style="background-color: #B8F0E6;">
                 <ion-row>
                     <ion-col>
 
                         <div class="overview">
-                            <p>City: <b>{{addresses.city}}</b></p>
+                            <p>Cidade: <b>{{addresses.city}}</b></p>
                         </div>
                     </ion-col>
 
@@ -93,7 +93,7 @@
                 <ion-row>
                     <ion-col>
                         <div class="overview">
-                            <p>District : <b>{{addresses.district}}</b></p>
+                            <p>Bairro : <b>{{addresses.district}}</b></p>
                         </div>
                     </ion-col>
 
@@ -103,7 +103,7 @@
                     <ion-col>
 
                         <div class="overview">
-                            <p>Street: <b>{{addresses.street}}</b></p>
+                            <p>Endereço: <b>{{addresses.street}}</b></p>
                         </div>
                     </ion-col>
 
@@ -112,7 +112,7 @@
                 <ion-row>
                     <ion-col>
                         <div class="overview">
-                            <p>Building Name: <b>{{addresses.number}}</b></p>
+                            <p>Número: <b>{{addresses.number}}</b></p>
                         </div>
                     </ion-col>
 
@@ -123,7 +123,7 @@
                     <ion-col>
 
                         <div class="overview">
-                            <p>Building No: <b>{{addresses.phone}}</b></p>
+                            <p>Telefone: <b>{{addresses.phone}}</b></p>
                         </div>
                     </ion-col>
 
@@ -143,7 +143,7 @@
                     <ion-col>
 
                         <div class="overview">
-                            <p>Date: <b>{{orderDetails.timeStamp | date}}</b></p>
+                            <p>Data: <b>{{orderDetails.timeStamp | date}}</b></p>
                         </div>
                     </ion-col>
 
@@ -167,7 +167,7 @@
 
 
             <div style="background-color: #B8F0E6;">
-                <div class="title" style="background-color: #6899DA;margin-top:20px;">Order's Item Details</div>
+                <div class="title" style="background-color: #6899DA;margin-top:20px;">Detalhes dos Produtos</div>
 
 
 
@@ -184,8 +184,8 @@
                         <h4 style="background-color:#7CC2B6"><strong>{{item.name}} --- {{item.restaurantName}}</strong></h4>
 
                         <div style="margin-left:20px;">
-                            <p>Price {{item.price}}$</p>
-                            <p>Quantity: {{item.quantity}}</p>
+                            <p>Preço {{item.price}}$</p>
+                            <p>Quantidade: {{item.quantity}}</p>
                             <h4><strong>SubTotal: {{1*item.price*item.quantity}}$</strong></h4>
 
                         </div>
@@ -198,9 +198,9 @@
                         <div *ngFor="let itemExtra of item.extra">
                             <div *ngIf="itemExtra.quantity != 0">
 
-                                <h4 style="background-color:#7CC2B6"><strong>Extra Item Name: {{itemExtra.name}}</strong></h4>
-                                <p>Price: {{itemExtra.value}}$</p>
-                                <p>Quantity: {{itemExtra.quantity}}</p>
+                                <h4 style="background-color:#7CC2B6"><strong>Nome de Pedido Extra: {{itemExtra.name}}</strong></h4>
+                                <p>Preço: {{itemExtra.value}}$</p>
+                                <p>Quantidade: {{itemExtra.quantity}}</p>
                                 <h4><strong>Sub-Total: {{1*itemExtra.value*itemExtra.quantity}}$</strong></h4>
 
                             </div>
@@ -400,7 +400,7 @@
 		 --->
                 <ion-row class="label" *ngIf="orderDetails.payments.id">
                     <ion-col width-75>
-                        <ion-label no-margin>Transaction Id:</ion-label>
+                        <ion-label no-margin>Id da Transação:</ion-label>
                     </ion-col>
                     <ion-col width-25 text-right>
                         <ion-label no-margin>{{orderDetails.payments.id}}</ion-label>
@@ -408,7 +408,7 @@
                 </ion-row>
                 <ion-row class="label" *ngIf="orderDetails.payments.status">
                     <ion-col width-75>
-                        <ion-label no-margin>Payment Status::</ion-label>
+                        <ion-label no-margin>Status do Pagamento:</ion-label>
                     </ion-col>
                     <ion-col width-25 text-right>
                         <ion-label no-margin>{{orderDetails.payments.status}}</ion-label>
@@ -416,7 +416,7 @@
                 </ion-row>
                 <ion-row class="label" *ngIf="orderDetails.payments.amount">
                     <ion-col width-75>
-                        <ion-label no-margin>Charged Amount:</ion-label>
+                        <ion-label no-margin>Valor Cobrado:</ion-label>
                     </ion-col>
                     <ion-col width-25 text-right>
                         <ion-label no-margin>{{orderDetails.payments.amount}}</ion-label>
@@ -465,7 +465,7 @@
             <ion-row class="label">
                 <ion-col width-75>
                     <h4>
-                        <ion-label no-margin style="text-align:right;"><b>Payment Type</b></ion-label>
+                        <ion-label no-margin style="text-align:right;"><b>Tipo de Pagamento</b></ion-label>
                     </h4>
                 </ion-col>
                 <ion-col width-25 text-right>

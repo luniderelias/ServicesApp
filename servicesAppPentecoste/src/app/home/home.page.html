@@ -27,20 +27,19 @@
 
                 <img class="poster-effect" [src]="cats.firebase_url">
             </div>
-            <div class="title">{{cats.title }}</div>
-            <div class="vote1">
+            <div class="title">{{cats.description }}</div>
+            <div class="vote3">
                 <ion-icon name="phone-portrait" expand="icon-only" (click)="call(cats)"></ion-icon>
             </div>
-            <div class="vote2">
+            <div class="vote4">
                 <ion-icon name="locate" expand="icon-only" [routerLink]="['/restaurant-map', {lat: cats.lat, long: cats.long,img: cats.img,title: cats.title, id: cats.id}]"></ion-icon>
             </div>
-            <div class="vote3">
+            <!--<div class="vote3">
                 <ion-icon name="chatbubbles" expand="icon-only" (click)="chat(cats)"></ion-icon>
             </div>
             <div class="vote4">
                 <ion-icon name="time" expand="icon-only"></ion-icon>
-            </div>
-
+            </div>-->
             <div class="year" [routerLink]="['/categories', {id: cats.id, title: cats.title , owner_id: cats.owner_id}]">{{ cats.title}}</div>
 
 

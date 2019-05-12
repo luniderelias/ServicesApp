@@ -57,7 +57,8 @@ export class ProductsPage implements OnInit {
 						price: snap.val().price,
 						favorite: false,
 						title: snap.val().name,
-						image: snap.val().image_firebase_url
+						image: snap.val().image_firebase_url,
+						stock: snap.val().stock
 						});
 					});
 					
@@ -111,7 +112,7 @@ export class ProductsPage implements OnInit {
   
   async presentLoading() {
 		this.loading = await this.loadingCtrl.create({
-			message: 'waiting',
+			message: 'Carregando',
 			duration: 2000
 		});
 		return await this.loading.present();

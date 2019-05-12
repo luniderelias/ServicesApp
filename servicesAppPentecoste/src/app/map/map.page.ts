@@ -149,7 +149,7 @@ export class MapPage implements OnInit {
 			infoWindow = new google.maps.InfoWindow;
 				
 					infoWindow.setPosition(posUser);
-					infoWindow.setContent('Thats2 your Location.');
+					infoWindow.setContent('Essa é sua localização');
 					infoWindow.open(map);
 					map.setCenter(posUser);
 					
@@ -241,7 +241,7 @@ export class MapPage implements OnInit {
 						console.log(distanceBetween);
 						
 						firebase.database().ref('/cord').child(uid).child(res_id).update({    // set
-						 item_dis : distanceBetween.toFixed(2) + "km away"
+						 item_dis : distanceBetween.toFixed(2) + "km distante"
 					  });
 						
 						return distanceBetween;
@@ -263,8 +263,8 @@ export class MapPage implements OnInit {
   handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
+                              'Erro: O serviço de geolocalização falhou.' :
+                              'Erro: Seu dispositivo não suporta geolocalização.');
         infoWindow.open(map);
       }
 	  

@@ -55,7 +55,7 @@ export class WishlistPage implements OnInit {
 			  image_firebase_url: snap.val().image,
 			  restaurantId: snap.val().restaurantId,
 			  restaurantName: snap.val().restaurantName,
-			  delate: "Delete",
+			  delate: "Deletar",
 			  ionBadge: snap.val().price
 			});  
 		  });

@@ -46,8 +46,8 @@ export class SignupPage implements OnInit {
 		
 		this.signupForm = formBuilder.group({
 			email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
-			firstname: ['', Validators.compose([Validators.minLength(6), Validators.required])],
-			lastname: ['', Validators.compose([Validators.minLength(6), Validators.required])],
+			firstname: ['', Validators.compose([Validators.required])],
+			lastname: ['', Validators.compose([Validators.required])],
 			password: ['', Validators.compose([Validators.minLength(6), Validators.required])],
 			phone: ['', Validators.compose([Validators.minLength(5), Validators.required])],
 			address: ['', Validators.compose([Validators.minLength(2), Validators.required])]
@@ -110,7 +110,7 @@ export class SignupPage implements OnInit {
 
 	async presentLoading() {
 		this.loading = await this.loadingCtrl.create({
-			message: 'waiting',
+			message: 'Carregando',
 			duration: 2000
 		});
 		return await this.loading.present();

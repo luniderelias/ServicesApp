@@ -121,7 +121,7 @@ export class ChatPage implements OnInit {
 	console.log(this.restaurantOwnerId);
 	
 	if(this.data.message == "" || this.data.message == undefined){
-		alert("Please write message");
+		alert("Por favor, escreva sua mensagem.");
 	}
 	else {
 		let newData = firebase.database().ref('chats/'+this.nickname+ '/chat/'+this.roomkey + '/list').push();
@@ -163,7 +163,7 @@ export class ChatPage implements OnInit {
     exitData.set({
       type:'exit',
       user:this.nickname,
-      message:this.nickname+' has exited this room.',
+      message:this.nickname+' saiu do chat.',
       sendDate:Date()
     });
 	
@@ -171,7 +171,7 @@ export class ChatPage implements OnInit {
     exitData2.set({
       type:'exit',
       user:this.nickname,
-      message:this.nickname+' has exited this room.',
+      message:this.nickname+' saiu do chat.',
       sendDate:Date()
     });
 

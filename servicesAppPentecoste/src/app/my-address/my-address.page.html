@@ -13,7 +13,7 @@
             </ion-button>
         </ion-buttons>
 
-        <ion-title>My Addresses</ion-title>
+        <ion-title>Meus Endereços</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -21,7 +21,7 @@
 
     <div style="margin: 10px 5px;">
         <ion-button [routerLink]="['/new-address']">
-            <ion-icon name="add-circle"></ion-icon> Add New Address</ion-button>
+            <ion-icon name="add-circle"></ion-icon>Adicionar novo Endereço</ion-button>
     </div>
 
     <!--saved address list-->
@@ -30,28 +30,21 @@
         <ion-card-header style="background-color: #D3C140;" color="light">
 
             <ion-card-title>
-                <ion-icon name="compass"></ion-icon>CUSTOMER ADDRESS</ion-card-title>
+                <ion-icon name="compass"></ion-icon> ENDEREÇO DO CLIENTE</ion-card-title>
         </ion-card-header>
 
         <ion-card-content style="background-color: #C8D488;" color="light">
 
             <div style="padding-left:20px;">
-                <p class="show-address">ID: {{address.id}} </p>
-                <p class="show-address">City: {{address.city}} </p>
-                <p class="show-address">District: {{address.district}}</p>
-                <p class="show-address">Street: {{address.street}}</p>
-                <p class="show-address">Building Name: {{address.number}}</p>
-                <p class="show-address">Building No: {{address.phone}}</p>
-                <p class="show-address">Complemento: {{address.complement}}</p>
-
-                <ion-button [routerLink]="['/edit-address', {address: address}]">
-                    <ion-icon name="build"></ion-icon>
-                    Edit
-                </ion-button>
+                <p class="show-address"><b>Cidade:</b> {{address.city}} </p>
+                <p class="show-address"><b>Bairro:</b> {{address.district}}</p>
+                <p class="show-address"><b>Endereço:</b> {{address.street}}</p>
+                <p class="show-address"><b>Número:</b> {{address.number}}</p>
+                <p class="show-address"><b>Telefone:</b> {{address.phone}}</p>
+                <p class="show-address"><b>Complemento:</b> {{address.complement}}</p>
 
                 <ion-button (click)="deleteUserAddress(address.id)">
-                    <ion-icon name="trash"></ion-icon>
-                    Delete
+                    <ion-icon name="trash"></ion-icon> Deletar
                 </ion-button>
 
 

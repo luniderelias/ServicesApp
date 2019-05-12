@@ -17,6 +17,8 @@ import { Page404Component } from './components/page404/page404.component';
 import { FormsModule } from '@angular/forms';
 import { environment } from '../environments/environment';
 
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -54,10 +56,32 @@ import { AddExtraFoodComponent } from './components/add-extra-food/add-extra-foo
 import { ViewExtraFoodComponent } from './components/view-extra-food/view-extra-food.component';
 import { EditExtraFoodComponent } from './components/edit-extra-food/edit-extra-food.component';
 import { AddNewRestaurantComponent } from './components/add-new-restaurant/add-new-restaurant.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from './components/shared/shared.module';
+import { AgmCoreModule } from '@agm/core';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { StoreModule } from '@ngrx/store';
 
 
+import { AuthService } from './components/shared/auth/auth.service';
+import { AuthGuard } from './components/shared/auth/auth-guard.service';
+
+import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
+
+import { ContentLayoutComponent } from './components/layouts/content/content-layout.component';
+import { FullLayoutComponent } from './components/layouts/full/full-layout.component';
+
+import { DragulaService } from 'ng2-dragula';
+
+import * as $ from 'jquery';
 
 
+export function createTranslateLoader(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -106,6 +130,8 @@ import { AddNewRestaurantComponent } from './components/add-new-restaurant/add-n
     ViewExtraFoodComponent,
     EditExtraFoodComponent,
     AddNewRestaurantComponent,
+    FullLayoutComponent,
+    ContentLayoutComponent
   ],
   imports: [
     BrowserModule,
@@ -114,8 +140,32 @@ import { AddNewRestaurantComponent } from './components/add-new-restaurant/add-n
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireStorageModule,
+    BrowserAnimationsModule,
+        StoreModule.forRoot({}),
+        AppRoutingModule,
+        SharedModule,
+        SnotifyModule.forRoot(),
+        HttpClientModule,
+        NgbModule.forRoot(),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: (createTranslateLoader),
+                deps: [HttpClient]
+              }
+        }),
+        AgmCoreModule.forRoot({
+            apiKey: 'AIzaSyBr5_picK8YJK7fFR2CPzTVMj6GG1TtRGo'
+        })
   ],
-  providers: [AngularFireAuth],
+  providers: [
+    AngularFireAuth,
+    { provide: 'SnotifyToastConfig', useValue: ToastDefaults },
+    SnotifyService,
+    DragulaService,
+    AuthService,
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

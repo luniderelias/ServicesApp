@@ -317,7 +317,7 @@ export class RestaurantMapPage implements OnInit {
 						
 						
 						firebase.database().ref('/cord').child(uid).child(res_id).update({    // set
-						 item_dis : distanceBetween.toFixed(2) + "km away"
+						 item_dis : distanceBetween.toFixed(2) + "km distante"
 					  });
 						
 						return distanceBetween;
@@ -335,8 +335,8 @@ export class RestaurantMapPage implements OnInit {
   handleLocationError(browserHasGeolocation, infoWindow, pos) {
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
+                              'Erro: O serviço de Geolocalização falhou.' :
+                              'Erro: Seu Dispositivo não suporta Geolocalização.');
         infoWindow.open(map);
       }
 

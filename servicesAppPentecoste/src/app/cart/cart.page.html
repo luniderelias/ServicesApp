@@ -41,7 +41,7 @@
                     <h4 class="fs-16 mg-0 ellipsis">{{item.name}}</h4>
                     <p>
                         <span>
-							<i>{{item.price}}$</i>
+							<i>R$ {{item.price}}</i>
 						</span>
 
 
@@ -52,7 +52,7 @@
                     <p>
 
 
-                        <i>Sub: {{1*item.price*item.quantity}}$</i>
+                        <i>Sub Total: R$ {{1*item.price*item.quantity}}</i>
 
 
 
@@ -158,10 +158,10 @@
         <ion-grid>
             <ion-row class="label">
                 <ion-col width-75>
-                    <ion-label no-margin *ngIf="service.total != 0"><b>Totals</b></ion-label>
+                    <ion-label no-margin *ngIf="service.total != 0"><b>Total</b></ion-label>
                 </ion-col>
                 <ion-col width-25 text-right>
-                    <ion-label no-margin *ngIf="service.total != 0"><b>{{1*service.total}}$</b></ion-label>
+                    <ion-label no-margin *ngIf="service.total != 0"><b>R$ {{1*service.total}}</b></ion-label>
                 </ion-col>
             </ion-row>
 
@@ -185,6 +185,6 @@
 
 <ion-footer>
     <ion-toolbar position="bottom">
-        <ion-button *ngIf="service.total != 0" expand="full" color="primary" [routerLink]="['/choose-payment']">Choose Payment Type</ion-button>
+        <ion-button *ngIf="service.total != 0" expand="full" color="primary" [routerLink]="['/choose-payment']">Escolher Forma de Pagamento</ion-button>
     </ion-toolbar>
 </ion-footer>

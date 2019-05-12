@@ -108,7 +108,7 @@ export class ProfilePage implements OnInit {
 
 	async presentLoading() {
 		this.loading = await this.loadingCtrl.create({
-			message: 'waiting',
+			message: 'Carregando',
 			duration: 2000
 		});
 		return await this.loading.present();

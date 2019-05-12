@@ -62,12 +62,14 @@ export const environment = {
 		path: '/my-address',
 		component: 'MyAddressPage',
 		icon: 'md-create',
-	},{
+	},
+	/*{
 		name: 'ChatList',
 		path: '/chat-list',
 		component: 'ChatListPage',
 		icon: 'chatboxes',
-	},{
+	}, */
+	{
 		name: 'MyProfile',
 		path: '/profile',
 		component: 'ProfilePage',
@@ -77,12 +79,14 @@ export const environment = {
 		path: '/forgot',
 		component: 'ForgotPage',
 		icon: 'lock',
-	},{
+	},
+	/*{
 		name: 'Languages',
 		path: '/translate',
 		component: 'TranslatePage',
 		icon: 'globe',
-	}],
+	}*/
+],
 
 	
 	themes: [{

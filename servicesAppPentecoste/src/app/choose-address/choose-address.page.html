@@ -14,7 +14,7 @@
             </ion-button>
         </ion-buttons>
 
-        <ion-title>Choose Delivery Address</ion-title>
+        <ion-title>Endereço de Entrega</ion-title>
     </ion-toolbar>
 </ion-header>
 
@@ -31,7 +31,7 @@
 
 
         <ion-button class="add" [routerLink]="['/new-address']">
-            <ion-icon name="add"></ion-icon>Add New Address</ion-button>
+            <ion-icon name="add"></ion-icon>Adicionar Novo Endereço</ion-button>
 
     </div>
     <!--
@@ -69,18 +69,18 @@
     <ion-list>
         <ion-radio-group>
             <ion-list-header>
-                <h2>Select Delivery Address</h2>
+                <h2>Selecione Endereço de Entrega</h2>
             </ion-list-header>
 
             <ion-item *ngFor="let address of addressList">
                 <ion-label>
 
-                    <p class="show-address">City: {{address.city}} </p>
-                    <p class="show-address">District: {{address.district}}</p>
-                    <p class="show-address">Street: {{address.street}}</p>
-                    <p class="show-address">Building Name: {{address.number}}</p>
-                    <p class="show-address">Building No: {{address.phone}}</p>
-                    <p class="show-address">Door No: {{address.complement}}</p>
+                    <p class="show-address"><b>Cidade:</b> {{address.city}} </p>
+                    <p class="show-address"><b>Bairro:</b> {{address.district}}</p>
+                    <p class="show-address"><b>Endereço:</b> {{address.street}}</p>
+                    <p class="show-address"><b>>Número:</b> {{address.number}}</p>
+                    <p class="show-address"><b>Telefone:</b> {{address.phone}}</p>
+                    <p class="show-address"><b>Complemento:</b> {{address.complement}}</p>
                 </ion-label>
 
                 <ion-radio (ionSelect)="selectAddress(address.id,address)"></ion-radio>
@@ -101,6 +101,6 @@
 
 <ion-footer>
     <ion-toolbar position="bottom">
-        <ion-button expand="full" color="primary" (click)="placeOrder(service.cart.line_items)">Full Button</ion-button>
+        <ion-button expand="full" color="primary" (click)="placeOrder(service.cart.line_items)">Confirmar Pedido</ion-button>
     </ion-toolbar>
 </ion-footer>

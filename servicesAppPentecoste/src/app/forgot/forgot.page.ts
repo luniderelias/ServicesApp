@@ -38,7 +38,7 @@ export class ForgotPage implements OnInit {
 			console.log(this.resetPasswordForm.value);
 		} else {
 			this.usersProv.resetPassword(this.resetPasswordForm.value.email).then((user) => {
-				this.presentAlertErr('Please check your inbox. We have sent you reset password link. Thanks!');
+				this.presentAlertErr('Por favor, confira seu Email. Enviamos um link para redefinição de senha. Obrigado!');
 			}, (error) => {
 				this.presentAlertErr(error.message);
 			});

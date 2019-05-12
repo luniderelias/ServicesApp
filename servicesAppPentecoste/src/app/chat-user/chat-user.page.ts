@@ -170,17 +170,17 @@ export class ChatUserPage implements OnInit {
 	  
     let exitData = firebase.database().ref('chats/'+this.userId+'/chat/'+this.roomKey+ '/list').push();
     exitData.set({
-      type:'exit',
+      type:'sair',
       user:this.userId,
-      message:this.userId+' has exited this room.',
+      message:this.userId+' saiu do chat.',
       sendDate:Date()
     });
 	
 	let exitData2 = firebase.database().ref('chats/'+ this.owner_id_restaurant +'/'+this.roomKey+'/chat/'+this.userId + '/list').push();
     exitData2.set({
-      type:'exit',
+      type:'sair',
       user:this.userId,
-      message:this.userId+' has exited this room.',
+      message:this.userId+' saiu do chat.',
       sendDate:Date()
     });
 	

@@ -14,14 +14,14 @@
             </ion-button>
         </ion-buttons>
 
-        <ion-title>Add New Address</ion-title>
+        <ion-title>Novo Endereço</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
     <div class="wrapp-pst" padding>
 
-        <h2>Add New Address</h2>
+        <h2>Adicionar Novo Endereço</h2>
 
         <div class="wrapp-form mgt--50" padding>
             <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
@@ -40,7 +40,7 @@
 
 
                     <ion-item>
-                        <ion-label>City</ion-label>
+                        <ion-label>Cidade</ion-label>
                         <ion-select formControlName="city" okText="Okay" cancelText="Dismiss" [class.invalid]="!signupForm.controls.city.valid && signupForm.controls.city.dirty">
                             <ion-select-option *ngFor="let item of cityName" value="{{item.name}}">{{item.name}}</ion-select-option>
 
@@ -51,35 +51,35 @@
 
 
                 <div class="error-message" *ngIf="!signupForm.controls.city.valid && signupForm.controls.city.dirty">
-                    <p class="fs-11 mgt-5">Please enter a valid city.</p>
+                    <p class="fs-11 mgt-5">Por favor, selecione uma cidade válida.</p>
                 </div>
                 <br>
-                <ion-label stacked class="mgb-5">District</ion-label>
+                <ion-label stacked class="mgb-5">Bairro</ion-label>
                 <ion-list class="ani-bottom-to-top mgb-0">
                     <ion-item class="white-opct bdra-30">
-                        <ion-input formControlName="district" type="text" placeholder="Your Address" class=""></ion-input>
+                        <ion-input formControlName="district" type="text" placeholder="Seu Bairro" class=""></ion-input>
                     </ion-item>
                 </ion-list>
                 <br>
-                <ion-label stacked class="mgb-5">Address</ion-label>
+                <ion-label stacked class="mgb-5">Endereço</ion-label>
                 <ion-list class="ani-bottom-to-top mgb-0">
                     <ion-item class="white-opct bdra-30">
-                        <ion-input #email formControlName="street" type="text" placeholder="Your address" class=""></ion-input>
+                        <ion-input #email formControlName="street" type="text" placeholder="Seu endereço" class=""></ion-input>
                     </ion-item>
                 </ion-list>
                 <br>
-                <ion-label stacked class="mgb-5">Building number</ion-label>
+                <ion-label stacked class="mgb-5">Número</ion-label>
                 <ion-list class="ani-bottom-to-top mgb-0">
                     <ion-item class="white-opct bdra-30">
-                        <ion-input #email formControlName="number" type="text" placeholder="Your address number" class=""></ion-input>
+                        <ion-input #email formControlName="number" type="text" placeholder="Número do Endereço" class=""></ion-input>
                     </ion-item>
                 </ion-list>
                 <br>
 
-                <ion-label stacked class="mgb-5">Phone Number</ion-label>
+                <ion-label stacked class="mgb-5">Telefone</ion-label>
                 <ion-list class="ani-bottom-to-top mgb-0">
                     <ion-item class="white-opct bdra-30">
-                        <ion-input #email formControlName="phone" type="text" placeholder="Your phone number" [class.invalid]="!signupForm.controls.phone.valid && signupForm.controls.phone.dirty" class=""></ion-input>
+                        <ion-input #email formControlName="phone" type="text" placeholder="Seu Telefone/Celular" [class.invalid]="!signupForm.controls.phone.valid && signupForm.controls.phone.dirty" class=""></ion-input>
                     </ion-item>
                 </ion-list>
                 <br>
@@ -97,7 +97,7 @@
 
 
 
-                <ion-button expand="full" color="primary" type="submit">Create New Address</ion-button>
+                <ion-button expand="full" color="primary" type="submit">Salvar Endereço</ion-button>
 
 
             </form>

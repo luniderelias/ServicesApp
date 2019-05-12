@@ -1,105 +1,101 @@
 <ion-header>
-	<ion-toolbar>
-		<ion-buttons slot="start">
-      <ion-menu-button>
-        <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
-      </ion-menu-button>
-    </ion-buttons>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button>
+                <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+            </ion-menu-button>
+        </ion-buttons>
 
-		<ion-title>Profile</ion-title>
-	</ion-toolbar>
-	
-	  
+        <ion-title>Perfil</ion-title>
+    </ion-toolbar>
+
+
 </ion-header>
 
 <ion-content padding>
 
 
-	<div class="backdrop" *ngIf="user">
-    <img src="{{'assets/imgs/background.jpg' }}">
-  </div>
-  <div class="backdrop-separator1"></div>
-  <div class="backdrop-separator2"></div>
+    <div class="backdrop" *ngIf="user">
+        <img src="{{'assets/imgs/background.jpg' }}">
+    </div>
+    <div class="backdrop-separator1"></div>
+    <div class="backdrop-separator2"></div>
 
-  
 
-  
-  <div class="poster" *ngIf="user">
-  
-    <img src="{{(user.avt != '' && user.avt != null)? user.avt : 'assets/imgs/profile.jpg' }}">
-	
-	
-	
-    
-  </div>
 
-  <div class="movie-data" *ngIf="user">
-    <div class="title">{{ user.username }} {{user.fullname}}</div>
-	
-	
-	
 
-  </div>
-  
-  
-	
-	<form padding (ngSubmit)="updateAddress()" [formGroup]="addressForm" *ngIf="user || user != null">
-		
-		
-		<ion-item>
-			<ion-label position = "fixed" class="pdl-15 txt-b3">Firstname</ion-label>
-			<ion-input formControlName="username" type="text"></ion-input>
-		</ion-item>
+    <div class="poster" *ngIf="user">
 
-		<br>
+        <img src="{{(user.avt != '' && user.avt != null)? user.avt : 'assets/imgs/profile2.jpg' }}">
 
-		
-		<ion-item>
-			<ion-label position = "fixed" class="pdl-15 txt-b3">Lastname</ion-label>
-			<ion-input formControlName="fullname" type="text"></ion-input>
-		</ion-item>
 
-		<br>
-		
-		<ion-item>
-			<ion-label position = "fixed" class="pdl-15 txt-b3">E-Mail</ion-label>
-			{{user.email}}
-		</ion-item>
 
-		<br>
 
-		
-		<ion-item>
-		
-			<ion-label position = "fixed" class="pdl-15 txt-b3">Address</ion-label>
-			<ion-input formControlName="address" type="text"></ion-input>
-		</ion-item>
+    </div>
 
-		<br>
+    <div class="movie-data" *ngIf="user">
+        <div class="title">{{ user.username }} {{user.fullname}}</div>
 
-		
-		<ion-item>
-			<ion-label position = "fixed" class="pdl-15 txt-b3">Phone</ion-label>
-			<ion-input formControlName="phone" type="numbber"></ion-input>
-		</ion-item>
 
-		<br>
-		<br>
 
-		<div class="" text-center>
-			<ion-button expand="full"  color = "primary" type="submit" class="">
-				Save change
-			</ion-button>
-		</div>
 
-		<br>
-		<br>
-		<br>
-	</form>
+    </div>
+
+
+
+    <form padding (ngSubmit)="updateAddress()" [formGroup]="addressForm" *ngIf="user || user != null">
+
+
+        <ion-item>
+            <ion-label position="fixed" class="pdl-15 txt-b3">Nome</ion-label>
+            <ion-input formControlName="username" type="text"></ion-input>
+        </ion-item>
+
+        <br>
+
+
+        <ion-item>
+            <ion-label position="fixed" class="pdl-15 txt-b3">Sobrenome</ion-label>
+            <ion-input formControlName="fullname" type="text"></ion-input>
+        </ion-item>
+
+        <br>
+
+        <ion-item>
+            <ion-label position="fixed" class="pdl-15 txt-b3">E-mail</ion-label>
+            {{user.email}}
+        </ion-item>
+
+        <br>
+
+
+        <ion-item>
+
+            <ion-label position="fixed" class="pdl-15 txt-b3">Endereço</ion-label>
+            <ion-input formControlName="address" type="text"></ion-input>
+        </ion-item>
+
+        <br>
+
+
+        <ion-item>
+            <ion-label position="fixed" class="pdl-15 txt-b3">Telefone</ion-label>
+            <ion-input formControlName="phone" type="numbber"></ion-input>
+        </ion-item>
+
+        <br>
+        <br>
+
+        <div class="" text-center>
+            <ion-button expand="full" color="primary" type="submit" class="">
+                Salvar
+            </ion-button>
+        </div>
+
+        <br>
+        <br>
+        <br>
+    </form>
 
 
 </ion-content>
-
-
-
-

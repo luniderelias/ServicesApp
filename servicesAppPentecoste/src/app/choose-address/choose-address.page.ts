@@ -94,7 +94,7 @@ export class ChooseAddressPage implements OnInit {
 		  
 		  
 			this.form = {}; 
-			this.buttonText= "Place Order";
+			this.buttonText= "Confirmar Pedido";
     
 	
 			console.log(firebase.auth().currentUser.uid);
@@ -167,7 +167,7 @@ export class ChooseAddressPage implements OnInit {
 	
 	placeOrder(item){
     this.disableSubmit = true;
-    this.buttonText = "Placing Order";
+    this.buttonText = "Confirmando Pedido";
 	
 	console.log("inside");
       if(this.values.isLoggedIn){
@@ -184,7 +184,7 @@ export class ChooseAddressPage implements OnInit {
          console.log(this.userProfiles);
 		 
           if(this.currentUserAddress == ''|| this.currentUserAddress == undefined){
-				alert("Please select delivery address");
+				alert("Por favor, selecione um endereço de entrega.");
 				console.log(this.userProfiles);
 				//this.nav.push(AddressPage,this.userProfiles);
                //this.nav.push(AddressPage, this.userProfiles);
@@ -361,7 +361,7 @@ export class ChooseAddressPage implements OnInit {
 
                             this.disableSubmit = false;
                         //    this.functions.showAlert('Success',  'Your order has been placed Successfully');
-						alert("success");
+						alert("Sucesso");
                             this.service.addOrders( item, this.service.total, this.currentUser.uid, this.payments, this.smallUserProfiles,this.currentUserAddress).then(()=>{
                              //  this.nav.setRoot('OrderList');
                                this.service.cart.line_items = []; 
@@ -431,7 +431,7 @@ export class ChooseAddressPage implements OnInit {
 					  
                      // this.functions.showAlert('Success',  'Your order has been placed Successfully');
 					  
-					  alert("success");
+					  alert("Pedido Realizado com Sucesso!");
 					  /***
                       this.service.addOrders( item, this.service.total, this.currentUser.uid, this.payments, this.smallUserProfiles,this.currentUserAddress).then(()=>{
                         // this.nav.setRoot('OrderList');     

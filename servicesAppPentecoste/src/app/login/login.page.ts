@@ -57,7 +57,7 @@ export class LoginPage implements OnInit {
 
 	async presentAlertErr() {
 		const alert = await this.alertCtrl.create({
-			message: 'login failed!',
+			message: 'Falha ao Entrar!',
 			buttons: [{
 				text: "Ok",
 				role: 'cancel'
@@ -68,7 +68,7 @@ export class LoginPage implements OnInit {
 
 	async presentLoading() {
 		this.loading = await this.loadingCtrl.create({
-			message: 'waiting',
+			message: 'Carregando',
 			duration: 2000
 		});
 		return await this.loading.present();
@@ -82,37 +82,9 @@ export class LoginPage implements OnInit {
 				
 				console.log(authData);
 				
-				
-				this.currentUser = firebase.auth().currentUser;
-		
-				console.log(this.currentUser.uid);
 			
-
-				this.service.getRestaurantUserProfile(authData.user.uid).on('value', (snapshot) =>{
-						console.log(snapshot.val());
-						
-						this.userProfiles = snapshot.val();
-						
-						console.log(this.userProfiles);
-						
-								this.loading.dismiss().then(() => {
-									let user = {
-										avt: this.userProfiles.facebook,
-										username: this.userProfiles.displayName,
-										fullname: this.userProfiles.lastName,
-										email: this.userProfiles.email,
-										address: this.userProfiles.address,
-										phone: this.userProfiles.phone,
-										id: this.currentUser.uid,
-
-									}
-									this.storage.set('user', user);
-									this.events.publish('user: change', user);
-								//	console.log(data);
-									this.router.navigateByUrl('/home');
-								});
-						
-				});
+				this.continueLogin(authData.user);
+				
 				/**
 				  this.userProfile = authData.user;
 			
@@ -188,6 +160,8 @@ export class LoginPage implements OnInit {
 	login_fb(){
 		this.usersProv.facebookLogin().then(authData => {
 			console.log(authData);
+			
+			this.continueLogin(authData);
 			/**
 			this.usersProv.getUser(authData.uid).then(data => {
 				let user = {
@@ -215,6 +189,52 @@ export class LoginPage implements OnInit {
 			});
 		});
 		this.presentLoading();
+	}
+
+	onLoginGoogle(): void {
+		this.usersProv.loginGoogleUser()
+		  .then((authData) => {
+			console.log(authData);
+			this.continueLogin(authData);
+		  }).catch(err => console.log('err', err.message));
+		  this.presentLoading();
+	}
+
+
+	continueLogin(user) {
+
+
+		this.currentUser = firebase.auth().currentUser;
+
+		console.log(user);
+
+		this.service.getRestaurantUserProfile(user.uid).on('value', (snapshot) => {
+			console.log(snapshot.val());
+			
+			this.userProfiles = snapshot.val();
+			if (this.userProfiles) {
+			console.log(this.userProfiles);
+			
+					this.loading.dismiss().then(() => {
+						let user = {
+							avt: this.userProfiles.facebook,
+							username: this.userProfiles.displayName,
+							fullname: this.userProfiles.lastName,
+							email: this.userProfiles.email,
+							address: this.userProfiles.address,
+							phone: this.userProfiles.phone,
+							id: this.currentUser.uid,
+
+						}
+						this.storage.set('user', user);
+						this.events.publish('user: change', user);
+					//	console.log(data);
+						this.router.navigateByUrl('/home');
+					});
+			}else{
+				this.usersProv.createUser(user, user.email, user.displayName, '', '', '').then(res => this.continueLogin(user));
+			}
+	});
 	}
 	
 

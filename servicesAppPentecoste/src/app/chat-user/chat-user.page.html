@@ -1,82 +1,81 @@
 <ion-header>
-  <ion-toolbar>
-   <ion-buttons slot="start">
-			<ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
-			<ion-menu-button>
-				<ion-icon class="fs-24 txt1" name="menu"></ion-icon>
-			</ion-menu-button>
-		</ion-buttons>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
+            <ion-menu-button>
+                <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
+            </ion-menu-button>
+        </ion-buttons>
 
-    <ion-buttons slot="end">
-      
-      <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
-        <ion-icon name="cart"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+        <ion-buttons slot="end">
 
-    <ion-title>Customer Chat</ion-title>
-  </ion-toolbar>
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+                <ion-icon name="cart"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+        <ion-title>Chat com Cliente</ion-title>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
 
-<div>
-    <div id="chat-container">
-      <span class="line-style"></span>
-      <hr>
-      <div class="message-wrap">
-        <div *ngFor="let chat of chats;" class="message">
+    <div>
+        <div id="chat-container">
+            <span class="line-style"></span>
+            <hr>
+            <div class="message-wrap">
+                <div *ngFor="let chat of chats;" class="message">
 
-          <div class="message-left"  *ngIf="chat.user !== nickname">
-            
-            <div class="msg-detail">
-              <div class="msg-content">
-                 <span class="msg-name">{{restaurantName}}</span>
-					<span class="msg-date">{{chat.sendDate | date:'short'}}</span>
-					<p text-wrap>{{chat.message}}</p>
-              </div>
+                    <div class="message-left" *ngIf="chat.user !== nickname">
+
+                        <div class="msg-detail">
+                            <div class="msg-content">
+                                <span class="msg-name">{{restaurantName}}</span>
+                                <span class="msg-date">{{chat.sendDate | date:'short'}}</span>
+                                <p text-wrap>{{chat.message}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="message-right" *ngIf="chat.user === nickname">
+
+
+                        <div class="msg-detail">
+                            <div class="msg-info">
+                            </div>
+                            <div class="msg-content">
+
+
+
+
+                                <span class="msg-name">{{userProfiles.displayName}}</span>
+                                <span class="msg-date">  {{chat.sendDate | date:'short'}}</span>
+                                <p text-wrap> {{chat.message}}</p>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          <div class="message-right" *ngIf="chat.user === nickname">
-            
-		
-            <div class="msg-detail">
-              <div class="msg-info">
-              </div>
-              <div class="msg-content">
-                
-				
-						
-						
-						<span class="msg-name">{{userProfiles.displayName}}</span>
-					<span class="msg-date">  {{chat.sendDate | date:'short'}}</span>
-					<p text-wrap>{{chat.message}}</p>
-					
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-  </div>
+    </div>
 
 </ion-content>
 
 
 
 <ion-footer class="footer">
-  <ion-toolbar class="footerSections">
-    <div class="containerFooter">
-      <div class="inputConatiner">
-        <ion-input class="placeholdertext inputMessage inputBg" type="text" placeholder="Type a message" [(ngModel)]="data.message"
-          autofocus="true" padding-start></ion-input>
-      </div>
-      <div class="send-button-parent">
-        <ion-button (click)="sendMessage()" class="sendBtn" color="primary">
-          <ion-icon class="sendBtn-icon" name="send" color="light"></ion-icon>
-        </ion-button>
-      </div>
-    </div>
-  </ion-toolbar>
+    <ion-toolbar class="footerSections">
+        <div class="containerFooter">
+            <div class="inputConatiner">
+                <ion-input class="placeholdertext inputMessage inputBg" type="text" placeholder="Escreva sua mensagem" [(ngModel)]="data.message" autofocus="true" padding-start></ion-input>
+            </div>
+            <div class="send-button-parent">
+                <ion-button (click)="sendMessage()" class="sendBtn" color="primary">
+                    <ion-icon class="sendBtn-icon" name="send" color="light"></ion-icon>
+                </ion-button>
+            </div>
+        </div>
+    </ion-toolbar>
 </ion-footer>

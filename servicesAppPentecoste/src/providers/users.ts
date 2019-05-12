@@ -6,6 +6,7 @@ import { Observable } from 'rxjs-compat/Observable';
 import * as firebase from 'firebase';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
+import { auth } from 'firebase/app';
 
 @Injectable()
 export class UsersProvider {
@@ -54,17 +55,9 @@ export class UsersProvider {
   }
 
   signupUser(email, password, firstname, lastname , phone, address ) {
-	  
 	  return this.fireAuth.createUserWithEmailAndPassword(email, password)
-  	.then((newUser) =>{
-  		this.restaurantUserInfo.child(newUser.user.uid).set({
-        email: email,
-        displayName: firstname,
-        lastName: lastname,
-        address: address,
-        phone: phone,
-		facebook: false
-        });
+  	.then((newUser) => {
+      this.createUser(newUser.user, email, firstname, lastname, address, phone);
   	});
 	  
 	  
@@ -95,6 +88,37 @@ export class UsersProvider {
     })
 	
 	*/
+  }
+
+  createUser(newUser, email, firstname, lastname, address, phone) {
+    return new Promise<any>((resolve, reject) => {
+      this.restaurantUserInfo.child(newUser.uid).set({
+      email: email,
+      displayName: firstname,
+      lastName: lastname,
+      address: address,
+      phone: phone,
+      facebook: false
+      }).then(res => console.log(res));
+    });
+  }
+
+  loginGoogleUser() {
+    return  new Promise<any>((resolve, reject) => {
+      this.fireAuth.signInWithPopup(new auth.GoogleAuthProvider())
+      .then(credential => {
+        console.log(credential);
+        const googleCredential = firebase.auth.GoogleAuthProvider
+                  .credential(credential.credential.idToken);
+        firebase.auth().signInWithCredential(googleCredential)
+      .then( success => {
+        console.log("Firebase success: " + JSON.stringify(success)); 
+        
+        resolve(success);
+
+      });
+    });
+  }).catch((error) => { console.log(error)});
   }
 
   facebookLogin(){
