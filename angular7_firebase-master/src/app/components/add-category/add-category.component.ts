@@ -111,7 +111,7 @@ export class AddCategoryComponent implements OnInit {
 					  
 					  
 					  this.firebaseService.addCategory(category);
-					  this.router.navigate(['categories']);
+					  this.router.navigate(['categorias/listar']);
 						
 				//	  });
 		});

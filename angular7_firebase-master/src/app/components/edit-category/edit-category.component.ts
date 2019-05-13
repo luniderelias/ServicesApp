@@ -163,7 +163,7 @@ export class EditCategoryComponent implements OnInit {
 	  
 	   this.firebaseService.updateCategory(this.id,category);
 	  
-	  this.router.navigate(['/categories']);
+	  this.router.navigate(['/categorias/detalhes/' + this.id]);
 	}
 	
 	if(this.inputImageUser.nativeElement.value){
@@ -181,7 +181,7 @@ export class EditCategoryComponent implements OnInit {
 		
 	  this.firebaseService.updateCategoryWithImage(this.id,category);
 	  
-	  this.router.navigate(['/categories']);
+	  this.router.navigate(['/categorias/detalhes/' + this.id]);
 		
 	}
 	  
@@ -210,7 +210,7 @@ export class EditCategoryComponent implements OnInit {
     this.uploadPercent = task.percentageChanges();
     task.snapshotChanges().pipe(finalize(() => this.urlImage = ref.getDownloadURL())).subscribe();
 	
-	alert("Please wait for uploading images");
+	alert("Por favor, clique em ok para fazer o envio da imagem");
 	
 	console.log(ref.getDownloadURL());
 	
