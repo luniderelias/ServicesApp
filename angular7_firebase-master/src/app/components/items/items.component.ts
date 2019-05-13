@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { UserInterface } from '../../models/user';
 import { ViewChild, ElementRef, Input } from '@angular/core';
-import {FirebaseService} from '../../services/firebase.service';
-import {Router} from '@angular/router';
+import { FirebaseService } from '../../services/firebase.service';
+import { Router } from '@angular/router';
 
-import { RestaurantInterface } from '../../models/restaurant'; 
-import { ItemInterface } from '../../models/item'; 
+import { RestaurantInterface } from '../../models/restaurant';
+import { ItemInterface } from '../../models/item';
+import { DatatableComponent } from '@swimlane/ngx-datatable/release';
 
 @Component({
   selector: 'app-items',
@@ -18,60 +19,54 @@ import { ItemInterface } from '../../models/item';
   styleUrls: ['./items.component.css']
 })
 export class ItemsComponent implements OnInit {
-	
-	restaurants : any;
-	restaurant2: any;
-	
-	items: any;
-	
-	
-  
-  private RestaurantInterface: RestaurantInterface[];  
-  private ItemInterface: ItemInterface[];  
+
+  restaurants: any;
+  restaurant2: any;
+
+  items: any;
+  private RestaurantInterface: RestaurantInterface[];
+  private ItemInterface: ItemInterface[];
   public isAdmin: any = null;
   public userUid: string = null;
+  @ViewChild(DatatableComponent) table: DatatableComponent;
 
-  constructor(private firebaseService:FirebaseService, private authService: AuthService , private router: Router) { }
+  constructor(private firebaseService: FirebaseService, private authService: AuthService, private router: Router) {
 
-  ngOnInit() {
-
-
-
-	 this.firebaseService.getItems().snapshotChanges().subscribe(items => { // Using snapshotChanges() method to retrieve list of data along with metadata($key)
+    this.firebaseService.getItems().snapshotChanges().subscribe(items => {
       this.items = [];
       items.forEach(item => {
-		  
-		  console.log(item);
-		  
-	
-		 let a = item.payload.toJSON(); 
+
+        console.log(item);
+
+
+        let a = item.payload.toJSON();
         a['$key'] = item.key;
-		
-		console.log(a);
-		
+
+        console.log(a);
+
         this.items.push(a as ItemInterface);
-		
-		
-        
-      })
+
+
+
+      });
     });
-	
-	  
+   }
+
+  ngOnInit() {}
+
+
+
+  onRestaurantDelete(id) {
+
+    this.firebaseService.deleteRestaurant(id);
+
+    this.router.navigate(['/restaurants']);
   }
 
- 
- 
-  onRestaurantDelete(id){
-	  
-	  this.firebaseService.deleteRestaurant(id);
-		
-	  this.router.navigate(['/restaurants']);
-  }
-  
-  goToRestaurantDetails(restaurant){
-	  console.log(restaurant);
-	  
-	  this.router.navigate(['/restaurants']);
+  goToRestaurantDetails(restaurant) {
+    console.log(restaurant);
+
+    this.router.navigate(['/restaurants']);
   }
 
 }

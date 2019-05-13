@@ -1,26 +1,21 @@
 <section class="row mt-5">
     <div class="col">
-
-        <a [routerLink]="['/items']">Back</a>
-        <br />
-        <h2 class="page-header">Add Extra Item</h2>
         <form (submit)="onExtraItemAddSubmit()" ngNativeValidate>
             <div class="form-group">
-                <label>Extra Name</label>
+                <label>Nome do Opcional</label>
                 <input class="form-control" type="text" [(ngModel)]="extraName" name="extraName" required>
-            </div>
-            <div class="form-group">
-                <label>Extra elected</label>
-                <input class="form-control" type="text" [(ngModel)]="extraSelected" name="extraSelected" required>
             </div>
 
             <div class="form-group">
-                <label>Extra Price</label>
+                <label>Preço do Opcional</label>
                 <input class="form-control" type="text" [(ngModel)]="extraPrice" name="extraPrice" required>
             </div>
 
 
-            <input type="submit" value="submit" class="btn btn-success">
+            <div class="col">
+                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/produtos/visualizar/'+id]">Voltar</button>
+                <button type="submit" value="submit" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Salvar</button>
+            </div>
         </form>
 
 

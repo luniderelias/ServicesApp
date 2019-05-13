@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
 import { NgForm } from '@angular/forms';
 
 import { FirebaseService } from '../../services/firebase.service';
@@ -35,7 +34,7 @@ export class ModalComponent implements OnInit {
 
   onSaveBook(bookForm: NgForm): void {
     if (bookForm.value.id == null) {
-      // New 
+      // New
       bookForm.value.userUid = this.userUid;
       this.dataApi.addBook(bookForm.value);
     } else {
@@ -69,11 +68,7 @@ export class ModalComponent implements OnInit {
     };
     this.firebaseService.addRestaurant(restaurant);
 
-    //bookForm.resetForm();
     this.btnClose.nativeElement.click();
-
-    //this.router.navigate(['restaurants']);
-
   }
 
 }

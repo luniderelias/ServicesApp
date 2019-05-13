@@ -1,52 +1,40 @@
 <section class="row mt-5">
-  <div class="col">
+    <div class="col">
+        <div *ngIf="item">
+            <h2 class="page header">{{item.name}} <small>Categoria: {{ item.category }}</small></h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <img style="width:100%" class="thumbnail" src="{{item.image_firebase_url}}">
 
-<div *ngIf = "item">
+                </div>
 
-	<a [routerLink] = "['/items']">Go back </a>
-	<br>
-	<h2 class ="page header">{{item.name}}<small>{{ item.category }}</small></h2>
-	<div class = "row">
-		<div class = "col-md-4">
-			<img style="width:100%" class="thumbnail" src="{{item.image_firebase_url}}">
-		
-		</div>
-		
-		<div class = "col-md-8">
-			<ul class ="list-group">
-				<li class = "list-group-item">Description: {{item.description}}</li>
-				<li class = "list-group-item">Image: {{item.image}}</li>
-				<li class = "list-group-item">Price: {{item.price}}</li>
-				<li class = "list-group-item">Stock: {{item.stock}}</li>
-				<li class = "list-group-item">Available: {{item.available}}</li>
-				
-				
-			</ul>
-			
-			
-		
-		</div>
-		
-		
-		
-		
-	</div>
-	
-		<div>
-			<a class = "btn btn-primary" [routerLink] = "['/edit-item/'+item.$key]">Edit Item</a>
-		<a class = "btn btn-warning" [routerLink] = "['/view-extra-food/'+item.$key]" style ="margin-left:10px;">View Extra </a>
-		
-		
-		</div>
-	
-		<div style = "padding-top:10px;">
-			<a class = "btn btn-success" [routerLink] = "['/add-extra-food/'+item.$key]">Add Extra</a>
-			<a (click)="onItemDelete()" class = "btn btn-danger"  style ="margin-left:10px;">Delete Item</a>
-			
-		</div>
+                <div class="col-md-8">
+                    <ul class="list-group">
+                        <li class="list-group-item"><b>Descrição:</b> {{item.description}}</li>
+                        <li class="list-group-item"><b>Preço:</b> R$ {{item.price}}</li>
+                        <li class="list-group-item"><b>Estoque:</b> {{item.stock}} un.</li>
+                        <li class="list-group-item"><b>Disponibilidade:</b> {{item.available}}</li>
 
-</div>
 
-</div>
+                    </ul>
+
+
+
+                </div>
+
+            </div>
+
+
+            <div class="col" style="margin-top: 15px">
+                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/produtos/listar']">Voltar</button>
+                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" [routerLink]="['/produtos/editar/'+item.$key]">Editar</button>
+                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" [routerLink]="['/produtos/adicional/'+item.$key]">Adicionar Opção</button>
+                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-warning" [routerLink]="['/produtos/adicional/listar/'+item.$key]">View Extra</button>
+                <button (click)="onItemDelete()" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger">Deletar</button>
+            </div>
+
+        </div>
+
+    </div>
 
 </section>

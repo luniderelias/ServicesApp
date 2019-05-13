@@ -1,15 +1,14 @@
 <section class="row mt-5">
     <div class="col">
-
-        <a [routerLink]="['/items']">Back</a>
-        <br />
-        <h2 class="page-header">Edit City</h2>
         <form (submit)="onCityEditSubmit()" ngNativeValidate>
             <div class="form-group">
-                <label>City Name</label>
+                <label>Nome</label>
                 <input class="form-control" type="text" [(ngModel)]="cityName" name="cityName" required>
             </div>
-            <input type="submit" value="submit" class="btn btn-success">
+            <div class="col">
+                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/enderecos/cidades/listar']">Voltar</button>
+                <button type="submit" value="submit" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Salvar</button>
+            </div>
         </form>
 
 

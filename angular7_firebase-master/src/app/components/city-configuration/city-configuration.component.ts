@@ -81,7 +81,7 @@ export class CityConfigurationComponent implements OnInit {
 	  
   }
   
-  deleteCity(citykey){
+  deleteCity(citykey) {
 	   this.firebaseService.deleteCity(citykey);
   }
 

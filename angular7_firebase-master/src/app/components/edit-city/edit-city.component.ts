@@ -98,7 +98,7 @@ export class EditCityComponent implements OnInit {
 	  
 	  this.firebaseService.updateCity(this.id,city);
 	  
-	  this.router.navigate(['/city-configuration']);
+	  this.router.navigate(['/enderecos/cidades/listar']);
 	  
   }
 

@@ -1,60 +1,81 @@
-<section class="row mt-5">
-  <div class="col">
-    <button class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modalBook">Add New Item</button>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Image</th>
-          <th scope="col">Title</th>
-          <th scope="col">Available</th>
-          <th scope="col">Description</th>
-		  <th scope="col">Price</th>
-		  <th scope="col">Stock</th>
-          <th scope="col">&nbsp;</th>
-          <th scope="col">&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of items; index as i">
-          <th scope="row">{{i+1}}</th>
-          <td>
-	  
-		  <img style="width:70px;height:50px;" class="thumbnail" src="{{item.image_firebase_url}}">
-		  </td>
-          <td>{{item.name}}</td>
-          <td>{{item.available}}</td>
-          <td>{{item.description}}</td>
-          <td>{{item.price}}$</td>
-		  <td>{{item.stock}}</td>
-          <td>
-		  <!--
-            <button class="btn btn-primary" data-toggle="modal" data-target="#modalBook" >Update</button>
-			-->
-			<button class="btn btn-primary" routerLink="/item-details/{{item.$key}}">More Info</button>
-          </td>
-          <ng-template #noOwner>
-            <td>
-              <button class="btn btn-secondary" disabled="true" >Update</button>
-			  
-			  
-			  
-            </td>
-          </ng-template>
-		  <!--
-          <td >
-            <button class="btn btn-danger" (click)="onRestaurantDelete(restaurant.$key)">Delete</button>
-          </td>
-          <ng-template #noAdmin>
-            <td>
-              <button class="btn btn-danger" disabled="true">Delete</button>
-            </td>
-          </ng-template>
-		  
-		  -->
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- Filter Datatable Options Starts -->
+<section id="filter" class="mb-3">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-block">
+                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='items'>
+                            <ngx-datatable-column prop="image_firebase_url">
+
+                                <ng-template let-column="Imagem" ngx-datatable-header-template>
+                                    IMAGEM
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+
+                                    <img style="width:150px;height:100px;" class="thumbnail" src="{{value}}">
+                                </ng-template>
+
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="title">
+                                <ng-template let-column="title" ngx-datatable-header-template>
+                                    NOME
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="available">
+                                <ng-template let-column="available" ngx-datatable-header-template>
+                                    DISPONÍVEL
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="description">
+                                <ng-template let-column="description" ngx-datatable-header-template>
+                                    DESCRIÇÃO
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="price">
+                                <ng-template let-column="price" ngx-datatable-header-template>
+                                    PREÇO
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    R$ {{value}}
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="stock">
+                                <ng-template let-column="stock" ngx-datatable-header-template>
+                                    ESTOQUE
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    {{value}} un.
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="$key">
+                                <ng-template let-column="$key" ngx-datatable-header-template>
+                                    MAIS INFORMAÇÕES
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/produtos/visualizar/{{value}}">Visualizar</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+
+                        </ngx-datatable>
+
+                        <div align="right" style="margin-top:15px;">
+                            <a [routerLink]="['/produtos/adicionar']" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Adicionar Novo Produto</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+<!-- Filter Datatable Options Ends -->
 <app-modal [userUid]="userUid"></app-modal>

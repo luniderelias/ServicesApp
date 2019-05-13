@@ -39,7 +39,7 @@ export class AddExtraFoodComponent implements OnInit {
 	percent: any;
 	
 	extraName: any;
-	extraSelected: any;
+	extraSelected = '';
 	extraPrice: any;
 	
 	item: any;
@@ -102,9 +102,9 @@ export class AddExtraFoodComponent implements OnInit {
 	  
 	  console.log(extraItem);
 	  
-	  this.firebaseService.addExtraItem(this.id,extraItem);
+	  this.firebaseService.addExtraItem(this.id, extraItem);
 	  
-	  this.router.navigate(['/items']);
+	  this.router.navigate(['/produtos/adicional/listar/' + this.id]);
 	  
   }
 

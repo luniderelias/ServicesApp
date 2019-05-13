@@ -1,45 +1,33 @@
 <section class="row mt-5">
     <div class="col">
-
-        <a [routerLink]="['/category']">Back</a>
-        <br />
-        <h2 class="page-header">Add New Category</h2>
-
         <form name="formBook" #formBook="ngForm" (ngSubmit)="onCategoryAddSubmit()" ngNativeValidate>
 
             <div class="form-group">
-                <label>Title</label>
+                <label>Nome</label>
                 <input class="form-control" type="text" [(ngModel)]="cat_id" name="cat_id" required>
             </div>
             <div class="form-group">
-                <label>City</label>
+                <label>Cidade</label>
                 <input class="form-control" type="text" [(ngModel)]="cat_name" name="cat_name" required>
             </div>
 
             <div class="form-group">
-                <label>Restaurant</label>
+                <label>Loja</label>
 
                 <select class="form-control" type="text" [(ngModel)]="res_name" name="res_name" required>
 
-	
      
       <option *ngFor="let restaurant of restaurants" [value]="restaurant.$key">{{restaurant.title}}</option>
 	 
-   
+
 	</select>
-
-
-
             </div>
-
             <div class="form-group">
                 <input id="image" name="image" [(ngModel)]="image" type="file">
             </div>
-
-            <input type="submit" value="submit" class="btn btn-success">
-
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Salvar</button>
+            </div>
         </form>
-
     </div>
-
 </section>
