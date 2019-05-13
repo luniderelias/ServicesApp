@@ -8,8 +8,7 @@ import { UserInterface } from '../../models/user';
 import { ViewChild, ElementRef, Input } from '@angular/core';
 import {FirebaseService} from '../../services/firebase.service';
 import {Router} from '@angular/router';
-
-import { RestaurantInterface } from '../../models/restaurant'; 
+import { RestaurantInterface } from '../../models/restaurant';
 
 @Component({
   selector: 'app-categories',
@@ -17,24 +16,19 @@ import { RestaurantInterface } from '../../models/restaurant';
   styleUrls: ['./categories.component.css']
 })
 export class CategoriesComponent implements OnInit {
-	
-  restaurants : any;
+  restaurants: any;
   restaurant2: any;
-	
   private books: BookInterface[];
-  
-  private RestaurantInterface: RestaurantInterface[];  
+  private RestaurantInterface: RestaurantInterface[]
   public isAdmin: any = null;
   public userUid: string = null;
-  
-  categories : any;
+  categories: any;
 
-  constructor(private firebaseService:FirebaseService, private authService: AuthService , private router: Router) { }
+  constructor(private firebaseService: FirebaseService, private authService: AuthService , private router: Router) { 
+
+  }
 
   ngOnInit() {
-
-
-
 	 this.firebaseService.getCategories().snapshotChanges().subscribe(category => { // Using snapshotChanges() method to retrieve list of data along with metadata($key)
       this.categories = [];
       category.forEach(item => {
@@ -66,7 +60,7 @@ export class CategoriesComponent implements OnInit {
 	  this.router.navigate(['/restaurants']);
   }
   
-  goToRestaurantDetails(restaurant){
+  goToRestaurantDetails(restaurant) {
 	  console.log(restaurant);
 	  
 	  this.router.navigate(['/restaurants']);

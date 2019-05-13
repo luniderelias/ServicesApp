@@ -41,6 +41,7 @@ import { AddExtraFoodComponent } from 'src/app/components/add-extra-food/add-ext
 import { ViewExtraFoodComponent } from 'src/app/components/view-extra-food/view-extra-food.component';
 import { EditExtraFoodComponent } from 'src/app/components/edit-extra-food/edit-extra-food.component';
 import { AddNewRestaurantComponent } from 'src/app/components/add-new-restaurant/add-new-restaurant.component';
+import { DashboardModule } from 'src/app/components/dashboard/dashboard.module';
 
 import { AuthGuard } from './../../../components/shared/auth/auth-guard.service';
 
@@ -49,7 +50,7 @@ import { AuthGuard } from './../../../components/shared/auth/auth-guard.service'
 export const Full_ROUTES: Routes = [
   {
     path: 'dashboard',
-    loadChildren: './../../dashboard/dashboard.module#DashboardModule'
+    loadChildren: 'src/app/components/dashboard/dashboard.module#DashboardModule'
   },
   { path: 'offers', component: OffersComponent, canActivate: [AuthGuard] },
     { path: 'book/:id', component: DetailsBookComponent },

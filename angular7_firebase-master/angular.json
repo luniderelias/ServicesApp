@@ -132,7 +132,7 @@
                 "e2e": {
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
-                        "protractorConfig": "e2e/protractor.conf.js",
+                        "protractorConfig": "./protractor.conf.js",
                         "devServerTarget": "bookStore:serve"
                     },
                     "configurations": {
@@ -153,5 +153,14 @@
             }
         }
     },
-    "defaultProject": "bookStore"
+    "defaultProject": "bookStore",
+    "schematics": {
+        "@schematics/angular:component": {
+            "prefix": "app",
+            "styleext": "scss"
+        },
+        "@schematics/angular:directive": {
+            "prefix": "app"
+        }
+    }
 }

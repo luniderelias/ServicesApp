@@ -6,6 +6,8 @@ import { ContentLayoutComponent } from './components/layouts/content/content-lay
 
 import { AuthGuard } from './components/shared/auth/auth-guard.service';
 
+import { CONTENT_ROUTES } from './components/shared/routes/content-layout.routes';
+
 
 const routes: Routes = [
   { path: '',
@@ -13,7 +15,7 @@ const routes: Routes = [
   pathMatch: 'full',
   },
   { path: '', component: FullLayoutComponent, data: { title: 'full Views' }, children: Full_ROUTES,  canActivate: [AuthGuard]},
-  { path: '', component: ContentLayoutComponent, data: { title: 'content Views' }, children: Full_ROUTES,  canActivate: [AuthGuard] },
+  { path: '', component: ContentLayoutComponent, data: { title: 'content Views' }, children: CONTENT_ROUTES,  canActivate: [AuthGuard] },
 
 ];
 

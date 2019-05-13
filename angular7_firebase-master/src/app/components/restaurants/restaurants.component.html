@@ -1,64 +1,71 @@
-<section class="row mt-5">
-  <div class="col">
-    <button class="btn btn-primary float-right mb-3" data-toggle="modal" data-target="#modalBook">Add New Restaurant</button>
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Image</th>
-          <th scope="col">Title</th>
-          <th scope="col">Address</th>
-          <th scope="col">Phonenumber</th>
-		  <th scope="col">Latitude</th>
-		  <th scope="col">Longitude</th>
-          <th scope="col">Information</th>
-		  <th scope="col">Outlet</th>
-          <th scope="col">&nbsp;</th>
-          <th scope="col">&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let restaurant of restaurants; index as i">
-          <th scope="row">{{i+1}}</th>
-          <td>
-	  
-		  <img style="width:150px;height:100px;" class="thumbnail" src="{{restaurant.firebase_url}}">
-		  </td>
-          <td>{{restaurant.title}}</td>
-          <td>{{restaurant.address}}</td>
-          <td>{{restaurant.phonenumber}}</td>
-          <td>{{restaurant.lat}}</td>
-		  <td>{{restaurant.long}}</td>
-		  <td>{{restaurant.info}}</td>
-		  <td>{{restaurant.outlet}}</td>
-          <td>
-		  <!--
-            <button class="btn btn-primary" data-toggle="modal" data-target="#modalBook" >Update</button>
-			-->
-			<button class="btn btn-primary" routerLink="/restaurant-details/{{restaurant.$key}}">More Info</button>
-          </td>
-          <ng-template #noOwner>
-            <td>
-              <button class="btn btn-secondary" disabled="true" >Update</button>
-			  
-			  
-			  
-            </td>
-          </ng-template>
-		  <!--
-          <td >
-            <button class="btn btn-danger" (click)="onRestaurantDelete(restaurant.$key)">Delete</button>
-          </td>
-          <ng-template #noAdmin>
-            <td>
-              <button class="btn btn-danger" disabled="true">Delete</button>
-            </td>
-          </ng-template>
-		  
-		  -->
-        </tr>
-      </tbody>
-    </table>
-  </div>
+<!-- Filter Datatable Options Starts -->
+<section id="filter" class="mb-3">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-block">
+                        <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" data-toggle="modal" data-target="#modalBook">Adicionar Loja</button>
+                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='stores'>
+                            <ngx-datatable-column prop="firebase_url">
+
+                                <ng-template let-column="Imagem" ngx-datatable-header-template>
+                                    IMAGEM
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+
+                                    <img style="width:150px;height:100px;" class="thumbnail" src="{{value}}">
+                                </ng-template>
+
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="title">
+                                <ng-template let-column="title" ngx-datatable-header-template>
+                                    NOME
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="address">
+                                <ng-template let-column="address" ngx-datatable-header-template>
+                                    ENDEREÇO
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="phonenumber">
+                                <ng-template let-column="phonenumber" ngx-datatable-header-template>
+                                    TELEFONE
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="info">
+                                <ng-template let-column="info" ngx-datatable-header-template>
+                                    SOBRE
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="outlet">
+                                <ng-template let-column="outlet" ngx-datatable-header-template>
+                                    TIPO DE LOJA
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="$key">
+                                <ng-template let-column="$key" ngx-datatable-header-template>
+                                    MAIS INFORMAÇÕES
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/restaurant-details/{{value}}">Visualizar</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+<!-- Filter Datatable Options Ends -->
 <app-modal [userUid]="userUid"></app-modal>

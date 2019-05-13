@@ -1,103 +1,88 @@
-
 <section class="row mt-5">
-  <div class="col">
+    <div class="col">
+        <form name="formBook" #formBook="ngForm" (ngSubmit)="onAddRestaurant()" ngNativeValidate>
+            <div class="form-group">
+                <label>Nome</label>
+                <input class="form-control" type="text" [(ngModel)]="title" name="title" required>
+            </div>
 
 
-			<a [routerLink]="['/settings']">Back</a>
-			<br />
-			<h2 class="page-header">Add New Restaurant</h2>
-			
-			<form name="formBook" #formBook="ngForm" (ngSubmit)="onAddRestaurant()">
-			
-				  <div class="form-group">
-					<label>Title</label>
-					<input class="form-control" type="text" [(ngModel)]="title" name="title" required>
-				  </div>
-				  
-				  
-					
-				<div class="form-group">
-							<label>Address</label>
-							<input class="form-control" type="text" [(ngModel)]="address" name="address" required>
-				 </div>
-					
-					
-					
-				 <div class="form-group">
-							<label>Description</label>
-							<input class="form-control" type="text" [(ngModel)]="description" name="description" required>
-				 </div>
-					
-				  
-				  
 
-				  
-				 
+            <div class="form-group">
+                <label>Endereço</label>
+                <input class="form-control" type="text" [(ngModel)]="address" name="address" required>
+            </div>
 
-				  
-				   <div class="form-row">
-					<div class="form-group col-md-6">
-					  <div class="form-group">
-							<label>lat</label>
-								<input class="form-control" type="double" [(ngModel)]="lat" name="lat" required>
-						  </div>
-					</div>
-					
-					<div class="form-group col-md-6">
-						 <div class="form-group">
-							<label>long</label>
-							<input class="form-control" type="double" [(ngModel)]="long" name="long" required>
-						  </div>
-					</div>
-				  </div>
-				  
-				  
-				  <div class="form-row">
-					<div class="form-group col-md-6">
-					  <div class="form-group">
-								<label>Info</label>
-							<input class="form-control" type="text" [(ngModel)]="info" name="info" required>
-						  </div>
-					</div>
-					
-					<div class="form-group col-md-6">
-						 <div class="form-group">
-							<label>mark</label>
-							<input class="form-control" type="text" [(ngModel)]="mark" name="mark" required>
-						  </div>
-					</div>
-				  </div>
-				
-				
-				  <div class="form-group">
-					<label>option</label>
-					<input class="form-control" type="number" [(ngModel)]="option" name="option" required>
-				  </div>
-				  
-				   <div class="form-group">
-					<label>outlet</label>
-					<input class="form-control" type="text" [(ngModel)]="outlet" name="outlet" required>
-				  </div>
-				  <div class="form-group">
-					<label>phonenumber</label>
-					<input class="form-control" type="text" [(ngModel)]="phonenumber" name="phonenumber" required>
-				  </div>
-				  
-				  
-				  
-				  <div class="form-group">
-					<input id="image" name="image" [(ngModel)]="image" type="file" >
-				  </div>
 
-				  
-				     <div class="modal-footer">
-						<button type="button" class="btn btn-secondary" #btnClose data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Save Book</button>
-					  </div>
-				  
-				</form>
-				
-		</div>
-		
+
+            <div class="form-group">
+                <label>Descrição</label>
+                <input class="form-control" type="text" [(ngModel)]="description" name="description" required>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <div class="form-group">
+                        <label>Latitude</label>
+                        <input class="form-control" type="double" [(ngModel)]="lat" name="lat" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <div class="form-group">
+                        <label>Longitude</label>
+                        <input class="form-control" type="double" [(ngModel)]="long" name="long" required>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <div class="form-group">
+                        <label>Informações Adicionais</label>
+                        <input class="form-control" type="text" [(ngModel)]="info" name="info" required>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <input class="form-control" type="text" [(ngModel)]="mark" name="mark" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Tipos de Produtos</label>
+                <input class="form-control" type="text" [(ngModel)]="outlet" name="outlet" required>
+            </div>
+
+            <div class="form-group">
+                <label>Telefone</label>
+                <input class="form-control" type="text" [(ngModel)]="phonenumber" placeholder="(85) 9 8888-8888" name="phonenumber" required>
+            </div>
+
+
+
+            <div class="form-group">
+                <input id="image" name="image" [(ngModel)]="image" type="file">
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Salvar</button>
+            </div>
+
+        </form>
+
+    </div>
+
 </section>
-	  

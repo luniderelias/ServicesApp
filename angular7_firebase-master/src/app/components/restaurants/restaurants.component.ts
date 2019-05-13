@@ -8,6 +8,7 @@ import { UserInterface } from '../../models/user';
 import { ViewChild, ElementRef, Input } from '@angular/core';
 import {FirebaseService} from '../../services/firebase.service';
 import {Router} from '@angular/router';
+import { DatatableComponent } from '@swimlane/ngx-datatable/release';
 
 import { RestaurantInterface } from '../../models/restaurant'; 
 
@@ -18,55 +19,52 @@ import { RestaurantInterface } from '../../models/restaurant';
 })
 export class RestaurantsComponent implements OnInit {
 	
-	restaurants : any;
+	stores : any;
 	restaurant2: any;
-	
+  rows = [];
+
+
 	private books: BookInterface[];
-  
-  private RestaurantInterface: RestaurantInterface[];  
+  private RestaurantInterface: RestaurantInterface[];
   public isAdmin: any = null;
   public userUid: string = null;
-  
-  constructor(private firebaseService:FirebaseService, private authService: AuthService , private router: Router) { }
-  
-  
-  ngOnInit() {
+  @ViewChild(DatatableComponent) table: DatatableComponent;
 
-
-
-	 this.firebaseService.getRestaurants().snapshotChanges().subscribe(restaurants => { // Using snapshotChanges() method to retrieve list of data along with metadata($key)
-      this.restaurants = [];
-      restaurants.forEach(item => {
-		  
+  constructor(private firebaseService: FirebaseService, private authService: AuthService , private router: Router) {
+    this.firebaseService.getRestaurants().snapshotChanges().subscribe(stores => { 
+      // Using snapshotChanges() method to retrieve list of data along with metadata($key)
+      this.stores = [];
+      stores.forEach(item => {
 		  console.log(item);
 		  
 	
-		 let a = item.payload.toJSON(); 
+		 let a = item.payload.toJSON();
         a['$key'] = item.key;
 		
 		console.log(a);
 		
-        this.restaurants.push(a as RestaurantInterface);
+        this.stores.push(a as RestaurantInterface);
 		
 		
         
       })
     })
-	
-	  
   }
+
+
+  ngOnInit() {}
 
  
  
-  onRestaurantDelete(id){
+  onRestaurantDelete(id) {
 	  
 	  this.firebaseService.deleteRestaurant(id);
 		
 	  this.router.navigate(['/restaurants']);
   }
   
-  goToRestaurantDetails(restaurant){
-	  console.log(restaurant);
+  goToRestaurantDetails(store) {
+	  console.log(store);
 	  
 	  this.router.navigate(['/restaurants']);
   }

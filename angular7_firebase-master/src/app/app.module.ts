@@ -65,6 +65,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { StoreModule } from '@ngrx/store';
 
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { AuthService } from './components/shared/auth/auth.service';
 import { AuthGuard } from './components/shared/auth/auth-guard.service';
@@ -137,6 +138,7 @@ export function createTranslateLoader(http: HttpClient) {
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    NgxDatatableModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireStorageModule,
