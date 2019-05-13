@@ -50,11 +50,11 @@
 
                             <ngx-datatable-column prop="$key">
                                 <ng-template let-column="$key" ngx-datatable-header-template>
-                                    MAIS INFORMAÇÕES
+                                    AÇÕES
                                 </ng-template>
 
                                 <ng-template let-value="value" ngx-datatable-cell-template>
-                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/restaurant-details/{{value}}">Visualizar</button>
+                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/lojas/detalhes/{{value}}">Visualizar</button>
                                 </ng-template>
                             </ngx-datatable-column>
 

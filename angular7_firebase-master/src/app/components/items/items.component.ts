@@ -22,7 +22,7 @@ export class ItemsComponent implements OnInit {
 
   restaurants: any;
   restaurant2: any;
-
+  temp:any;
   items: any;
   private RestaurantInterface: RestaurantInterface[];
   private ItemInterface: ItemInterface[];
@@ -34,6 +34,7 @@ export class ItemsComponent implements OnInit {
 
     this.firebaseService.getItems().snapshotChanges().subscribe(items => {
       this.items = [];
+      this.temp = [];
       items.forEach(item => {
 
         console.log(item);
@@ -45,6 +46,7 @@ export class ItemsComponent implements OnInit {
         console.log(a);
 
         this.items.push(a as ItemInterface);
+        this.temp.push(a as ItemInterface);
 
 
 
@@ -67,6 +69,22 @@ export class ItemsComponent implements OnInit {
     console.log(restaurant);
 
     this.router.navigate(['/restaurants']);
+  }
+
+  
+  updateFilter(event) {
+    const val = event.target.value.toLowerCase();
+
+    // filter our data
+    const temp = this.temp.filter(function (d) {
+      console.log(d)
+      return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+
+    // update the rows
+    this.items = temp;
+    // Whenever the filter changes, always go back to the first page
+    this.table.offset = 0;
   }
 
 }

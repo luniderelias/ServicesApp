@@ -1,49 +1,38 @@
-<div style="padding-top:60px;">
-    <a [routerLink]="['/restaurants']">Back</a>
-    <br />
-    <h2 class="page-header">Edit Restaurant</h2>
-</div>
-
 <div>
     <form name="formBook" #formBook="ngForm" (ngSubmit)="onEditRestaurant()" ngNativeValidate>
 
         <div class="form-group">
-            <label>Title</label>
+            <label>Nome</label>
             <input class="form-control" type="text" [(ngModel)]="title" name="title" required>
         </div>
 
 
 
         <div class="form-group">
-            <label>Address</label>
+            <label>Endereço</label>
             <input class="form-control" type="text" [(ngModel)]="address" name="address" required>
         </div>
 
 
 
         <div class="form-group">
-            <label>Description</label>
+            <label>Descrição</label>
             <input class="form-control" type="text" [(ngModel)]="description" name="description" required>
         </div>
-
-
-
-
-
 
 
 
         <div class="form-row">
             <div class="form-group col-md-6">
                 <div class="form-group">
-                    <label>lat</label>
+                    <label>Latitude</label>
                     <input class="form-control" type="double" [(ngModel)]="lat" name="lat" required>
                 </div>
             </div>
 
             <div class="form-group col-md-6">
                 <div class="form-group">
-                    <label>long</label>
+                    <label>Longitude</label>
                     <input class="form-control" type="double" [(ngModel)]="long" name="long" required>
                 </div>
             </div>
@@ -53,32 +42,26 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <div class="form-group">
-                    <label>Info</label>
+                    <label>Informações Adicionais</label>
                     <input class="form-control" type="text" [(ngModel)]="info" name="info" required>
                 </div>
             </div>
 
             <div class="form-group col-md-6">
                 <div class="form-group">
-                    <label>mark</label>
+                    <label>Marca</label>
                     <input class="form-control" type="text" [(ngModel)]="mark" name="mark" required>
                 </div>
             </div>
         </div>
 
-
         <div class="form-group">
-            <label>option</label>
-            <input class="form-control" type="number" [(ngModel)]="option" name="option" required>
-        </div>
-
-        <div class="form-group">
-            <label>outlet</label>
+            <label>Tipo de Produtos</label>
             <input class="form-control" type="text" [(ngModel)]="outlet" name="outlet" required>
         </div>
         <div class="form-group">
-            <label>phonenumber</label>
-            <input class="form-control" type="text" [(ngModel)]="phonenumber" name="phonenumber" required>
+            <label>Telefone</label>
+            <input class="form-control" type="text" [(ngModel)]="phonenumber" placeholder="(85) 9 8888-8888" name="phonenumber" required>
         </div>
 
 
@@ -99,7 +82,7 @@
 
         <hr>
         <div class="form-group">
-            <h5>Select image:</h5>
+            <h5>Selecionar Imagem</h5>
             <input type="file" accept=".png, .jpg" (change)="onUpload($event)">
         </div>
         <div class="progress">
@@ -111,9 +94,9 @@
         <input #imageUser type="hidden" [value]="urlImage | async">
 
 
-        <div class="form-group">
-
-            <button type="submit" class="btn btn-primary">Save Book</button>
+        <div class="modal-footer">
+            <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/lojas/detalhes/'+id]">Voltar</button>
+            <button type="submit" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Salvar</button>
         </div>
 
 

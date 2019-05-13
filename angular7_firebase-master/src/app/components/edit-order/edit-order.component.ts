@@ -22,31 +22,31 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class EditOrderComponent implements OnInit {
 	
-	restaurants : any;
+	restaurants: any;
 	restaurant2: any;
 	
 	id: any;
 	
-	restaurant:any;
-	imageUrl:any;
+	restaurant: any;
+	imageUrl: any;
 	categories: any;
 	
-	order_id:any;
-	order_details:any;
-	status:any;
-	checked:any;
+	order_id: any;
+	order_details: any;
+	status: any;
+	checked: any;
 	
-	private RestaurantInterface: RestaurantInterface[];  
-  private CategoryInterface: CategoryInterface[];  
-  private OrderInterface: OrderInterface[];  
+	private RestaurantInterface: RestaurantInterface[];
+  private CategoryInterface: CategoryInterface[];
+  private OrderInterface: OrderInterface[];
   
   
-  cat_id:any;
-  category_details:any;
+  cat_id: any;
+  category_details: any;
 
 	user_details: any;
 
-  constructor(private firebaseService:FirebaseService, private authService: AuthService , 
+  constructor(private firebaseService: FirebaseService, private authService: AuthService ,
   private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -65,17 +65,17 @@ export class EditOrderComponent implements OnInit {
   }
   
   
-   onStatusOrderSubmit(){
+   onStatusOrderSubmit() {
 	  
-	   let order_details= {
+	   let order_details = {
 		  status : this.status,
 		  checked : ""
 		  
 	  }
 	  
-	  this.firebaseService.updateRestaurantOrderStatus(this.id,order_details);
+	  this.firebaseService.updateRestaurantOrderStatus(this.id, order_details);
 	  
-	  this.router.navigate(['/orders']);
+	  this.router.navigate(['/pedidos/detalhes/' + this.id]);
 	  
   }
 

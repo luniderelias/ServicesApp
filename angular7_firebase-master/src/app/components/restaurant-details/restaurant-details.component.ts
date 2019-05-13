@@ -101,7 +101,7 @@ export class RestaurantDetailsComponent implements OnInit {
 	  
 	  this.firebaseService.deleteRestaurant(id);
 		
-	  this.router.navigate(['/restaurants']);
+	  this.router.navigate(['/lojas/listar']);
   }
   
 

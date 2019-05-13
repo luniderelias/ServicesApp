@@ -5,7 +5,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-block">
-                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='items'>
+                            <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtar pelo Nome' (keyup)='updateFilter($event)' />
+                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='items' [sorts]="[{prop: 'name', dir: 'asc'},{prop: 'available', dir: 'asc'},{prop: 'description', dir: 'asc'},{prop: 'price', dir: 'asc'},{prop: 'stock', dir: 'asc'}]">
                             <ngx-datatable-column prop="image_firebase_url">
 
                                 <ng-template let-column="Imagem" ngx-datatable-header-template>
@@ -18,8 +19,8 @@
 
                             </ngx-datatable-column>
 
-                            <ngx-datatable-column prop="title">
-                                <ng-template let-column="title" ngx-datatable-header-template>
+                            <ngx-datatable-column prop="name">
+                                <ng-template let-column="name" ngx-datatable-header-template>
                                     NOME
                                 </ng-template>
                             </ngx-datatable-column>
@@ -57,7 +58,7 @@
 
                             <ngx-datatable-column prop="$key">
                                 <ng-template let-column="$key" ngx-datatable-header-template>
-                                    MAIS INFORMAÇÕES
+                                    AÇÕES
                                 </ng-template>
 
                                 <ng-template let-value="value" ngx-datatable-cell-template>

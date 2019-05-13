@@ -1,108 +1,87 @@
-<section class="row mt-5">
-  <div class="col">
+<!-- Filter Datatable Options Starts -->
+<section id="filter" class="mb-3">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-block">
+                        <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtar pelo Nome do Cliente' (keyup)='updateFilter($event)' />
+                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='orders' [sorts]="[{prop: '$key', dir: 'asc'},{prop: 'customerDetails.displayName', dir: 'asc'},{prop: 'total', dir: 'asc'},{prop: 'timeStamp', dir: 'asc'},{prop: 'status', dir: 'asc'}]">
+                            <ngx-datatable-column prop="items">
 
-			<ul class = "list-group">
+                                <ng-template let-column="image" ngx-datatable-header-template>
+                                    IMAGEM
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <img style="width:150px;height:100px;" class="thumbnail" src="{{value[0].image}}">
+                                </ng-template>
 
-				<div class="row" >
-					  <div class="col-xs-12 col-md-12" >
-					  
-					  <div class="panel panel-default" >
-						  <!-- Table -->
-						  <table class="table">
-							<tr>
-								
-								<td style = "width:10%;">
-									<b style = "text-align: center;">Product Image</b>
-								</td>
-								
-								<td style = "width:20%;">					
-									<b style = "text-align: center;">Customer Name</b>
-								</td>
-								
-								<td style = "width:20%;">					
-									<b style = "text-align: center;">Email Address</b>
-								</td>
-								
-							
-								<td style = "width:10%;">					
-									<b style = "text-align: center;">Total</b>
-								</td>
-								
-								<td style = "width:10%;">					
-									<b style = "text-align: center;">Status</b>
-								</td>
-								
-								<td style = "width:10%;">
-									<b style = "text-align: center;">Date</b>
-								</td>
+                            </ngx-datatable-column>
 
-								<td style = "width:20%;text-align:center;">
-									<b style = "text-align: center;">Action</b>
-								</td>					
-								
-								
-							</tr>
-						  </table>
-						  
-						  
-						  
-						  <table class="table" *ngFor="let order of orders">
-							<tr>
-								
-								<td style = "width:10%;">
-									<img style="width:100px;height:60px;" class="thumbnail" src="{{order.items[0].image}}">
-								</td>
-								
-								<td style = "width:20%;">
-									<p style = "text-align: center;">{{order.customerDetails.displayName}}</p>
-								</td>
-								
-								
-								<td style = "width:20%;">
-									<p style = "text-align: center;">{{order.customerDetails.email}}</p>
-								</td>
-								
-								<td style = "width:10%;">					
-									<p style = "text-align: center;">{{order.total}}$</p>
-								</td>
-								
-								<td style = "width:10%;">					
-									<b style = "text-align: center;">{{order.status}}</b>
-								</td>
-								
-								<td style = "width:10%;">
-									<p style = "text-align: center;">{{order.timeStamp | date}}</p>
-								</td>
+                            <ngx-datatable-column prop="$key" name="$key">
+                                <ng-template let-column="image" ngx-datatable-header-template>
+                                    ID
+                                </ng-template>
+                            </ngx-datatable-column>
 
-								<td style = "width:20%;text-align:center;">
-									<a class = "btn btn-primary" [routerLink] = "['/order-details/'+order.$key]">View</a>
-								</td>	
-								
-								
-								
-							</tr>
-						  </table>
-						  
-						  
-					</div>
-							
-							
-							
-							
-							
-							
-							
-						
-							
-							
-					  </div>
-				</div>
-				
-				
+                            <ngx-datatable-column prop="customerDetails.displayName">
+                                <ng-template let-column="customerDetails.displayName" ngx-datatable-header-template>
+                                    NOME DO CLIENTE
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="customerDetails.phone">
+                                <ng-template let-column="customerDetails.phone" ngx-datatable-header-template>
+                                    TELEFONE
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="total">
+                                <ng-template let-column="total" ngx-datatable-header-template>
+                                    TOTAL
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    R$ {{value}}
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="status">
+                                <ng-template let-column="status" ngx-datatable-header-template>
+                                    STATUS
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="timeStamp">
+                                <ng-template let-column="timeStamp" ngx-datatable-header-template>
+                                    DATA
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    {{value | date}}
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="$key">
+                                <ng-template let-column="$key" ngx-datatable-header-template>
+                                    AÇÕES
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/pedidos/detalhes/{{value}}">Visualizar</button>
+                                </ng-template>
+                            </ngx-datatable-column>
 
 
-			</ul>
-			
-	</div>
+                        </ngx-datatable>
+
+                        <div align="right" style="margin-top:15px;">
+                            <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" data-toggle="modal" data-target="#modalBook">Adicionar Nova Loja</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
-
+<!-- Filter Datatable Options Ends -->
+<app-modal [userUid]="userUid"></app-modal>

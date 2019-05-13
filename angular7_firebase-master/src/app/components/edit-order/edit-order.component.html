@@ -1,10 +1,5 @@
 <section class="row mt-5">
     <div class="col">
-
-        <a [routerLink]="['/orders']">Back</a>
-        <br />
-        <h2 class="page-header">Update Order Status</h2>
-
         <form (submit)="onStatusOrderSubmit()" ngNativeValidate>
 
             <ul class="list-group" *ngIf="order_details">
@@ -18,10 +13,10 @@
                                 <tr>
 
                                     <td style="width:15%;">
-                                        <b style="text-align: center;">Product Image</b>
+                                        <b style="text-align: center;">Imagem</b>
                                     </td>
                                     <td style="width:15%;">
-                                        <b style="text-align: center;">Customer Name</b>
+                                        <b style="text-align: center;">Nome do Cliente</b>
                                     </td>
 
 
@@ -30,7 +25,7 @@
                                         <b style="text-align: center;">Total</b>
                                     </td>
                                     <td style="width:10%;">
-                                        <b style="text-align: center;">Payment type</b>
+                                        <b style="text-align: center;">Forma de Pagamento</b>
                                     </td>
 
                                     <td style="width:20%;">
@@ -38,11 +33,11 @@
                                     </td>
 
                                     <td style="width:10%;">
-                                        <b style="text-align: center;">Date</b>
+                                        <b style="text-align: center;">Data</b>
                                     </td>
 
                                     <td style="width:20%;text-align:center;">
-                                        <b style="text-align: center;">Action</b>
+                                        <b style="text-align: center;">Ação</b>
                                     </td>
 
 
@@ -66,7 +61,7 @@
 
 
                                     <td style="width:10%;">
-                                        <p style="text-align: left;">{{order_details.total}}$</p>
+                                        <p style="text-align: left;">R$ {{order_details.total}}</p>
                                     </td>
 
                                     <td style="width:10%;">
@@ -76,15 +71,14 @@
                                     <td style="width:20%;">
 
                                         <select class="form-control" type="text" [(ngModel)]="status" name="status">
-													  <option value="Queued">Queued</option>
-													  <option value="Delivered">Delivered</option>
-													  <option value="Canceled">Canceled</option>
+													  <option value="Realizado">Realizado</option>
+													  <option value="Em Andamento">Em Andamento</option>
+													  <option value="Saiu para Entrega">Saiu para Entrega</option>
+													  <option value="Entregue">Entregue</option>
+													  <option value="Cancelado">Cancelado pelo Cliente</option>
+													  <option value="Cancelado">Cancelado pela Loja</option>
 													</select>
                                         <p style="text-align: center;">{{order_details.status}}</p>
-
-
-
-
 
                                     </td>
 
@@ -93,9 +87,8 @@
                                     </td>
 
                                     <td style="width:20%;text-align:center;">
-                                        <input type="submit" value="submit" class="btn btn-success">
+                                        <button type="submit" value="submit" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Salvar</button>
                                     </td>
-
 
                                 </tr>
                             </table>
