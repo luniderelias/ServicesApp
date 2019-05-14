@@ -7,9 +7,9 @@ export const ROUTES: RouteInfo[] = [
         path: '/dashboard', title: 'Dashboard', icon: 'icon-home', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []
     },
     {
-        path: '/lojas', title: 'Stores', icon: 'icon-screen-desktop', class: 'has-sub', badge: '', badgeClass: '', isExternalLink: false, submenu: [
+        path: '/lojas', title: 'Lojas', icon: 'icon-screen-desktop', class: 'has-sub', badge: '', badgeClass: '', isExternalLink: false, submenu: [
             { path: '/lojas/listar', title: 'Listar', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
-            { path: '/lojas/adicionar', title: 'Adicionar', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
+           // { path: '/lojas/adicionar', title: 'Adicionar', icon: '', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: [] },
         ]
     },
     {
