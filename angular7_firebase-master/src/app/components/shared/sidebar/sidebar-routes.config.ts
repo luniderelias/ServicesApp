@@ -4,7 +4,7 @@ import { RouteInfo } from './sidebar.metadata';
 export const ROUTES: RouteInfo[] = [
 
     {
-        path: '/dashboard/eCommerce', title: 'Dashboard', icon: 'icon-home', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []
+        path: '/dashboard', title: 'Dashboard', icon: 'icon-home', class: '', badge: '', badgeClass: '', isExternalLink: false, submenu: []
     },
     {
         path: '/lojas', title: 'Stores', icon: 'icon-screen-desktop', class: 'has-sub', badge: '', badgeClass: '', isExternalLink: false, submenu: [

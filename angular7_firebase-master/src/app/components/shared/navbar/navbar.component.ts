@@ -1,8 +1,13 @@
+import { UserInterface } from './../../../models/user';
 import { FirebaseService } from './../../../services/firebase.service';
 import { Component, ViewChild, ViewContainerRef, ViewRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { MessagingService } from 'src/app/services/messaging.service';
 import { NotificationInterface } from 'src/app/models/notification';
+import { AuthService } from 'src/app/services/auth.service';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-navbar',
@@ -12,24 +17,49 @@ import { NotificationInterface } from 'src/app/models/notification';
 
 export class NavbarComponent {
     notifications = [];
-    _subscription = [];
+    _subscription: Subscription;
     currentLang = 'en';
     toggleClass = 'ft-maximize';
     public isCollapsed = true;
+    public isLogged = false;
 
     childViewRef: ViewRef;
 
     @ViewChild('notificationNumber', { read: ViewContainerRef }) vc: ViewContainerRef;
 
-    constructor(public translate: TranslateService, private messagingService: MessagingService, private firebaseService: FirebaseService) {
+    constructor(private router: Router, private authService: AuthService,
+        private translate: TranslateService, private afsAuth: AngularFireAuth,
+        private messagingService: MessagingService, private firebaseService: FirebaseService) {
         // const browserLang: string = translate.getBrowserLang();
         // translate.use(browserLang.match(/en|es|pt|de/) ? browserLang : 'en');
+
+        this.getCurrentUser();
         this.getNotifications();
-        this._subscription.push(this.messagingService.currentMessage.subscribe((value) => {
+        this._subscription = this.messagingService.currentMessage.subscribe((value) => {
             if (value !== null) {
                 this.getNotifications();
             }
-        }));
+        });
+    }
+
+
+    getCurrentUser() {
+        this.authService.isAuth().subscribe(auth => {
+            localStorage.setItem('current_user', JSON.stringify(auth));
+            if (auth) {
+                console.log('user logged');
+                this.isLogged = true;
+            } else {
+                console.log('NOT user logged');
+                this.isLogged = false;
+                this.router.navigate(['/user/login']);
+            }
+        });
+    }
+
+    onLogout() {
+        this.afsAuth.auth.signOut();
+        this.router.navigate(['/user/login']);
     }
 
 
@@ -37,14 +67,14 @@ export class NavbarComponent {
         this.firebaseService.getNotifications().snapshotChanges().subscribe(notifications => {
             this.notifications = [];
             notifications.forEach(item => {
-              let a = item.payload.toJSON();
-              a['$key'] = item.key;
-              this.notifications.push(a as NotificationInterface);
+                let a = item.payload.toJSON();
+                a['$key'] = item.key;
+                this.notifications.push(a as NotificationInterface);
             });
             if (notifications !== null) {
                 this.reloadChildView();
             }
-          });
+        });
     }
 
     ChangeLanguage(language: string) {

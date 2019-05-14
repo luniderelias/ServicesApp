@@ -1,3 +1,4 @@
+import { EcommerceComponent } from './components/dashboard/eCommerce/eCommerce.component';
 import { MessagingService } from './services/messaging.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -69,8 +70,8 @@ import { StoreModule } from '@ngrx/store';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
-import { AuthService } from './components/shared/auth/auth.service';
-import { AuthGuard } from './components/shared/auth/auth-guard.service';
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
 
 import { SnotifyModule, SnotifyService, ToastDefaults } from 'ng-snotify';
 
@@ -134,7 +135,7 @@ export function createTranslateLoader(http: HttpClient) {
     EditExtraFoodComponent,
     AddNewRestaurantComponent,
     FullLayoutComponent,
-    ContentLayoutComponent
+    ContentLayoutComponent,
   ],
   imports: [
     BrowserModule,

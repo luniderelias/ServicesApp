@@ -1,18 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { map } from 'rxjs/operators';
 import { auth } from 'firebase/app';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Observable, BehaviorSubject } from 'rxjs';
 
-
-import { UserInterface } from '../models/user';
-
-
-import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/database';  // Firebase modules for Database, Data list and Single object
-
-import * as firebase from 'firebase';
-
-import { NgModule } from '@angular/core';
-
+import { UserInterface } from './../models/user';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -20,18 +13,40 @@ import { NgModule } from '@angular/core';
 })
 export class AuthService {
 
-  constructor(private afsAuth: AngularFireAuth) { }
+  // new
+  redirectUrl: string;
+  authState: Observable<firebase.User>;
+  private currentUserSubject: BehaviorSubject<UserInterface>;
+  isLoggedIn = new BehaviorSubject<boolean>(false);
+
+  constructor( private router: Router, private firebaseAuth: AngularFireAuth, private afsAuth: AngularFireAuth) {
+    this.currentUserSubject = new BehaviorSubject<UserInterface>(JSON.parse(localStorage.getItem('current_user')));
+
+    this.firebaseAuth.authState.subscribe((user) => {
+      if (user) {
+        this.isLoggedIn.next(true);
+
+        // NOW, when the callback from firebase came, and user is logged in,
+        // we can navigate to the attempted URL (if exists)
+        if (this.redirectUrl ) {
+          this.router.navigate([this.redirectUrl]);
+        }
+      } else {
+        this.isLoggedIn.next(false);
+      }
+   });
+  }
 
 
 
   loginFacebookUser() {
     return this.afsAuth.auth.signInWithPopup(new auth.FacebookAuthProvider())
-      .then(credential => this.updateUserData(credential.user))
+      .then(credential => this.updateUserData(credential.user));
   }
 
   loginGoogleUser() {
     return this.afsAuth.auth.signInWithPopup(new auth.GoogleAuthProvider())
-      .then(credential => this.updateUserData(credential.user))
+      .then(credential => this.updateUserData(credential.user));
   }
 
   logoutUser() {
@@ -40,6 +55,18 @@ export class AuthService {
 
   isAuth() {
     return this.afsAuth.authState.pipe(map(auth => auth));
+  }
+
+  public get currentUserValue(): UserInterface {
+    return this.currentUserSubject.value;
+}
+
+  get authenticated(): boolean {
+    return (this.afsAuth.authState !== undefined && this.authState !== null);
+  }
+
+  get currentUserObservable(): any {
+    return this.afsAuth.auth;
   }
 
   private updateUserData(user) {

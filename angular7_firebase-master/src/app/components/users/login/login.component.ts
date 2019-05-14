@@ -38,6 +38,6 @@ export class LoginComponent implements OnInit {
     this.authService.logoutUser();
   }
   onLoginRedirect(): void {
-    this.router.navigate(['restaurants']);
+    this.router.navigate(['dashboard']);
   }
 }

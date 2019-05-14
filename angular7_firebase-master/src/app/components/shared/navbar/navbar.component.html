@@ -44,6 +44,45 @@
                             </div>
                         </div>
                     </li>
+                    <li class="nav-item mr-0" ngbDropdown placement="bottom-right">
+                        <a class="nav-link dropdown-user-link position-relative" id="dropdownBasic3" ngbDropdownToggle>
+                            <span class="avatar avatar-online">
+                                    <img src="assets/img/photos/profile2.jpg" alt="avatar" id="navbar-avatar">
+                                </span>
+                            <p class="d-none">User Settings</p>
+                        </a>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic3">
+                            <div class="arrow_box_right">
+
+                                <div *ngIf="isLogged">
+                                    <a class="dropdown-item py-1" routerLink="/user/profile">
+                                        <i class="ft-edit mr-2"></i>
+                                        <span>Meu perfil</span>
+                                    </a>
+                                </div>
+                                <div *ngIf="isLogged">>
+                                    <a class="dropdown-item py-1" routerLink="/chat">
+                                        <i class="ft-message-circle mr-2"></i>
+                                        <span>Meus Chats</span>
+                                    </a>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div *ngIf="isLogged">
+                                    <a class="dropdown-item" href="javascript:;" (click)="onLogout()">
+                                        <i class="ft-power mr-2"></i>
+                                        <span>Sair</span>
+                                    </a>
+                                </div>
+                                <div *ngIf="!isLogged">
+                                    <a class="nav-link" routerLink="/user/login">
+                                        <i class="ft-power mr-2"></i>
+                                        <span>Entrar</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
