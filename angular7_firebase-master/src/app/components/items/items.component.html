@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-block">
-                            <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtar pelo Nome' (keyup)='updateFilter($event)' />
+                        <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtar pelo Nome' (keyup)='updateFilter($event)' />
                         <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='items' [sorts]="[{prop: 'name', dir: 'asc'},{prop: 'available', dir: 'asc'},{prop: 'description', dir: 'asc'},{prop: 'price', dir: 'asc'},{prop: 'stock', dir: 'asc'}]">
                             <ngx-datatable-column prop="image_firebase_url">
 

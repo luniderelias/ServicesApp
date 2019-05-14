@@ -1,3 +1,4 @@
+import { MessagingService } from './services/messaging.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -65,6 +66,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { StoreModule } from '@ngrx/store';
 
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { AuthService } from './components/shared/auth/auth.service';
@@ -139,6 +141,7 @@ export function createTranslateLoader(http: HttpClient) {
     AppRoutingModule,
     FormsModule,
     NgxDatatableModule,
+    AngularFireMessagingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
     AngularFireStorageModule,
@@ -166,7 +169,8 @@ export function createTranslateLoader(http: HttpClient) {
     SnotifyService,
     DragulaService,
     AuthService,
-    AuthGuard
+    AuthGuard,
+    MessagingService
   ],
   bootstrap: [AppComponent]
 })

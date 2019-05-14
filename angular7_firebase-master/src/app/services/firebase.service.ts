@@ -11,16 +11,16 @@ import * as firebase from 'firebase';
   providedIn: 'root'
 })
 export class FirebaseService {
-	
-	
-	listings: AngularFireList<any[]>;
+
+
+  listings: AngularFireList<any[]>;
   listing: AngularFireObject<any>;
 
   restaurants: AngularFireList<any[]>;
   restaurant: AngularFireObject<any>;
 
   categories: AngularFireList<any[]>;
-  category_details:AngularFireObject<any>;
+  category_details: AngularFireObject<any>;
 
   items: AngularFireList<any[]>;
   item_details: AngularFireObject<any>;
@@ -51,11 +51,15 @@ export class FirebaseService {
   category_choose_details: AngularFireObject<any>;
 
 
-  itemChoose:AngularFireList<any[]>;
+  itemChoose: AngularFireList<any[]>;
   item_choose_details: AngularFireObject<any>;
 
   extraChooseItemList: AngularFireList<any[]>;
   extraChooseItemDetail: AngularFireObject<any>;
+
+  notifications: AngularFireList<any[]>;
+  notification_details: AngularFireObject<any>;
+  eraseNotificationsPath: any;
 
 
 
@@ -78,338 +82,340 @@ export class FirebaseService {
 
   productId: any;
 
-  constructor(private af: AngularFireDatabase) { 
-  
-	this.listings = this.af.list('/listings') as AngularFireList<Listing[]>;
-	this.restaurants = this.af.list('/restaurants') as AngularFireList<Listing[]>;
-	this.categories = this.af.list('/category') as AngularFireList<Category[]>;
-	this.items = this.af.list('/items') as AngularFireList<Item[]>;
-	this.orders = this.af.list('/orders') as AngularFireList<Order[]>;
-	this.orderList = firebase.database().ref('/orders');
-	this.itemExtraList = firebase.database().ref('/items');
-	this.userDetail = firebase.database().ref('/users');
-	this.allTableOrders = this.af.list('/AllTableOrders') as AngularFireList<TableOrder[]>;
-	this.allTableOrdersList = firebase.database().ref('/AllTableOrders');
-	this.paypal = firebase.database().ref('/paypal');
-	this.stripe = firebase.database().ref('/stripe');
-	this.cities = this.af.list('/city') as AngularFireList<City[]>;
-	this.districts = this.af.list('/districts') as AngularFireList<District[]>;
-	this.streets = this.af.list('/streets') as AngularFireList<Street[]>;
-	this.buildings = this.af.list('/apartments') as AngularFireList<Building[]>;
-	
-	
-	this.chooseCategories = this.af.list('/categoryChoose') as AngularFireList<Category[]>;
+  constructor(private af: AngularFireDatabase) {
+
+    this.listings = this.af.list('/listings') as AngularFireList<Listing[]>;
+    this.restaurants = this.af.list('/restaurants') as AngularFireList<Listing[]>;
+    this.categories = this.af.list('/category') as AngularFireList<Category[]>;
+    this.items = this.af.list('/items') as AngularFireList<Item[]>;
+    this.orders = this.af.list('/orders') as AngularFireList<Order[]>;
+    this.notifications = this.af.list('/notifications/user001') as AngularFireList<Notification[]>;
+    this.eraseNotificationsPath = firebase.database().ref('/notifications/user001');
+    this.orderList = firebase.database().ref('/orders');
+    this.itemExtraList = firebase.database().ref('/items');
+    this.userDetail = firebase.database().ref('/users');
+    this.allTableOrders = this.af.list('/AllTableOrders') as AngularFireList<TableOrder[]>;
+    this.allTableOrdersList = firebase.database().ref('/AllTableOrders');
+    this.paypal = firebase.database().ref('/paypal');
+    this.stripe = firebase.database().ref('/stripe');
+    this.cities = this.af.list('/city') as AngularFireList<City[]>;
+    this.districts = this.af.list('/districts') as AngularFireList<District[]>;
+    this.streets = this.af.list('/streets') as AngularFireList<Street[]>;
+    this.buildings = this.af.list('/apartments') as AngularFireList<Building[]>;
+
+
+    this.chooseCategories = this.af.list('/categoryChoose') as AngularFireList<Category[]>;
     this.itemChoose = this.af.list('/itemChoose') as AngularFireList<Item[]>;
     this.itemChooseExtraList = firebase.database().ref('/itemChoose');
-  
+
     this.tax = firebase.database().ref('/tax');
 
 
     this.folder = 'listingimages';
-	this.itemFolder = 'itemimages';
-	this.restaurantFolder = 'restaurantimages';
-	this.categoryFolder = 'categoryimages';
-  
+    this.itemFolder = 'itemimages';
+    this.restaurantFolder = 'restaurantimages';
+    this.categoryFolder = 'categoryimages';
+
   }
-  
-  updateChooseExtraItem(id,extraItem){
-	    firebase.database().ref('/items').child(this.productId).child("extraOptions").child(id).update({
-		name: extraItem.name,
-		selected: "false",
-		value: extraItem.value
+
+  updateChooseExtraItem(id, extraItem) {
+    firebase.database().ref('/items').child(this.productId).child("extraOptions").child(id).update({
+      name: extraItem.name,
+      selected: "false",
+      value: extraItem.value
     });
   }
-  
-   getItemEditExtraDetail(id){
 
-	console.log(this.productId);
-   
-	this.extraItemDetail = this.af.object('/items/'+this.productId+'/extraOptions/'+id) as AngularFireObject<Extra>;
+  getItemEditExtraDetail(id) {
+
+    console.log(this.productId);
+
+    this.extraItemDetail = this.af.object('/items/' + this.productId + '/extraOptions/' + id) as AngularFireObject<Extra>;
     return this.extraItemDetail;
 
   }
-  
-  getItemExtraDetail(id){
- 
-	this.extraItemList = this.af.list('/items/'+id+'/extraOptions/') as AngularFireList<Extra[]>
+
+  getItemExtraDetail(id) {
+
+    this.extraItemList = this.af.list('/items/' + id + '/extraOptions/') as AngularFireList<Extra[]>
     return this.extraItemList;
 
   }
-  
-  setProductId(id){
-	  this.productId = id;
+
+  setProductId(id) {
+    this.productId = id;
   }
-  
-   onExtraItemDelete(item_id,extra_id){
-	  //private items = this.af.database.list('listings');
-      //items.remove(category);
-		this.itemExtraList.child(item_id).child("extraOptions").child(extra_id).remove();
+
+  onExtraItemDelete(item_id, extra_id) {
+    //private items = this.af.database.list('listings');
+    //items.remove(category);
+    this.itemExtraList.child(item_id).child("extraOptions").child(extra_id).remove();
 
   }
-  
-  addExtraItem(id,extraItem){
-			console.log(id);
-			console.log(extraItem);
 
-			 firebase.database().ref('/items').child(id).child("extraOptions").push({
-				name: extraItem.name,
-				selected: "false",
-				value: extraItem.price
-			});
-	}
-  
-  addStripeConfiguration(stripe){
-	  console.log(stripe);
+  addExtraItem(id, extraItem) {
+    console.log(id);
+    console.log(extraItem);
 
-	    this.stripe.set({
-			publishable : stripe.publishable,
-			secret: stripe.secret
-		});
+    firebase.database().ref('/items').child(id).child("extraOptions").push({
+      name: extraItem.name,
+      selected: "false",
+      value: extraItem.price
+    });
   }
-  
-  addPaypalConfiguration(paypal){
-	  console.log(paypal);
 
-	    this.paypal.set({
-			sandbox : paypal.sandbox,
-			production: paypal.production
-		});
+  addStripeConfiguration(stripe) {
+    console.log(stripe);
+
+    this.stripe.set({
+      publishable: stripe.publishable,
+      secret: stripe.secret
+    });
   }
-  
-  updateBuilding(id,building){
-	  return this.buildings.update(id,building);
+
+  addPaypalConfiguration(paypal) {
+    console.log(paypal);
+
+    this.paypal.set({
+      sandbox: paypal.sandbox,
+      production: paypal.production
+    });
   }
-  
-  getBuildingDetails(id){
-	  this.buildingDetail = this.af.object('/apartments/'+id) as AngularFireObject<Building>
+
+  updateBuilding(id, building) {
+    return this.buildings.update(id, building);
+  }
+
+  getBuildingDetails(id) {
+    this.buildingDetail = this.af.object('/apartments/' + id) as AngularFireObject<Building>
     return this.buildingDetail;
 
   }
-  
-  updateStreet(id,street){
-	  return this.streets.update(id,street);
+
+  updateStreet(id, street) {
+    return this.streets.update(id, street);
   }
-  
-  getStreetDetails(id){
-	  this.streetDetail = this.af.object('/streets/'+id) as AngularFireObject<Street>
+
+  getStreetDetails(id) {
+    this.streetDetail = this.af.object('/streets/' + id) as AngularFireObject<Street>
     return this.streetDetail;
 
   }
-  
-   updateDistrict(id,district){
-	  return this.districts.update(id,district);
+
+  updateDistrict(id, district) {
+    return this.districts.update(id, district);
   }
-  
-  getDistrictDetails(id){
-    this.districtDetail = this.af.object('/districts/'+id) as AngularFireObject<District>
+
+  getDistrictDetails(id) {
+    this.districtDetail = this.af.object('/districts/' + id) as AngularFireObject<District>
     return this.districtDetail;
   }
-  
-  updateCity(id,city){
-	  return this.cities.update(id,city);
+
+  updateCity(id, city) {
+    return this.cities.update(id, city);
   }
-  
-  getCityDetails(id){
-    this.cityDetail = this.af.object('/city/'+id) as AngularFireObject<City>
+
+  getCityDetails(id) {
+    this.cityDetail = this.af.object('/city/' + id) as AngularFireObject<City>
     return this.cityDetail;
   }
-  
-  addNewBuilding(buildingName){
-	  return this.buildings.push(buildingName);
-  }
-  
-   addNewStreet(streetName){
-	  return this.streets.push(streetName);
-  }
-  
-  addNewDistrict(districtName){
-	  return this.districts.push(districtName);
-  }
-  
-  addNewCity(cityName){
-	  return this.cities.push(cityName);
-  }
-  
-  deleteBuilding(buildingKey){
-	  return this.buildings.remove(buildingKey);
 
-  }
-  
-  getBuildings(){
-	  return this.buildings;
+  addNewBuilding(buildingName) {
+    return this.buildings.push(buildingName);
   }
 
-  
-  deleteStreet(streetKey){
-	  return this.streets.remove(streetKey);
+  addNewStreet(streetName) {
+    return this.streets.push(streetName);
+  }
+
+  addNewDistrict(districtName) {
+    return this.districts.push(districtName);
+  }
+
+  addNewCity(cityName) {
+    return this.cities.push(cityName);
+  }
+
+  deleteBuilding(buildingKey) {
+    return this.buildings.remove(buildingKey);
 
   }
-  
-  getStreets(){
-	  return this.streets;
+
+  getBuildings() {
+    return this.buildings;
   }
-  
-  getDistricts(){
-	  return this.districts;
-  }
-  
-   deleteDistrict(districtKey){
-	  return this.districts.remove(districtKey);
+
+
+  deleteStreet(streetKey) {
+    return this.streets.remove(streetKey);
 
   }
-  
-   getCities(){
 
-	  return this.cities;
+  getStreets() {
+    return this.streets;
   }
-  
-  deleteCity(cityKey){
-	  return this.cities.remove(cityKey);
+
+  getDistricts() {
+    return this.districts;
+  }
+
+  deleteDistrict(districtKey) {
+    return this.districts.remove(districtKey);
 
   }
-  
-  
-   updateRestaurantOrderStatus(id,order_details){
 
-	  console.log(id);
-	  console.log(order_details);
-	  firebase.database().ref('/orders').child(id).update({
-		status: order_details.status
+  getCities() {
+
+    return this.cities;
+  }
+
+  deleteCity(cityKey) {
+    return this.cities.remove(cityKey);
+
+  }
+
+
+  updateRestaurantOrderStatus(id, order_details) {
+
+    console.log(id);
+    console.log(order_details);
+    firebase.database().ref('/orders').child(id).update({
+      status: order_details.status
     });
 
   }
-  
-  getOrderDetail(id){
+
+  getOrderDetail(id) {
     return this.orderList.child(id);
   }
- 
 
-  
-  getOrders(){
+
+
+  getOrders() {
 
     return this.orders;
   }
-  
-  addItem(item){
 
-	  let storageRefItem = firebase.storage().ref();
-    for(let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]){
+  addItem(item) {
 
-	  //let path = '/${this.folder}/${selectedFile.name}';
+    let storageRefItem = firebase.storage().ref();
+    for (let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]) {
+
+      //let path = '/${this.folder}/${selectedFile.name}';
       let pathItem = `/${this.itemFolder}/${selectedItemFile.name}`;
       let iRefItem = storageRefItem.child(pathItem);
       iRefItem.put(selectedItemFile).then((snapshot) => {
         item.image = pathItem;
 
-			  let storageRef = firebase.storage().ref();
-			  let spaceRef = storageRef.child(item.image);
+        let storageRef = firebase.storage().ref();
+        let spaceRef = storageRef.child(item.image);
 
-			  console.log(item.image);
-			  storageRef.child(item.image).getDownloadURL().then((url) => {
-				// Set image url
-				console.log(url);
+        console.log(item.image);
+        storageRef.child(item.image).getDownloadURL().then((url) => {
+          // Set image url
+          console.log(url);
 
 
-				item.image_firebase_url=url;
+          item.image_firebase_url = url;
 
-				return this.items.push(item);
+          return this.items.push(item);
 
-			  }).catch((error) => {
-				console.log(error);
-			  });
+        }).catch((error) => {
+          console.log(error);
+        });
 
         //return this.items.push(item);
       });
     }
 
   }
-  
-   updateItemWithImage(id,item){
-	  
-	  return this.items.update(id,item);
+
+  updateItemWithImage(id, item) {
+
+    return this.items.update(id, item);
 
   }
-  
-    updateItem(id,item){
-	  
-	  return this.items.update(id,item);
+
+  updateItem(id, item) {
+
+    return this.items.update(id, item);
 
   }
-  
-  deleteItem(id){
-	
-	return this.items.remove(id);
+
+  deleteItem(id) {
+
+    return this.items.remove(id);
 
   }
-  
-  getItemDetails(id){
 
-		this.item_details = this.af.object('/items/'+id) as AngularFireObject<Item>
-		return this.item_details;
-	}
-  
-  getItems(){
-	  return this.items;
+  getItemDetails(id) {
+
+    this.item_details = this.af.object('/items/' + id) as AngularFireObject<Item>
+    return this.item_details;
+  }
+
+  getItems() {
+    return this.items;
 
   }
-  
-  
-  deleteCategory(id){
-	
-	return this.categories.remove(id);
+
+
+  deleteCategory(id) {
+
+    return this.categories.remove(id);
 
   }
-  
-  updateCategoryWithImage(id,category){
-	
-	
-	return this.categories.update(id,category);
-	
-	
+
+  updateCategoryWithImage(id, category) {
+
+
+    return this.categories.update(id, category);
+
+
 
   }
-  
-   updateCategory(id,category){
-	 
-	  return this.categories.update(id,category);
+
+  updateCategory(id, category) {
+
+    return this.categories.update(id, category);
 
   }
-  
-  
-  getCategoryDetails(cat_id){
-	this.category_details = this.af.object('/category/'+cat_id) as AngularFireObject<Category>
+
+
+  getCategoryDetails(cat_id) {
+    this.category_details = this.af.object('/category/' + cat_id) as AngularFireObject<Category>
     return this.category_details;
 
   }
-  
-    addCategory(category){
+
+  addCategory(category) {
 
 
-	  let storageRefItem = firebase.storage().ref();
-    for(let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]){
+    let storageRefItem = firebase.storage().ref();
+    for (let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]) {
 
-	  
+
       let pathItem = `/${this.categoryFolder}/${selectedItemFile.name}`;
       let iRefItem = storageRefItem.child(pathItem);
       iRefItem.put(selectedItemFile).then((snapshot) => {
         category.image = pathItem;
 
-			  let storageRef = firebase.storage().ref();
-			  let spaceRef = storageRef.child(category.image);
+        let storageRef = firebase.storage().ref();
+        let spaceRef = storageRef.child(category.image);
 
-			  console.log(category.image);
-			  storageRef.child(category.image).getDownloadURL().then((url) => {
-				
-				console.log(url);
+        console.log(category.image);
+        storageRef.child(category.image).getDownloadURL().then((url) => {
+
+          console.log(url);
 
 
-				category.firebase_url=url;
+          category.firebase_url = url;
 
-				return this.categories.push(category);
+          return this.categories.push(category);
 
-			  }).catch((error) => {
-				console.log(error);
-			  });
+        }).catch((error) => {
+          console.log(error);
+        });
 
 
 
@@ -420,241 +426,263 @@ export class FirebaseService {
 
 
   }
-  
-  
-  getCategories(){
+
+
+  getCategories() {
     this.categories = this.af.list('/category') as AngularFireList<Category[]>
     return this.categories;
   }
-  
-   updateRestaurant(id,restaurant){
 
-	  return this.restaurants.update(id,restaurant);
+  updateRestaurant(id, restaurant) {
 
-  }
-  
-  
-  updateRestaurantWithImage(id,restaurant){
-	
-	
-	return this.restaurants.update(id,restaurant);
-	
-	
+    return this.restaurants.update(id, restaurant);
 
   }
-  
-  getRestaurantDetails(id){
-    this.restaurant = this.af.object('/restaurants/'+id) as AngularFireObject<Restaurant>
+
+
+  updateRestaurantWithImage(id, restaurant) {
+
+
+    return this.restaurants.update(id, restaurant);
+
+
+
+  }
+
+  getRestaurantDetails(id) {
+    this.restaurant = this.af.object('/restaurants/' + id) as AngularFireObject<Restaurant>
     return this.restaurant;
   }
-  
+
   restaurantCategory: AngularFireList<any>;
-  getRestaurantCategories(id){
+  getRestaurantCategories(id) {
 
-	//const uid = this.authService.getUserId();
-	
-	this.restaurantCategory = this.af.list('/category/', ref => ref.orderByChild('res_name').equalTo(id)) as AngularFireList<Category>;
-     // .subscribe(data => {
-      //  console.log(data);
-      //});
-	  return this.restaurantCategory;
+    //const uid = this.authService.getUserId();
+
+    this.restaurantCategory = this.af.list('/category/', ref => ref.orderByChild('res_name').equalTo(id)) as AngularFireList<Category>;
+    // .subscribe(data => {
+    //  console.log(data);
+    //});
+    return this.restaurantCategory;
   }
 
-/**
-    this.restaurantCategory = this.af.list('/category/',
-            {
-          query: {
-            orderByChild: 'res_name',
-            equalTo: id
-          }
-          }) as AngularFireList<Category>;
-      return this.restaurantCategory;
-    }
-	
-	*/
-  
-   deleteRestaurant(id){
-	
-		return this.restaurants.remove(id);
-		
-		
+  /**
+      this.restaurantCategory = this.af.list('/category/',
+              {
+            query: {
+              orderByChild: 'res_name',
+              equalTo: id
+            }
+            }) as AngularFireList<Category>;
+        return this.restaurantCategory;
+      }
+  	
+    */
+
+  deleteRestaurant(id) {
+
+    return this.restaurants.remove(id);
+
+
 
   }
-  
-  getRestaurants(){
+
+  getRestaurants() {
 
     return this.restaurants;
   }
-  
-  addRestaurant(restaurant){
 
+  addRestaurant(restaurant) {
+    let storageRefItem = firebase.storage().ref();
+    for (let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]) {
 
-	let storageRefItem = firebase.storage().ref();
-    for(let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]){
-
-	  //let path = '/${this.folder}/${selectedFile.name}';
+      //let path = '/${this.folder}/${selectedFile.name}';
       let pathItem = `/${this.restaurantFolder}/${selectedItemFile.name}`;
       let iRefItem = storageRefItem.child(pathItem);
       iRefItem.put(selectedItemFile).then((snapshot) => {
         restaurant.image = pathItem;
 
-			  let storageRef = firebase.storage().ref();
-			  let spaceRef = storageRef.child(restaurant.image);
+        let storageRef = firebase.storage().ref();
+        let spaceRef = storageRef.child(restaurant.image);
 
-			  console.log(restaurant.image);
-			  storageRef.child(restaurant.image).getDownloadURL().then((url) => {
-				// Set image url
-				console.log(url);
-
-
-				restaurant.firebase_url=url;
-
-				return this.restaurants.push(restaurant);
-
-			  }).catch((error) => {
-				console.log(error);
-			  });
+        console.log(restaurant.image);
+        storageRef.child(restaurant.image).getDownloadURL().then((url) => {
+          // Set image url
+          console.log(url);
 
 
-       
+          restaurant.firebase_url = url;
+
+          return this.restaurants.push(restaurant);
+
+        }).catch((error) => {
+          console.log(error);
+        });
+
+
+
       });
     }
 
 
   }
-  
+
+
+  getNotifications() {
+    return this.notifications;
+  }
+
+  deleteNotification(id) {
+    return this.notifications.remove(id);
+  }
+
+  deleteAllNotifications() {
+    this.eraseNotificationsPath.set({});
+  }
+
+  getNotificationDetails(id) {
+    this.notification_details = this.af.object('/notifications/' + id) as AngularFireObject<Notification>;
+    return this.restaurant;
+  }
+
 }
 
 
-interface Listing{
-  $key?:string;
-  title?:string;
-  type?:string;
-  image?:string;
-  city?:string;
-  owner?:string;
-  bedrooms?:string;
-  path?:any;
+interface Listing {
+  $key?: string;
+  title?: string;
+  type?: string;
+  image?: string;
+  city?: string;
+  owner?: string;
+  bedrooms?: string;
+  path?: any;
 }
 
-interface Restaurant{
-  $key?:string;
-  address?:string;
-  description?:string;
-  image?:string;
-  info?:string;
-  lat?:string;
-  long?:string;
-  mark?:string;
-  option?:string;
-  outlet?:string;
-  phonenumber?:string;
-  title?:string;
-  firebase_url?:string;
-  user_id?:string;
+interface Notification {
+  $key?: string;
+  notification?: any;
+  data?: any;
 }
 
-interface Category{
-  $key?:string;
-  cat_id?:string;
-  cat_name?:string;
-  res_name?:string;
-  image?:string;
-  firebase_url?:string;
+interface Restaurant {
+  $key?: string;
+  address?: string;
+  description?: string;
+  image?: string;
+  info?: string;
+  lat?: string;
+  long?: string;
+  mark?: string;
+  option?: string;
+  outlet?: string;
+  phonenumber?: string;
+  title?: string;
+  firebase_url?: string;
+  user_id?: string;
 }
 
-interface City{
-  $key?:string;
-  name?:string;
+interface Category {
+  $key?: string;
+  cat_id?: string;
+  cat_name?: string;
+  res_name?: string;
+  image?: string;
+  firebase_url?: string;
 }
 
-interface District{
-	$key?:string;
-	name?:string;
+interface City {
+  $key?: string;
+  name?: string;
 }
 
-interface Street{
-	$key?:string;
-	name?:string;
+interface District {
+  $key?: string;
+  name?: string;
 }
 
-interface Building{
-	$key?:string;
-	name?:string;
+interface Street {
+  $key?: string;
+  name?: string;
 }
 
-
-
-interface Item{
-  $key?:string;
-  available?:string;
-  category?:string;
-  description?:string;
-  image?:string;
-  name?:string;
-  price?:string;
-  stock?:string;
-  categories?:string;
-  percent?:string;
-  image_firebase_url?:string;
-  lenght?:string;
-}
-
-interface Extra{
-	$key?:string;
-	name:string;
-	selected:string;
-	value:string;
+interface Building {
+  $key?: string;
+  name?: string;
 }
 
 
-interface Order{
-  $key?:string;
-  address_id?:string;
-  created?:string;
-  item_qty?:string;
-  order_date_time?:string;
-  payment_id?:string;
-  product_firebase?:string;
-  product_id?:string;
-  product_image?:string;
-  product_price?:string;
-  product_total_price?:string;
-  restaurant_id?:string;
-  restaurant_name?:string;
-  status?:string;
-  user_id?:string;
-  user_name?:string;
-  restaurant_owner_id?:string;
-  checked?:string;
+
+interface Item {
+  $key?: string;
+  available?: string;
+  category?: string;
+  description?: string;
+  image?: string;
+  name?: string;
+  price?: string;
+  stock?: string;
+  categories?: string;
+  percent?: string;
+  image_firebase_url?: string;
+  lenght?: string;
 }
 
-interface TableOrder{
-	  $key?:string;
-	  restaurant_id?: string;
-	  restaurant_address?: string;
-	  restaurant_description?: string;
-	  restaurant_backgroundImage?: string;
-	  restaurant_firebase_url?: string;
-	  restaurant_icon?: string;
-	  restaurant_iconText?: string;
-	  restaurant_images?: string;
-	  restaurant_info?: string;
-	  restaurant_lat?: string;
-	  restaurant_long?: string;
-	  restaurant_mark?: string;
-	  restaurant_market?: string;
-	  restaurant_option?: string;
-	  restaurant_outlet?: string;
-	  restaurant_phonenumber?: string;
-	  restaurant_show?: string;
-	  restaurant_subtitle?: string;
-	  restaurant_title?: string;
-      date?: string;
-	  person?: string;
-	  time?: string;
-	  userId?: string;
-	  status?: string;
-      timeStamp?: string;
-      reverseOrder?: string;
+interface Extra {
+  $key?: string;
+  name: string;
+  selected: string;
+  value: string;
+}
+
+
+interface Order {
+  $key?: string;
+  address_id?: string;
+  created?: string;
+  item_qty?: string;
+  order_date_time?: string;
+  payment_id?: string;
+  product_firebase?: string;
+  product_id?: string;
+  product_image?: string;
+  product_price?: string;
+  product_total_price?: string;
+  restaurant_id?: string;
+  restaurant_name?: string;
+  status?: string;
+  user_id?: string;
+  user_name?: string;
+  restaurant_owner_id?: string;
+  checked?: string;
+}
+
+interface TableOrder {
+  $key?: string;
+  restaurant_id?: string;
+  restaurant_address?: string;
+  restaurant_description?: string;
+  restaurant_backgroundImage?: string;
+  restaurant_firebase_url?: string;
+  restaurant_icon?: string;
+  restaurant_iconText?: string;
+  restaurant_images?: string;
+  restaurant_info?: string;
+  restaurant_lat?: string;
+  restaurant_long?: string;
+  restaurant_mark?: string;
+  restaurant_market?: string;
+  restaurant_option?: string;
+  restaurant_outlet?: string;
+  restaurant_phonenumber?: string;
+  restaurant_show?: string;
+  restaurant_subtitle?: string;
+  restaurant_title?: string;
+  date?: string;
+  person?: string;
+  time?: string;
+  userId?: string;
+  status?: string;
+  timeStamp?: string;
+  reverseOrder?: string;
 }
