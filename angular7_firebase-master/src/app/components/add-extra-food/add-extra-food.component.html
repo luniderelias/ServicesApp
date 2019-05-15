@@ -1,6 +1,7 @@
 <section class="row mt-5" *ngIf="isAdmin">
+    <img *ngIf="loading" class="center-spinner" src="assets/spinner.gif" />
     <div class="col">
-        <form (submit)="onExtraItemAddSubmit()" ngNativeValidate>
+        <form (submit)="showQuestion()" ngNativeValidate>
             <div class="form-group">
                 <label>Nome do Opcional</label>
                 <input class="form-control" type="text" [(ngModel)]="extraName" name="extraName" required>
@@ -8,7 +9,7 @@
 
             <div class="form-group">
                 <label>Preço do Opcional</label>
-                <input class="form-control" type="text" [(ngModel)]="extraPrice" name="extraPrice" required>
+                <input class="form-control" type="number" [(ngModel)]="extraPrice" name="extraPrice" required>
             </div>
 
 

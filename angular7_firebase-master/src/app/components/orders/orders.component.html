@@ -1,31 +1,16 @@
 <!-- Filter Datatable Options Starts -->
 <section id="filter" class="mb-3">
+    <img *ngIf="loading" class="center-spinner" src="assets/spinner.gif" />
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-body">
                     <div class="card-block">
                         <div class="row">
-                                <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtrar por Cliente' (keyup)='updateFilter($event,"name")' />
-                                <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtrar por Status' (keyup)='updateFilter($event,"status")' />
+                            <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtrar por Cliente' (keyup)='updateFilter($event,"name")' />
+                            <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtrar por Status' (keyup)='updateFilter($event,"status")' />
                         </div>
                         <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='orders' [sorts]="[{prop: 'timeStamp', dir: 'asc'}]">
-                            <ngx-datatable-column prop="items">
-
-                                <ng-template let-column="image" ngx-datatable-header-template>
-                                    <small><b>IMAGEM</b></small>
-                                </ng-template>
-                                <ng-template let-value="value" ngx-datatable-cell-template>
-                                    <img style="width:50px;height:50px;" class="thumbnail" src="{{value[0].image}}">
-                                </ng-template>
-
-                            </ngx-datatable-column>
-
-                            <ngx-datatable-column prop="$key" name="$key">
-                                <ng-template let-column="image" ngx-datatable-header-template>
-                                    <small><b>ID</b></small>
-                                </ng-template>
-                            </ngx-datatable-column>
 
                             <ngx-datatable-column prop="customerDetails.displayName" name="customerDetails.displayName">
                                 <ng-template let-column="customerDetails.displayName" ngx-datatable-header-template>
@@ -72,8 +57,8 @@
                                     <small><b>AÇÕES</b></small>
                                 </ng-template>
 
-                                <ng-template let-value="value" ngx-datatable-cell-template>
-                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/pedidos/detalhes/{{value}}">Visualizar</button>
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" (click)="showQuestion(row)">{{row.status === 'Pendente'? 'Receber':'Visualizar'}}</button>
                                 </ng-template>
                             </ngx-datatable-column>
 

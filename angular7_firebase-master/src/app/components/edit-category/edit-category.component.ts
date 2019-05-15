@@ -1,14 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
 import { NgForm } from '@angular/forms';
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
 import { FirebaseService } from '../../services/firebase.service';
 
 import { RestaurantInterface } from '../../models/restaurant';
 import { CategoryInterface } from '../../models/category';
 
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Router } from '@angular/router';
 
@@ -26,7 +26,7 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class EditCategoryComponent implements OnInit {
 
-
+	loading: boolean;
 	address?: string;
 	description?: string;
 	image?: string;
@@ -64,7 +64,7 @@ export class EditCategoryComponent implements OnInit {
 		private router: Router, private route: ActivatedRoute,
 		private authService: AuthService, private storage: AngularFireStorage) {
 
-		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
 
 		this.categoryFolder = 'categoryimages';
 
@@ -97,6 +97,14 @@ export class EditCategoryComponent implements OnInit {
 	}
 
 	ngOnInit() {
+	}
+
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.onCategoryEditSubmit();
+		});
 	}
 
 
@@ -138,13 +146,9 @@ export class EditCategoryComponent implements OnInit {
 	}
 
 	onCategoryEditSubmit() {
-
-		console.log(this.image);
-
 		if (!this.inputImageUser.nativeElement.value || this.inputImageUser.nativeElement.value === undefined) {
-			console.log("inside");
 
-			let category = {
+			const category = {
 				cat_id: this.cat_id,
 				cat_name: this.cat_name,
 				image: this.firebase_url,
@@ -152,16 +156,20 @@ export class EditCategoryComponent implements OnInit {
 
 			}
 
-			this.firebaseService.updateCategory(this.id, category);
+			this.firebaseService.updateCategory(this.id, category).then(res => {
+				alertFunctions.showSuccess('Sucesso!', 'Categoria Salva com Sucesso!');
+				this.loading = false;
+				this.router.navigate(['/categorias/detalhes/' + this.id]);
+			}, error => {
+				alertFunctions.showError('Erro!', 'Falha ao Editar Categoria!');
+				this.loading = false;
+			});
 
-			this.router.navigate(['/categorias/detalhes/' + this.id]);
 		}
 
 		if (this.inputImageUser.nativeElement.value) {
 
-			console.log("white");
-
-			let category = {
+			const category = {
 
 				cat_id: this.cat_id,
 				cat_name: this.cat_name,
@@ -170,10 +178,14 @@ export class EditCategoryComponent implements OnInit {
 
 			}
 
-			this.firebaseService.updateCategoryWithImage(this.id, category);
-
-			this.router.navigate(['/categorias/detalhes/' + this.id]);
-
+			this.firebaseService.updateCategoryWithImage(this.id, category).then(res => {
+				alertFunctions.showSuccess('Sucesso!', 'Categoria Salva com Sucesso!');
+				this.loading = false;
+				this.router.navigate(['/categorias/detalhes/' + this.id]);
+			}, error => {
+				alertFunctions.showError('Erro!', 'Falha ao Editar Categoria!');
+				this.loading = false;
+			});
 		}
 	}
 
@@ -196,7 +208,6 @@ export class EditCategoryComponent implements OnInit {
 		this.uploadPercent = task.percentageChanges();
 		task.snapshotChanges().pipe(finalize(() => this.urlImage = ref.getDownloadURL())).subscribe();
 
-		alert("Por favor, clique em ok para fazer o envio da imagem");
 
 		console.log(ref.getDownloadURL());
 

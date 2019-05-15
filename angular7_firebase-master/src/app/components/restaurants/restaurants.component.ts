@@ -37,7 +37,7 @@ export class RestaurantsComponent implements OnInit {
         console.log(item);
 
 
-        let a = item.payload.toJSON();
+        const a = item.payload.toJSON();
         a['$key'] = item.key;
 
         console.log(a);

@@ -1,18 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
-import { NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { UserInterface } from '../../models/user';
-import { ViewChild, ElementRef, Input } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
 import { RestaurantInterface } from '../../models/restaurant';
 import { CategoryInterface } from '../../models/category';
 
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-category-details',
@@ -21,6 +16,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class CategoryDetailsComponent implements OnInit {
 
+	loading: boolean;
 	restaurants: any;
 	restaurant2: any;
 
@@ -42,8 +38,16 @@ export class CategoryDetailsComponent implements OnInit {
 
 	constructor(private firebaseService: FirebaseService, private authService: AuthService,
 		private router: Router, private route: ActivatedRoute) {
-			this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
-		 }
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
+		}
+
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.onCategoryDelete();
+		});
+	}
 
 	ngOnInit() {
 
@@ -82,10 +86,14 @@ export class CategoryDetailsComponent implements OnInit {
 	}
 
 	onCategoryDelete() {
-		this.firebaseService.deleteCategory(this.id);
-
-		this.router.navigate(['/categorias/listar']);
-
+		this.firebaseService.deleteCategory(this.id).then(res => {
+			alertFunctions.showSuccess('Sucesso!', 'Categoria Removida');
+			this.loading = false;
+			this.router.navigate(['/categorias/listar']);
+		}, error => {
+			this.loading = false;
+			alertFunctions.showError('Erro!', 'Falha ao Remover Categoria!');
+		});
 	}
 
 }

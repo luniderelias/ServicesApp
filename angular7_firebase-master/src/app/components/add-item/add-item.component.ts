@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
 import { NgForm } from '@angular/forms';
 
+import * as alertFunctions from './../shared/data/sweet-alerts';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 
@@ -15,6 +15,7 @@ import { CategoryInterface } from '../../models/category';
 })
 export class AddItemComponent implements OnInit {
 
+	loading: boolean;
 	available = '';
 	category = '';
 	description: any;
@@ -30,7 +31,13 @@ export class AddItemComponent implements OnInit {
 
 	categoryList: any;
 
-
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.onItemAddSubmit();
+		});
+	}
 
 	private CategoryInterface: CategoryInterface[];
 	public isAdmin: any = null;
@@ -39,7 +46,8 @@ export class AddItemComponent implements OnInit {
 		private firebaseService: FirebaseService,
 		private router: Router) {
 
-		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+		this.isAdmin = localStorage.getItem('current_user_role') === 'admin' ||
+			localStorage.getItem('current_user_role') === 'super_admin';
 	}
 	@ViewChild('btnClose') btnClose: ElementRef;
 	@Input() userUid: string;
@@ -82,29 +90,18 @@ export class AddItemComponent implements OnInit {
 	}
 
 	onItemAddSubmit() {
-
-
-
-
 		this.firebaseService.getCategoryDetails(this.categories).snapshotChanges().subscribe(category => {
 			this.category_details = [];
 
+			const res = category.payload.toJSON();
 
-
-			let res = category.payload.toJSON();
-
-			if (category.key != null || category.key != 'null') {
+			if (category.key != null || category.key !== 'null') {
 				res['$key'] = category.key;
 			}
 
-			console.log(category);
-
 			this.category_details = res as CategoryInterface;
 
-
-			console.log(this.category_details);
-
-			let item = {
+			const item = {
 				available: this.available,
 				category: this.category,
 				description: this.description,
@@ -121,24 +118,16 @@ export class AddItemComponent implements OnInit {
 				res_id: this.category_details.res_id,
 				user_id: this.category_details.user_id,
 				real_price: this.price,
-
-
 			}
 
-
-			this.firebaseService.addItem(item);
-			this.router.navigate(['produtos/listar']);
-
-
-
-
+			this.firebaseService.addItem(item).then(res => {
+				alertFunctions.showSuccess('Sucesso!', 'Produto Adicionado');
+				this.loading = false;
+				this.router.navigate(['produtos/listar']);
+			}, error => {
+				alertFunctions.showError('Erro!', 'Falha ao Adicionar Produto!');
+				this.loading = false;
+			});
 		});
-
-
-
 	}
-
-
-
-
 }

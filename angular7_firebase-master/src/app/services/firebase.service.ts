@@ -133,7 +133,7 @@ export class FirebaseService {
   }
 
   updateChooseExtraItem(id, extraItem) {
-    firebase.database().ref('/items').child(this.productId).child("extraOptions").child(id).update({
+    return firebase.database().ref('/items').child(this.productId).child("extraOptions").child(id).update({
       name: extraItem.name,
       selected: "false",
       value: extraItem.value
@@ -161,17 +161,14 @@ export class FirebaseService {
   }
 
   onExtraItemDelete(item_id, extra_id) {
-    //private items = this.af.database.list('listings');
-    //items.remove(category);
-    this.itemExtraList.child(item_id).child("extraOptions").child(extra_id).remove();
-
+    return this.itemExtraList.child(item_id).child("extraOptions").child(extra_id).remove();
   }
 
   addExtraItem(id, extraItem) {
     console.log(id);
     console.log(extraItem);
 
-    firebase.database().ref('/items').child(id).child("extraOptions").push({
+    return firebase.database().ref('/items').child(id).child("extraOptions").push({
       name: extraItem.name,
       selected: "false",
       value: extraItem.price
@@ -293,7 +290,6 @@ export class FirebaseService {
 
   deleteCity(cityKey) {
     return this.cities.remove(cityKey);
-
   }
 
 
@@ -301,7 +297,7 @@ export class FirebaseService {
 
     console.log(id);
     console.log(order_details);
-    firebase.database().ref('/orders').child(id).update({
+    return firebase.database().ref('/orders').child(id).update({
       status: order_details.status
     });
 
@@ -329,14 +325,14 @@ export class FirebaseService {
       //let path = '/${this.folder}/${selectedFile.name}';
       let pathItem = `/${this.itemFolder}/${selectedItemFile.name}`;
       let iRefItem = storageRefItem.child(pathItem);
-      iRefItem.put(selectedItemFile).then((snapshot) => {
+      return iRefItem.put(selectedItemFile).then((snapshot) => {
         item.image = pathItem;
 
         let storageRef = firebase.storage().ref();
         let spaceRef = storageRef.child(item.image);
 
         console.log(item.image);
-        storageRef.child(item.image).getDownloadURL().then((url) => {
+        return storageRef.child(item.image).getDownloadURL().then((url) => {
           // Set image url
           console.log(url);
 
@@ -401,9 +397,7 @@ export class FirebaseService {
   }
 
   updateCategory(id, category) {
-
     return this.categories.update(id, category);
-
   }
 
 
@@ -419,17 +413,17 @@ export class FirebaseService {
     let storageRefItem = firebase.storage().ref();
     for (let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]) {
 
-
+      
       let pathItem = `/${this.categoryFolder}/${selectedItemFile.name}`;
       let iRefItem = storageRefItem.child(pathItem);
-      iRefItem.put(selectedItemFile).then((snapshot) => {
+      return iRefItem.put(selectedItemFile).then((snapshot) => {
         category.image = pathItem;
 
         let storageRef = firebase.storage().ref();
         let spaceRef = storageRef.child(category.image);
 
         console.log(category.image);
-        storageRef.child(category.image).getDownloadURL().then((url) => {
+        return storageRef.child(category.image).getDownloadURL().then((url) => {
 
           console.log(url);
 
@@ -524,14 +518,14 @@ export class FirebaseService {
       //let path = '/${this.folder}/${selectedFile.name}';
       let pathItem = `/${this.restaurantFolder}/${selectedItemFile.name}`;
       let iRefItem = storageRefItem.child(pathItem);
-      iRefItem.put(selectedItemFile).then((snapshot) => {
+      return iRefItem.put(selectedItemFile).then((snapshot) => {
         restaurant.image = pathItem;
 
         let storageRef = firebase.storage().ref();
         let spaceRef = storageRef.child(restaurant.image);
 
         console.log(restaurant.image);
-        storageRef.child(restaurant.image).getDownloadURL().then((url) => {
+        return storageRef.child(restaurant.image).getDownloadURL().then((url) => {
           // Set image url
           console.log(url);
 

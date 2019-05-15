@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
 import { NgForm } from '@angular/forms';
+
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 })
 export class AddNewRestaurantComponent implements OnInit {
 
+  loading: boolean;
   address?: string;
   description?: string;
   image?: string;
@@ -29,12 +31,19 @@ export class AddNewRestaurantComponent implements OnInit {
   constructor(private dataApi: DataApiService,
     private firebaseService: FirebaseService,
     private router: Router) {
-			this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+      this.isAdmin = localStorage.getItem('current_user_role') === 'super_admin';
      }
   @ViewChild('btnClose') btnClose: ElementRef;
   @Input() userUid: string;
 
-
+  showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.onAddRestaurant();
+		});
+  }
+  
   onSaveBook(bookForm: NgForm): void {
     if (bookForm.value.id == null) {
       // New 
@@ -53,7 +62,7 @@ export class AddNewRestaurantComponent implements OnInit {
   }
 
   onAddRestaurant() {
-      let restaurant = {
+      const restaurant = {
         address: this.address,
         description: this.description,
         image: this.image,
@@ -67,12 +76,15 @@ export class AddNewRestaurantComponent implements OnInit {
         title: this.title,
         user_id: 'superadmin'
       };
-      this.firebaseService.addRestaurant(restaurant);
+      this.firebaseService.addRestaurant(restaurant).then(res => {
+        alertFunctions.showSuccess('Sucesso!', 'Loja Adicionada');
+        this.loading = false;
+        this.router.navigate(['lojas/listar']);
+      }, error => {
+        alertFunctions.showError('Erro!', 'Falha ao Adicionar Loja!');
+        this.loading = false;
+      });
 
-      //bookForm.resetForm();
-      //this.btnClose.nativeElement.click();
-
-      this.router.navigate(['lojas/listar']);
 
   }
 

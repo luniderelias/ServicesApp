@@ -1,6 +1,7 @@
 <section class="row mt-5" *ngIf="isAdmin">
+    <img *ngIf="loading" class="center-spinner" src="assets/spinner.gif" />
     <div class="col">
-        <form name="formBook" #formBook="ngForm" (ngSubmit)="onAddRestaurant()" ngNativeValidate>
+        <form name="formBook" #formBook="ngForm" (ngSubmit)="showQuestion()" ngNativeValidate>
             <div class="form-group">
                 <label>Nome</label>
                 <input class="form-control" type="text" [(ngModel)]="title" name="title" required>
@@ -73,7 +74,7 @@
 
 
             <div class="form-group">
-                <input id="image" name="image" [(ngModel)]="image" type="file">
+                <input id="image" name="image" [(ngModel)]="image" type="file" required>
             </div>
 
 

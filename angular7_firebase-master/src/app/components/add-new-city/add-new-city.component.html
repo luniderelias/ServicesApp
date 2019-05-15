@@ -1,6 +1,8 @@
 <section class="row mt-5" *ngIf="isAdmin">
     <div class="col">
-        <form (submit)="addCityName()" ngNativeValidate>
+        <img *ngIf="loading" class="center-spinner" src="assets/spinner.gif" />
+
+        <form (submit)="showQuestion()" ngNativeValidate>
             <div class="form-group">
                 <label>Nome</label>
                 <input class="form-control" type="text" [(ngModel)]="cityName" name="cityName" required>

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
 import { BookInterface } from '../../models/book';
 import { NgForm } from '@angular/forms';
+import * as alertFunctions from './../shared/data/sweet-alerts';
+
 
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
@@ -15,6 +17,7 @@ import { RestaurantInterface } from '../../models/restaurant';
 })
 export class AddCategoryComponent implements OnInit {
 
+	loading: boolean;
 	cat_id: any;
 	cat_name: any;
 	res_name: any;
@@ -33,7 +36,8 @@ export class AddCategoryComponent implements OnInit {
 	constructor(private dataApi: DataApiService,
 		private firebaseService: FirebaseService,
 		private router: Router) {
-		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+		this.isAdmin = localStorage.getItem('current_user_role') === 'admin' ||
+			localStorage.getItem('current_user_role') === 'super_admin';
 	}
 	@ViewChild('btnClose') btnClose: ElementRef;
 	@Input() userUid: string;
@@ -75,14 +79,18 @@ export class AddCategoryComponent implements OnInit {
 		});
 	}
 
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.onCategoryAddSubmit();
+		});
+	}
+
 	onCategoryAddSubmit() {
 
-		this.firebaseService.getRestaurantDetails(this.res_name).snapshotChanges().subscribe(restaurant => {
+		return this.firebaseService.getRestaurantDetails(this.res_name).snapshotChanges().subscribe(restaurant => {
 			this.restaurant = [];
-			//  restaurant.forEach(item => {
-
-			//  console.log(item);
-
 
 			let res = restaurant.payload.toJSON();
 			res['$key'] = restaurant.key;
@@ -90,12 +98,11 @@ export class AddCategoryComponent implements OnInit {
 			console.log(restaurant);
 
 			this.restaurant = res as RestaurantInterface;
-			//this.restaurant.push(res as RestaurantInterface);
 
 			console.log(this.restaurant);
 
 
-			let category = {
+			const category = {
 				cat_id: this.cat_id,
 				cat_name: this.cat_name,
 				res_name: this.res_name,
@@ -109,11 +116,17 @@ export class AddCategoryComponent implements OnInit {
 
 			}
 
-
-			this.firebaseService.addCategory(category);
-			this.router.navigate(['categorias/listar']);
-
-			//	  });
+			this.firebaseService.addCategory(category).then(() => {
+				alertFunctions.showSuccess('Sucesso!', 'Categoria Cadastrada com Sucesso!');
+				this.loading = false;
+				this.router.navigate(['categorias/listar']);
+			}, error => {
+				alertFunctions.showError('Erro', 'Falha ao Cadastrar Categoria');
+				this.loading = false;
+			});
+		}, error => {
+			this.loading = false;
+			alertFunctions.showError('Erro', 'Falha ao Cadastrar Categoria');
 		});
 
 

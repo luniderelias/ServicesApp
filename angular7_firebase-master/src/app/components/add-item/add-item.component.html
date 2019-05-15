@@ -1,6 +1,7 @@
 <section class="row mt-5" *ngIf="isAdmin">
+    <img *ngIf="loading" class="center-spinner" src="assets/spinner.gif" />
     <div class="col">
-        <form (submit)="onItemAddSubmit()" ngNativeValidate>
+        <form (submit)="showQuestion()" ngNativeValidate>
             <div class="form-group">
                 <label>Código</label>
                 <input class="form-control" type="text" [(ngModel)]="product_id" name="product_id" required>
@@ -27,7 +28,7 @@
             </div>
 
             <div class="form-group">
-                <input id="image" name="image" [(ngModel)]="image" type="file">
+                <input id="image" name="image" [(ngModel)]="image" type="file" required>
             </div>
 
             <div class="form-group">

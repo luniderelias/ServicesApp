@@ -1,22 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
-import { NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { UserInterface } from '../../models/user';
-import { ViewChild, ElementRef, Input } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 
+import * as alertFunctions from './../shared/data/sweet-alerts';
 import { RestaurantInterface } from '../../models/restaurant';
 import { CategoryInterface } from '../../models/category';
 import { ItemInterface } from '../../models/item';
-import { CityInterface } from '../../models/city';
-import { OrderInterface } from '../../models/order';
-import { DistrictInterface } from '../../models/district';
-import { BuildingInterface } from '../../models/building';
-import { StreetInterface } from '../../models/street';
 
 import { ActivatedRoute, Params } from '@angular/router';
 
@@ -28,6 +19,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 export class AddExtraFoodComponent implements OnInit {
 
 	id: any;
+	loading: boolean;
 	available: any;
 	category: any;
 	description: any;
@@ -53,11 +45,18 @@ export class AddExtraFoodComponent implements OnInit {
 		private router: Router, private route: ActivatedRoute,
 		private authService: AuthService) {
 
-		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin' ||
+			localStorage.getItem('current_user_role') === 'super_admin';
 
 
 	}
-
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.onExtraItemAddSubmit();
+		});
+	}
 
 	ngOnInit() {
 
@@ -94,18 +93,21 @@ export class AddExtraFoodComponent implements OnInit {
 
 	onExtraItemAddSubmit() {
 
-		let extraItem = {
+		const extraItem = {
 			name: this.extraName,
 			selected: this.extraSelected,
 			price: this.extraPrice,
 
 		}
+		this.firebaseService.addExtraItem(this.id, extraItem).then(res => {
+			alertFunctions.showSuccess('Sucesso!', 'Produto Extra Salvo');
+			this.loading = false;
+			this.router.navigate(['/produtos/adicional/listar/' + this.id]);
+		}, error => {
+			alertFunctions.showError('Erro!', 'Falha ao Adicionar Produto Extra!');
+			this.loading = false;
+		});
 
-		console.log(extraItem);
-
-		this.firebaseService.addExtraItem(this.id, extraItem);
-
-		this.router.navigate(['/produtos/adicional/listar/' + this.id]);
 
 	}
 

@@ -1,5 +1,7 @@
 <div>
-    <form name="formBook" #formBook="ngForm" (ngSubmit)="onEditRestaurant()" ngNativeValidate>
+
+    <img *ngIf="loading" class="center-spinner" src="assets/spinner.gif" />
+    <form name="formBook" #formBook="ngForm" (ngSubmit)="showQuestion()" ngNativeValidate>
 
         <div class="form-group">
             <label>Nome</label>

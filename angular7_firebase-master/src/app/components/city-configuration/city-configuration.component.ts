@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
-import { NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { UserInterface } from '../../models/user';
-import { ViewChild, ElementRef, Input } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
+
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
 import { RestaurantInterface } from '../../models/restaurant';
 import { CategoryInterface } from '../../models/category';
 import { CityInterface } from '../../models/city';
 import { OrderInterface } from '../../models/order';
 
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-city-configuration',
@@ -46,7 +42,7 @@ export class CityConfigurationComponent implements OnInit {
 	private OrderInterface: OrderInterface[];
 	private CityInterface: CityInterface[];
 
-
+	loading = false;
 
 	cat_id: any;
 	category_details: any;
@@ -55,7 +51,15 @@ export class CityConfigurationComponent implements OnInit {
 
 	constructor(private firebaseService: FirebaseService, private authService: AuthService,
 		private router: Router, private route: ActivatedRoute) {
-		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
+		}
+
+	showQuestion(value) {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.deleteCity(value);
+		});
 	}
 
 	ngOnInit() {
@@ -83,7 +87,13 @@ export class CityConfigurationComponent implements OnInit {
 	}
 
 	deleteCity(citykey) {
-		this.firebaseService.deleteCity(citykey);
+		this.firebaseService.deleteCity(citykey).then(res => {
+			alertFunctions.showSuccess('Sucesso!', 'Cidade Removida!');
+			this.loading = false;
+		}, error => {
+			alertFunctions.showError('Erro!', 'Falha ao Remover Cidade!');
+			this.loading = false;
+		});
 	}
 
 }

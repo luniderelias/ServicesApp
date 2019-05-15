@@ -28,7 +28,7 @@ export class EcommerceComponent {
     dashboard: DashboardInterface;
     orders: any[];
     constructor(private firebaseService: FirebaseService) {
-        this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+        this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
         this.orders = [];
         this.getDashboardOrders();
 
@@ -57,11 +57,11 @@ export class EcommerceComponent {
                 res['$key'] = dashboard.key;
             }
             this.dashboard = res as DashboardInterface;
-
-            console.log(this.dashboard.dailyRevenue);
+            this.dashboard.dailyRevenue.series = [this.dashboard.dailyRevenue.series];
+            this.dashboard.dailyOrders.series = [this.dashboard.dailyOrders.series];
             this.WidgetAreaChart2.data = this.dashboard.dailyRevenue;
             this.lineChart.data = this.dashboard.dailyRevenue;
-
+            console.log(this.dashboard.dailyRevenue);
             this.WidgetAreaChart3.data = this.dashboard.dailyOrders;
         });
     }

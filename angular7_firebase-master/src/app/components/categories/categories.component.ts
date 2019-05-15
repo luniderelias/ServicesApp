@@ -25,7 +25,7 @@ export class CategoriesComponent implements OnInit {
   categories: any;
 
   constructor(private firebaseService: FirebaseService, private authService: AuthService , private router: Router) { 
-    this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+    this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
   }
 
   ngOnInit() {

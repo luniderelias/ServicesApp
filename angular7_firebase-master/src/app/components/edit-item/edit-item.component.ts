@@ -1,16 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
 import { NgForm } from '@angular/forms';
 
 import { FirebaseService } from '../../services/firebase.service';
 
-import { RestaurantInterface } from '../../models/restaurant';
 import { CategoryInterface } from '../../models/category';
 import { ItemInterface } from '../../models/item';
 
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
+import * as alertFunctions from './../shared/data/sweet-alerts';
 import { Router } from '@angular/router';
 
 
@@ -27,6 +26,7 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class EditItemComponent implements OnInit {
 
+	loading: boolean;
 	id: any;
 	name: any;
 	categories: any;
@@ -54,8 +54,16 @@ export class EditItemComponent implements OnInit {
 		private authService: AuthService, private storage: AngularFireStorage) {
 
 
-		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
-		this.itemFolder = 'itemimages';
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
+			this.itemFolder = 'itemimages';
+	}
+
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.onItemEditSubmit();
+		});
 	}
 
 	@Input() userUid: string;
@@ -137,9 +145,8 @@ export class EditItemComponent implements OnInit {
 	onItemEditSubmit() {
 
 		if (!this.inputImageUser.nativeElement.value || this.inputImageUser.nativeElement.value === undefined) {
-			console.log("inside");
 
-			let item = {
+			const item = {
 				name: this.name,
 				categories: this.categories,
 				description: this.description,
@@ -152,15 +159,20 @@ export class EditItemComponent implements OnInit {
 
 			}
 
-			this.firebaseService.updateItem(this.id, item);
-
-			this.router.navigate(['/produtos/detalhes/' + this.id]);
+			this.firebaseService.updateItem(this.id, item).then(res => {
+				alertFunctions.showSuccess('Sucesso!', 'Produto Salvo');
+				this.loading = false;
+				this.router.navigate(['/produtos/detalhes/' + this.id]);
+			}, error => {
+				alertFunctions.showError('Erro!', 'Falha ao Salvar Produto!');
+				this.loading = false;
+			});
 		}
 		if (this.inputImageUser.nativeElement.value) {
 
 			console.log("white");
 
-			let item = {
+			const item = {
 				name: this.name,
 				categories: this.categories,
 				description: this.description,
@@ -171,26 +183,27 @@ export class EditItemComponent implements OnInit {
 				image: this.inputImageUser.nativeElement.value,
 				image_firebase_url: this.inputImageUser.nativeElement.value,
 			}
-			this.firebaseService.updateItemWithImage(this.id, item);
-
-			this.router.navigate(['/produtos/detalhes/' + this.id]);
+			this.firebaseService.updateItemWithImage(this.id, item).then(res => {
+				alertFunctions.showSuccess('Sucesso!', 'Produto Salvo');
+				this.loading = false;
+				this.router.navigate(['/produtos/detalhes/' + this.id]);
+			}, error => {
+				alertFunctions.showError('Erro!', 'Falha ao Salvar Produto!');
+				this.loading = false;
+			});
 
 		}
 
 	}
 
 	onChange($event) {
-		//let file = $event.target.files[0]; // <--- File Object for future use.
 		console.log($event);
-		this.image = $event; // <--- File Object for future use.
+		this.image = $event;
 	}
 
-
-	onUpload(e) {
-		// console.log('subir', e.target.files[0]);
+	onUpload (e) {
 		const id = Math.random().toString(36).substring(2);
 		const file = e.target.files[0];
-		//const filePath = `uploads/profile`;
 		const filePath = `/${this.itemFolder}/${file.name}`;
 
 		const ref = this.storage.ref(filePath);
@@ -198,11 +211,6 @@ export class EditItemComponent implements OnInit {
 		this.uploadPercent = task.percentageChanges();
 		task.snapshotChanges().pipe(finalize(() => this.urlImage = ref.getDownloadURL())).subscribe();
 
-		alert("Please wait for uploading images");
-
-		console.log(ref.getDownloadURL());
-
-		console.log(this.urlImage);
 	}
 
 }

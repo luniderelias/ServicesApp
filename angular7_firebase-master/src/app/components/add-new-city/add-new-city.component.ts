@@ -1,22 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
-import { NgForm } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { UserInterface } from '../../models/user';
-import { ViewChild, ElementRef, Input } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 
-import { RestaurantInterface } from '../../models/restaurant';
-import { CategoryInterface } from '../../models/category';
-import { CityInterface } from '../../models/city';
-import { OrderInterface } from '../../models/order';
-import { DistrictInterface } from '../../models/district';
-import { BuildingInterface } from '../../models/building';
-
-import { ActivatedRoute, Params } from '@angular/router';
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
 @Component({
 	selector: 'app-add-new-city',
@@ -24,7 +10,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 	styleUrls: ['./add-new-city.component.css']
 })
 export class AddNewCityComponent implements OnInit {
-
+	loading: boolean;
 	available: any;
 	category: any;
 	description: any;
@@ -45,21 +31,36 @@ export class AddNewCityComponent implements OnInit {
 		private router: Router
 
 	) {
-		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
-	 }
+		this.isAdmin = localStorage.getItem('current_user_role') === 'admin' ||
+			localStorage.getItem('current_user_role') === 'super_admin';
+	}
 
 	ngOnInit() {
 
 
 	}
 
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+				this.loading = true;
+				this.addCityName();
+		});
+	}
+
 	addCityName() {
-		let cityName = {
+		const cityName = {
 			name: this.cityName
 		}
 
-		this.firebaseService.addNewCity(cityName);
-		this.router.navigate(['enderecos/cidades/listar']);
+		this.firebaseService.addNewCity(cityName).then(res => {
+			alertFunctions.showSuccess('Sucesso!', 'Cidade Adicionada');
+			this.loading = false;
+			this.router.navigate(['enderecos/cidades/listar']);
+		}, error => {
+			alertFunctions.showError('Erro!', 'Falha ao Adicionar Cidade!');
+			this.loading = false;
+		});
 	}
 
 }

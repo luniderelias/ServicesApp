@@ -1,24 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
-import { NgForm } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { UserInterface } from '../../models/user';
-import { ViewChild, ElementRef, Input } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 
-import { RestaurantInterface } from '../../models/restaurant';
-import { CategoryInterface } from '../../models/category';
-import { CityInterface } from '../../models/city';
-import { OrderInterface } from '../../models/order';
-import { DistrictInterface } from '../../models/district';
-import { BuildingInterface } from '../../models/building';
-import { StreetInterface } from '../../models/street';
 import { ExtraInterface } from '../../models/extra';
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-edit-extra-food',
@@ -27,6 +14,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class EditExtraFoodComponent implements OnInit {
 
+	loading: boolean;
 	order_id: any;
 	order_details: any;
 	user_details: any;
@@ -44,7 +32,7 @@ export class EditExtraFoodComponent implements OnInit {
 		private route: ActivatedRoute
 	) {
 
-		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+		this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
 	}
 
 
@@ -55,6 +43,14 @@ export class EditExtraFoodComponent implements OnInit {
 	price: any;
 	stock: any;
 	image: any;
+
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.save();
+		});
+	}
 
 	ngOnInit() {
 
@@ -93,15 +89,20 @@ export class EditExtraFoodComponent implements OnInit {
 
 	save() {
 
-		let extraItem = {
+		const extraItem = {
 			name: this.order_details.name,
 			selected: this.order_details.selected,
 			value: this.order_details.value,
 		}
 
-		this.firebaseService.updateChooseExtraItem(this.id, extraItem);
-
-		this.router.navigate(['/produtos/adicional/listar/' + this.product_id]);
+		this.firebaseService.updateChooseExtraItem(this.id, extraItem).then(res => {
+			alertFunctions.showSuccess('Sucesso!', 'Adicional Salvo');
+			this.loading = false;
+			this.router.navigate(['/produtos/adicional/listar/' + this.product_id]);
+		}, error => {
+			alertFunctions.showError('Erro!', 'Falha ao Salvar Adicional');
+			this.loading = false;
+		});
 
 	}
 

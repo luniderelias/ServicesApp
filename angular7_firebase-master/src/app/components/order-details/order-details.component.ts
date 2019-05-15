@@ -1,19 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
-import { NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { UserInterface } from '../../models/user';
-import { ViewChild, ElementRef, Input } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 
+import * as alertFunctions from './../shared/data/sweet-alerts';
 import { RestaurantInterface } from '../../models/restaurant';
 import { CategoryInterface } from '../../models/category';
 import { OrderInterface } from '../../models/order';
 
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-order-details',
@@ -22,6 +17,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class OrderDetailsComponent implements OnInit {
 
+	loading: boolean;
 	restaurants: any;
 	restaurant2: any;
 
@@ -30,6 +26,7 @@ export class OrderDetailsComponent implements OnInit {
 	restaurant: any;
 	imageUrl: any;
 	categories: any;
+	button_text: string;
 
 
 	private RestaurantInterface: RestaurantInterface[];
@@ -51,12 +48,64 @@ export class OrderDetailsComponent implements OnInit {
 
 		this.id = this.route.snapshot.params['id'];
 
-		console.log(this.id);
-
 		this.firebaseService.getOrderDetail(this.id).on('value', (snapshot) => {
 			this.order_details = snapshot.val();
 
-			console.log(this.order_details);
+			if (this.order_details.status === 'Pendente') {
+				this.onStatusOrderSubmit('Em Andamento');
+			}
+			switch (this.order_details.status) {
+				case 'Em Andamento':
+					this.button_text = 'Liberar Entrega';
+					break;
+				case 'Saiu para Entrega':
+					this.button_text = 'Finalizar';
+					break;
+				case 'Finalizado':
+				break;
+			}
+		});
+
+	}
+
+	showQuestion() {
+		switch (this.order_details.status) {
+			case 'Em Andamento':
+				alertFunctions.showQuestion('', 'O Pedido saiu para Entrega?').then(res => {
+					if (res.dismiss) { return; }
+					this.onStatusOrderSubmit('Saiu para Entrega');
+			  	});
+				break;
+			case 'Saiu para Entrega':
+				alertFunctions.showQuestion('', 'O Pedido foi Recebido pelo Cliente?').then(res => {
+					if (res.dismiss) { return; }
+					this.onStatusOrderSubmit('Finalizado');
+			  	});
+				break;
+		}
+	}
+
+	showCancelOrderQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Cancelar o Pedido?').then(res => {
+			if (res.dismiss) { return; }
+			this.onStatusOrderSubmit('Cancelado Pela Loja');
+		  });
+	}
+
+
+	onStatusOrderSubmit(status) {
+		this.loading = true;
+		const order_details = {
+			status: status,
+			checked: ''
+		}
+
+		this.firebaseService.updateRestaurantOrderStatus(this.id, order_details).then(res => {
+			this.loading = false;
+			alertFunctions.showSuccess('Sucesso!', 'Status do Pedido Alterado');
+		}, error => {
+			this.loading = false;
+			alertFunctions.showError('Erro!', 'Falha ao Alterar Status do Pedido');
 		});
 
 	}

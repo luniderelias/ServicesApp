@@ -1,18 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
 import { NgForm } from '@angular/forms';
 
 import { FirebaseService } from '../../services/firebase.service';
 
 import { RestaurantInterface } from '../../models/restaurant';
-import { CategoryInterface } from '../../models/category';
 
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { Router } from '@angular/router';
 
 
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
 import { AuthService } from '../../services/auth.service';
 
@@ -26,6 +25,8 @@ import { Observable } from 'rxjs/internal/Observable';
 	styleUrls: ['./edit-restaurant.component.css']
 })
 export class EditRestaurantComponent implements OnInit {
+
+	loading: boolean;
 	address?: string;
 	description?: string;
 	image?: string;
@@ -60,6 +61,14 @@ export class EditRestaurantComponent implements OnInit {
 
 		this.restaurantFolder = 'restaurantimages';
 	}
+
+	showQuestion() {
+		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+			if (res.dismiss) { return; }
+			this.loading = true;
+			this.onEditRestaurant();
+		});
+  }
 
 
 	@Input() userUid: string;
@@ -135,7 +144,7 @@ export class EditRestaurantComponent implements OnInit {
 
 	onAddRestaurant() {
 
-		let restaurant = {
+		const restaurant = {
 
 			address: this.address,
 			description: this.description,
@@ -148,30 +157,16 @@ export class EditRestaurantComponent implements OnInit {
 			outlet: this.outlet,
 			phonenumber: this.phonenumber,
 			title: this.title,
-
-
 		}
-
-
-
-
-
-
 		this.firebaseService.addRestaurant(restaurant);
-
-
-
 	}
 
 
 	onEditRestaurant() {
 
-		console.log(this.image);
-
 		if (!this.inputImageUser.nativeElement.value || this.inputImageUser.nativeElement.value === undefined) {
-			console.log("inside");
 
-			let restaurant = {
+			const restaurant = {
 				address: this.address,
 				description: this.description,
 				info: this.info,
@@ -185,16 +180,20 @@ export class EditRestaurantComponent implements OnInit {
 				image: this.firebase_url,
 			}
 
-			this.firebaseService.updateRestaurant(this.id, restaurant);
-
-			this.router.navigate(['/lojas/detalhes/' + this.id]);
+			this.firebaseService.updateRestaurant(this.id, restaurant).then(res => {
+				alertFunctions.showSuccess('Sucesso!', 'Loja Salva');
+				this.loading = false;
+				this.router.navigate(['/lojas/detalhes/' + this.id]);
+			  }, error => {
+				alertFunctions.showError('Erro!', 'Falha ao Salvar Loja!');
+				this.loading = false;
+			  });
 		}
 
 		if (this.inputImageUser.nativeElement.value) {
 
-			console.log("white");
 
-			let restaurant = {
+			const restaurant = {
 				address: this.address,
 				description: this.description,
 				info: this.info,
@@ -212,10 +211,14 @@ export class EditRestaurantComponent implements OnInit {
 
 			}
 
-			this.firebaseService.updateRestaurantWithImage(this.id, restaurant);
-
-			this.router.navigate(['/lojas/detalhes/' + this.id]);
-
+			this.firebaseService.updateRestaurantWithImage(this.id, restaurant).then(res => {
+				alertFunctions.showSuccess('Sucesso!', 'Loja Salva');
+				this.loading = false;
+				this.router.navigate(['/lojas/detalhes/' + this.id]);
+			  }, error => {
+				alertFunctions.showError('Erro!', 'Falha ao Salvar Loja!');
+				this.loading = false;
+			  });
 		}
 
 
@@ -232,10 +235,8 @@ export class EditRestaurantComponent implements OnInit {
 
 
 	onUpload(e) {
-		// console.log('subir', e.target.files[0]);
 		const id = Math.random().toString(36).substring(2);
 		const file = e.target.files[0];
-		//const filePath = `uploads/profile`;
 		const filePath = `/${this.restaurantFolder}/${file.name}`;
 
 		const ref = this.storage.ref(filePath);
@@ -243,11 +244,6 @@ export class EditRestaurantComponent implements OnInit {
 		this.uploadPercent = task.percentageChanges();
 		task.snapshotChanges().pipe(finalize(() => this.urlImage = ref.getDownloadURL())).subscribe();
 
-		alert('Por favor, clique em ok para realizar o envio da imagem.');
-
-		console.log(ref.getDownloadURL());
-
-		console.log(this.urlImage);
 	}
 
 }

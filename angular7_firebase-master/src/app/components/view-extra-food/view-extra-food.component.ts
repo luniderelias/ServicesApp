@@ -1,24 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { DataApiService } from '../../services/data-api.service';
-import { BookInterface } from '../../models/book';
-import { NgForm } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { UserInterface } from '../../models/user';
-import { ViewChild, ElementRef, Input } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
-import { RestaurantInterface } from '../../models/restaurant';
-import { CategoryInterface } from '../../models/category';
-import { CityInterface } from '../../models/city';
-import { OrderInterface } from '../../models/order';
-import { DistrictInterface } from '../../models/district';
-import { BuildingInterface } from '../../models/building';
-import { StreetInterface } from '../../models/street';
 import { ExtraInterface } from '../../models/extra';
 
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-view-extra-food',
@@ -27,6 +15,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class ViewExtraFoodComponent implements OnInit {
 
+	loading: boolean;
 	order_id: any;
 	order_details: any;
 	user_details: any;
@@ -44,8 +33,16 @@ export class ViewExtraFoodComponent implements OnInit {
 
 	constructor(private firebaseService: FirebaseService, private authService: AuthService,
 		private router: Router, private route: ActivatedRoute) {
-			this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
-		 }
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
+		}
+
+		showQuestion(value) {
+			alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
+				if (res.dismiss) { return; }
+				this.loading = true;
+				this.onExtraItemDelete(value);
+			});
+		}
 
 	ngOnInit() {
 
@@ -85,7 +82,13 @@ export class ViewExtraFoodComponent implements OnInit {
 
 
 	onExtraItemDelete(id) {
-		this.firebaseService.onExtraItemDelete(this.id, id);
+		this.firebaseService.onExtraItemDelete(this.id, id).then(res => {
+			alertFunctions.showSuccess('Sucesso!', 'Adicional Removido');
+			this.loading = false;
+		}, error => {
+			alertFunctions.showError('Erro!', 'Falha ao Remover Adicional');
+			this.loading = false;
+		});
 	}
 
 	onExtraItemEdit(id) {

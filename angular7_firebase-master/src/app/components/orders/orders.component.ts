@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { ViewChild, ElementRef, Input } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 import { DatatableComponent } from '@swimlane/ngx-datatable/release';
 
+import * as alertFunctions from './../shared/data/sweet-alerts';
 
 import { OrderInterface } from '../../models/order';
 
@@ -19,6 +20,17 @@ export class OrdersComponent implements OnInit {
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
   constructor(private firebaseService: FirebaseService, private authService: AuthService, private router: Router) { }
+
+  showQuestion(row) {
+    if (row.status === 'Pendente') {
+      alertFunctions.showQuestion('', 'Deseja Receber o Pedido?').then(res => {
+        if (res.dismiss) { return; }
+        this.router.navigate(['pedidos/detalhes/' + row.$key]);
+      });
+    } else {
+      this.router.navigate(['pedidos/detalhes/' + row.$key]);
+    }
+  }
 
   ngOnInit() {
 
@@ -45,13 +57,13 @@ export class OrdersComponent implements OnInit {
   }
 
 
-  updateFilter(event,prop) {
+  updateFilter(event, prop) {
     const val = event.target.value.toLowerCase();
 
     const temp = this.temp.filter(function (d) {
-      if(prop === 'name')
+      if (prop === 'name')
         return d.customerDetails.displayName.toLowerCase().indexOf(val) !== -1 || !val;
-      if(prop === 'status')
+      if (prop === 'status')
         return d.status.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
@@ -59,12 +71,12 @@ export class OrdersComponent implements OnInit {
     this.table.offset = 0;
   }
 
-   customComparator(propA, propB) {
+  customComparator(propA, propB) {
     console.log('Sorting Comparator', propA, propB);
 
     // Just a simple sort function comparisoins
     if (propA < propB) { return -1; }
     if (propA > propB) { return 1; }
-  } 
+  }
 
 }

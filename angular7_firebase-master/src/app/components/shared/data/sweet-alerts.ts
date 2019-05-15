@@ -22,6 +22,10 @@ export function htmlAlert() {
 export function typeQuestion() {
     swal("Question", "Are You Sure?", "question");
 }
+// Question Type Alert
+export function showQuestion(title, question) {
+    return swal(title, question, "question");
+}
 
 // Primary Type Alert
 export function typePrimary() {
@@ -31,6 +35,10 @@ export function typePrimary() {
 // Success Type Alert
 export function typeSuccess() {
     swal("Good job!", "You clicked the button!", "success");
+}
+
+export function showSuccess(title,text) {
+    return swal(title, text, "success");
 }
 
 // Info Type Alert
@@ -48,6 +56,9 @@ export function typeError() {
     swal("Error!", "You clicked the button!", "error");
 }
 
+export function showError(title, text) {
+    return swal(title, text, "error");
+}
 // Custom Icon 
 export function customIcon() {
     swal({ title: "Sweet!", text: "Here's a custom image.", imageUrl: "./assets/img/photos/7.jpeg" });

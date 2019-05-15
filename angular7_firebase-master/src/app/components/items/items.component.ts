@@ -32,7 +32,7 @@ export class ItemsComponent implements OnInit {
 
   constructor(private firebaseService: FirebaseService, private authService: AuthService, private router: Router) {
 
-    this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+    this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
 
     this.firebaseService.getItems().snapshotChanges().subscribe(items => {
       this.items = [];

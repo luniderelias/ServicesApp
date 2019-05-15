@@ -1,5 +1,6 @@
 <!-- Filter Datatable Options Starts -->
 <section id="filter" class="mb-3">
+    <img *ngIf="loading" class="center-spinner" src="assets/spinner.gif" />
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -29,7 +30,7 @@
 
                                 <ng-template let-value="value" ngx-datatable-cell-template>
                                     <button (click)="onExtraItemEdit(value)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-warning" *ngIf="isAdmin">Editar</button>
-                                    <button (click)="onExtraItemDelete(value)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger" *ngIf="isAdmin">Deletar</button>
+                                    <button (click)="showQuestion(value)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger" *ngIf="isAdmin">Deletar</button>
                                 </ng-template>
                             </ngx-datatable-column>
 
