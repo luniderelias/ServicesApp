@@ -1,4 +1,4 @@
-<section class="row mt-5">
+<section class="row mt-5" *ngIf="isAdmin">
     <div class="col">
         <form (submit)="onExtraItemAddSubmit()" ngNativeValidate>
             <div class="form-group">
@@ -13,7 +13,7 @@
 
 
             <div class="col">
-                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/produtos/visualizar/'+id]">Voltar</button>
+                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/produtos/detalhes/'+id]">Voltar</button>
                 <button type="submit" value="submit" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Salvar</button>
             </div>
         </form>

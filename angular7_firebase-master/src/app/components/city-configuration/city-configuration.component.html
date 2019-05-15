@@ -34,8 +34,8 @@
                                 </ng-template>
 
                                 <ng-template let-value="value" ngx-datatable-cell-template>
-                                    <button routerLink="/enderecos/cidades/editar/{{value}}" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-warning">Editar</button>
-                                    <button (click)="deleteCity(value)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger">Deletar</button>
+                                    <button routerLink="/enderecos/cidades/editar/{{value}}" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-warning" *ngIf="isAdmin">Editar</button>
+                                    <button (click)="deleteCity(value)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger" *ngIf="isAdmin">Deletar</button>
                                 </ng-template>
                             </ngx-datatable-column>
 
@@ -43,7 +43,7 @@
                         </ngx-datatable>
 
                         <div align="right" style="margin-top:15px;">
-                            <a [routerLink]="['/enderecos/cidades/adicionar']" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Adicionar Nova Cidade</a>
+                            <a [routerLink]="['/enderecos/cidades/adicionar']" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" *ngIf="isAdmin">Adicionar Nova Cidade</a>
                         </div>
                     </div>
                 </div>

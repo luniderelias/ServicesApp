@@ -17,7 +17,7 @@ import { RegisterPageComponent } from "./register/register-page.component";
     imports: [
         CommonModule,
         ContentPagesRoutingModule,
-        FormsModule        
+        FormsModule
     ],
     declarations: [
         ComingSoonPageComponent,

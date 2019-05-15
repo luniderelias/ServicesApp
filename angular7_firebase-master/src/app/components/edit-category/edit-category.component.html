@@ -1,4 +1,4 @@
-<form (submit)="onCategoryEditSubmit()" ngNativeValidate>
+<form (submit)="onCategoryEditSubmit()" ngNativeValidate *ngIf="isAdmin">
     <div class="form-group">
         <label>ID</label>
         <input class="form-control" type="text" [(ngModel)]="cat_id" name="cat_id" required>
@@ -8,17 +8,25 @@
         <input class="form-control" type="text" [(ngModel)]="cat_name" name="cat_name" required>
     </div>
 
+    <select class="form-control" type="text" [(ngModel)]="res_name" name="res_name" required>
 
-    <div class="form-group" *ngIf="!this.inputImageUser.nativeElement.value">
+     
+            <option *ngFor="let restaurant of restaurants" [value]="restaurant.$key">{{restaurant.title}}</option>
+           
+      
+          </select>
 
-        <img style="width:25%;height:150px;" class="thumbnail" src="{{firebase_url}}">
+
+    <div class="form-group" *ngIf="!this.inputImageUser?.nativeElement.value" style="margin-top: 20px">
+
+        <img style="width:15%" class="thumbnail" src="{{firebase_url}}">
 
 
     </div>
 
-    <div class="form-group" *ngIf="this.inputImageUser.nativeElement.value">
+    <div class="form-group" *ngIf="this.inputImageUser?.nativeElement.value" style="margin-top: 20px">
 
-        <img style="width:25%;height:150px;" class="thumbnail" src="{{this.inputImageUser.nativeElement.value}}">
+        <img style="width:15%" class="thumbnail" src="{{this.inputImageUser?.nativeElement.value}}">
 
 
     </div>

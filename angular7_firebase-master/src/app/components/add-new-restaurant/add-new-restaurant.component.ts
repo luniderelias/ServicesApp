@@ -24,10 +24,13 @@ export class AddNewRestaurantComponent implements OnInit {
   outlet?: string;
   phonenumber?: string;
   title?: string;
+  isAdmin: boolean;
 
   constructor(private dataApi: DataApiService,
     private firebaseService: FirebaseService,
-    private router: Router) { }
+    private router: Router) {
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+     }
   @ViewChild('btnClose') btnClose: ElementRef;
   @Input() userUid: string;
 
@@ -69,7 +72,7 @@ export class AddNewRestaurantComponent implements OnInit {
       //bookForm.resetForm();
       //this.btnClose.nativeElement.click();
 
-      this.router.navigate(['restaurants']);
+      this.router.navigate(['lojas/listar']);
 
   }
 

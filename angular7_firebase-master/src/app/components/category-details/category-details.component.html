@@ -23,8 +23,8 @@
 
             <div class="col" style="margin-top: 15px">
                 <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/categorias/listar']">Voltar</button>
-                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" [routerLink]="['/categorias/editar/'+category_details.$key]">Editar</button>
-                <button (click)="onCategoryDelete()" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger">Deletar</button>
+                <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" [routerLink]="['/categorias/editar/'+category_details.$key]" *ngIf="isAdmin">Editar</button>
+                <button (click)="onCategoryDelete()" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger" *ngIf="isAdmin">Deletar</button>
             </div>
 
         </div>

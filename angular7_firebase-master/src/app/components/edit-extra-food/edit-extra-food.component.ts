@@ -35,13 +35,17 @@ export class EditExtraFoodComponent implements OnInit {
 	restaurant: any;
 	item: any;
 
+	isAdmin: boolean;
 	private ExtraInterface: ExtraInterface[];
 
 	constructor(
 		private firebaseService: FirebaseService,
 		private router: Router,
 		private route: ActivatedRoute
-	) { }
+	) {
+
+		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+	}
 
 
 	name: any;

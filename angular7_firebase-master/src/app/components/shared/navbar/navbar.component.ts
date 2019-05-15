@@ -105,7 +105,9 @@ export class NavbarComponent {
     }
 
     insertChildView() {
-        this.vc.insert(this.childViewRef);
+        if (this.vc) {
+            this.vc.insert(this.childViewRef);
+        }
     }
 
     removeChildView() {

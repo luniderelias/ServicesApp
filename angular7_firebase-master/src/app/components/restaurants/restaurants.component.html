@@ -13,7 +13,7 @@
                                 </ng-template>
                                 <ng-template let-value="value" ngx-datatable-cell-template>
 
-                                    <img style="width:150px;height:100px;" class="thumbnail" src="{{value}}">
+                                    <img style="width:100px;height:100px;" class="thumbnail" src="{{value}}">
                                 </ng-template>
 
                             </ngx-datatable-column>
@@ -40,11 +40,20 @@
                                 <ng-template let-column="info" ngx-datatable-header-template>
                                     SOBRE
                                 </ng-template>
+
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    {{(value.length>60)? (value | slice:0:60)+'..':(value)}}
+                                </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column prop="outlet">
                                 <ng-template let-column="outlet" ngx-datatable-header-template>
                                     TIPO DE LOJA
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    {{(value.length>60)? (value | slice:0:60)+'..':(value)}}
                                 </ng-template>
                             </ngx-datatable-column>
 

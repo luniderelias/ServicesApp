@@ -11,7 +11,7 @@ import { CONTENT_ROUTES } from './components/shared/routes/content-layout.routes
 
 const routes: Routes = [
   { path: '',
-  redirectTo: 'dashboard',
+  redirectTo: 'dashboard/eCommerce',
   pathMatch: 'full',
   },
   { path: '', component: FullLayoutComponent, data: { title: 'full Views' }, children: Full_ROUTES},

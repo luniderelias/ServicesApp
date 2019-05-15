@@ -35,13 +35,17 @@ export class ViewExtraFoodComponent implements OnInit {
 
 	id: any;
 
+	isAdmin: boolean;
+
 
 
 	private ExtraInterface: ExtraInterface[];
 
 
 	constructor(private firebaseService: FirebaseService, private authService: AuthService,
-		private router: Router, private route: ActivatedRoute) { }
+		private router: Router, private route: ActivatedRoute) {
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+		 }
 
 	ngOnInit() {
 

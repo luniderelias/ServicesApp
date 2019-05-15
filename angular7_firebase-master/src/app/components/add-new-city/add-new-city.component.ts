@@ -38,11 +38,15 @@ export class AddNewCityComponent implements OnInit {
 	production: any;
 	cityName: any;
 
+	isAdmin: boolean;
+
 	constructor(
 		private firebaseService: FirebaseService,
 		private router: Router
 
-	) { }
+	) {
+		this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+	 }
 
 	ngOnInit() {
 

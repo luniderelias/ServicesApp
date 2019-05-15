@@ -1,3 +1,4 @@
+import { FirebaseService } from './firebase.service';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { auth } from 'firebase/app';
@@ -19,12 +20,16 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<UserInterface>;
   isLoggedIn = new BehaviorSubject<boolean>(false);
 
-  constructor( private router: Router, private firebaseAuth: AngularFireAuth, private afsAuth: AngularFireAuth) {
+  constructor(private firebaseService: FirebaseService, private router: Router,
+    private firebaseAuth: AngularFireAuth, private afsAuth: AngularFireAuth) {
     this.currentUserSubject = new BehaviorSubject<UserInterface>(JSON.parse(localStorage.getItem('current_user')));
 
     this.firebaseAuth.authState.subscribe((user) => {
       if (user) {
+
         this.isLoggedIn.next(true);
+
+        this.getCurrentUserDetails(user.email.split('@')[0]);
 
         // NOW, when the callback from firebase came, and user is logged in,
         // we can navigate to the attempted URL (if exists)
@@ -38,6 +43,20 @@ export class AuthService {
   }
 
 
+  getCurrentUserDetails(id) {
+    this.firebaseService.getUserDetails(id).snapshotChanges().subscribe(user => {
+
+			const res = user.payload.val();
+
+      const currentUser = res as UserInterface;
+
+      console.log(res);
+      
+      localStorage.setItem('current_user_role', currentUser.role);
+		});
+  }
+
+
 
   loginFacebookUser() {
     return this.afsAuth.auth.signInWithPopup(new auth.FacebookAuthProvider())
@@ -46,10 +65,14 @@ export class AuthService {
 
   loginGoogleUser() {
     return this.afsAuth.auth.signInWithPopup(new auth.GoogleAuthProvider())
-      .then(credential => this.updateUserData(credential.user));
+      .then(credential => {
+        console.log(credential.user);
+        this.updateUserData(credential.user);
+      });
   }
 
   logoutUser() {
+    localStorage.clear();
     return this.afsAuth.auth.signOut();
   }
 
@@ -59,7 +82,7 @@ export class AuthService {
 
   public get currentUserValue(): UserInterface {
     return this.currentUserSubject.value;
-}
+  }
 
   get authenticated(): boolean {
     return (this.afsAuth.authState !== undefined && this.authState !== null);
@@ -70,21 +93,16 @@ export class AuthService {
   }
 
   private updateUserData(user) {
-	  /**
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const data: UserInterface = {
       id: user.uid,
       email: user.email,
-      roles: {
-        editor: true
-      }
-    }
-    return userRef.set(data, { merge: true })
-	
-	*/
-	return false;
-  }
+      displayName: user.displayName
+    };
 
+    this.firebaseService.addNewUser(data).then(res => {
+      this.getCurrentUserDetails(user.email.split('@')[0]);
+    });
+  }
 
   isUserAdmin(userUid) {
     //return this.afs.doc<UserInterface>(`users/${userUid}`).valueChanges();

@@ -1,4 +1,4 @@
-<section class="row mt-5">
+<section class="row mt-5" *ngIf="isAdmin">
     <div class="col">
         <form name="formBook" #formBook="ngForm" (ngSubmit)="onCategoryAddSubmit()" ngNativeValidate>
 

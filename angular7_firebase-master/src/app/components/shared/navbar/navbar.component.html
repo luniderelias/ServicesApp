@@ -52,7 +52,7 @@
                             <p class="d-none">User Settings</p>
                         </a>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic3">
-                            <div class="arrow_box_right">
+                            <div>
 
                                 <div *ngIf="isLogged">
                                     <a class="dropdown-item py-1" routerLink="/user/profile">
@@ -60,13 +60,13 @@
                                         <span>Meu perfil</span>
                                     </a>
                                 </div>
-                                <div *ngIf="isLogged">>
+                                <!--                                 <div *ngIf="isLogged">>
                                     <a class="dropdown-item py-1" routerLink="/chat">
                                         <i class="ft-message-circle mr-2"></i>
                                         <span>Meus Chats</span>
                                     </a>
-                                </div>
-                                <div class="dropdown-divider"></div>
+                                </div> 
+                                <div class="dropdown-divider"></div>-->
                                 <div *ngIf="isLogged">
                                     <a class="dropdown-item" href="javascript:;" (click)="onLogout()">
                                         <i class="ft-power mr-2"></i>

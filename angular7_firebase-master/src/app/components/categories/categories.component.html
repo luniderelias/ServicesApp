@@ -63,12 +63,12 @@
                 <a [routerLink]="['/categorias/detalhes/'+category.$key]" style="text-align: center;">
                     <h5>{{i+1}}. {{category.cat_name}}</h5>
                 </a>
-                <img style="width:100%;height:150px;" class="thumbnail" src="{{category.firebase_url}}">
+                <img style="width:100%" class="thumbnail" src="{{category.firebase_url}}">
             </div>
         </div>
 
         <div align="right" style="margin-top:15px;">
-            <a [routerLink]="['/categorias/adicionar']" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Adicionar Nova Categoria</a>
+            <a [routerLink]="['/categorias/adicionar']" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" *ngIf="isAdmin">Adicionar Nova Categoria</a>
         </div>
     </div>
 </section>

@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-block">
-                        <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtar pelo Nome' (keyup)='updateFilter($event)' />
+                        <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtar pelo Código' (keyup)='updateFilter($event)' />
                         <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='items' [sorts]="[{prop: 'name', dir: 'asc'},{prop: 'available', dir: 'asc'},{prop: 'description', dir: 'asc'},{prop: 'price', dir: 'asc'},{prop: 'stock', dir: 'asc'}]">
                             <ngx-datatable-column prop="image_firebase_url">
 
@@ -14,9 +14,16 @@
                                 </ng-template>
                                 <ng-template let-value="value" ngx-datatable-cell-template>
 
-                                    <img style="width:150px;height:100px;" class="thumbnail" src="{{value}}">
+                                    <img style="width:100px;height:100px;" class="thumbnail" src="{{value}}">
                                 </ng-template>
 
+                            </ngx-datatable-column>
+
+
+                            <ngx-datatable-column prop="product_id">
+                                <ng-template let-column="product_id" ngx-datatable-header-template>
+                                    CÓDIGO
+                                </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column prop="name">
@@ -25,15 +32,13 @@
                                 </ng-template>
                             </ngx-datatable-column>
 
-                            <ngx-datatable-column prop="available">
-                                <ng-template let-column="available" ngx-datatable-header-template>
-                                    DISPONÍVEL
-                                </ng-template>
-                            </ngx-datatable-column>
-
                             <ngx-datatable-column prop="description">
                                 <ng-template let-column="description" ngx-datatable-header-template>
                                     DESCRIÇÃO
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    {{(value.length>75)? (value | slice:0:75)+'..':(value)}}
                                 </ng-template>
                             </ngx-datatable-column>
 
@@ -62,7 +67,7 @@
                                 </ng-template>
 
                                 <ng-template let-value="value" ngx-datatable-cell-template>
-                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/produtos/visualizar/{{value}}">Visualizar</button>
+                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/produtos/detalhes/{{value}}">Visualizar</button>
                                 </ng-template>
                             </ngx-datatable-column>
 
@@ -70,7 +75,7 @@
                         </ngx-datatable>
 
                         <div align="right" style="margin-top:15px;">
-                            <a [routerLink]="['/produtos/adicionar']" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Adicionar Novo Produto</a>
+                            <a [routerLink]="['/produtos/adicionar']" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" *ngIf="isAdmin">Adicionar Novo Produto</a>
                         </div>
                     </div>
                 </div>

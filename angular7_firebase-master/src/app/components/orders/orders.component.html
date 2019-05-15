@@ -5,65 +5,71 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-block">
-                        <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtar pelo Nome do Cliente' (keyup)='updateFilter($event)' />
-                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='orders' [sorts]="[{prop: '$key', dir: 'asc'},{prop: 'customerDetails.displayName', dir: 'asc'},{prop: 'total', dir: 'asc'},{prop: 'timeStamp', dir: 'asc'},{prop: 'status', dir: 'asc'}]">
+                        <div class="row">
+                                <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtrar por Cliente' (keyup)='updateFilter($event,"name")' />
+                                <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtrar por Status' (keyup)='updateFilter($event,"status")' />
+                        </div>
+                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='orders' [sorts]="[{prop: 'timeStamp', dir: 'asc'}]">
                             <ngx-datatable-column prop="items">
 
                                 <ng-template let-column="image" ngx-datatable-header-template>
-                                    IMAGEM
+                                    <small><b>IMAGEM</b></small>
                                 </ng-template>
                                 <ng-template let-value="value" ngx-datatable-cell-template>
-                                    <img style="width:150px;height:100px;" class="thumbnail" src="{{value[0].image}}">
+                                    <img style="width:50px;height:50px;" class="thumbnail" src="{{value[0].image}}">
                                 </ng-template>
 
                             </ngx-datatable-column>
 
                             <ngx-datatable-column prop="$key" name="$key">
                                 <ng-template let-column="image" ngx-datatable-header-template>
-                                    ID
+                                    <small><b>ID</b></small>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column prop="customerDetails.displayName" name="customerDetails.displayName">
                                 <ng-template let-column="customerDetails.displayName" ngx-datatable-header-template>
-                                    NOME DO CLIENTE
+                                    <small><b>CLIENTE</b></small>
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column prop="customerDetails.phone">
                                 <ng-template let-column="customerDetails.phone" ngx-datatable-header-template>
-                                    TELEFONE
+                                    <small><b>TELEFONE</b></small>
                                 </ng-template>
                             </ngx-datatable-column>
 
-                            <ngx-datatable-column prop="total">
+                            <ngx-datatable-column prop="total" name="total">
                                 <ng-template let-column="total" ngx-datatable-header-template>
-                                    TOTAL
+                                    <small><b>TOTAL</b></small>
                                 </ng-template>
 
-                                <ng-template let-value="value" ngx-datatable-cell-template>
-                                    R$ {{value}}
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    R$ {{row.total}}
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column prop="status" name="status">
                                 <ng-template let-column="status" ngx-datatable-header-template>
-                                    STATUS
+                                    <small><b>STATUS</b></small>
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    {{value}} <span style="color: red" *ngIf="value === 'Pendente'">Novo</span>
                                 </ng-template>
                             </ngx-datatable-column>
 
-                            <ngx-datatable-column prop="timeStamp">
+                            <ngx-datatable-column prop="timeStamp" name="timeStamp" [comparator]="customComparator">
                                 <ng-template let-column="timeStamp" ngx-datatable-header-template>
-                                    DATA
+                                    <small><b>DATA</b></small>
                                 </ng-template>
                                 <ng-template let-value="value" ngx-datatable-cell-template>
-                                    {{value | date}}
+                                    {{value | date:'dd/MM/yyyy hh:mm'}}
                                 </ng-template>
                             </ngx-datatable-column>
 
                             <ngx-datatable-column prop="$key">
                                 <ng-template let-column="$key" ngx-datatable-header-template>
-                                    AÇÕES
+                                    <small><b>AÇÕES</b></small>
                                 </ng-template>
 
                                 <ng-template let-value="value" ngx-datatable-cell-template>
@@ -73,10 +79,6 @@
 
 
                         </ngx-datatable>
-
-                        <div align="right" style="margin-top:15px;">
-                            <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" data-toggle="modal" data-target="#modalBook">Adicionar Nova Loja</button>
-                        </div>
                     </div>
                 </div>
             </div>

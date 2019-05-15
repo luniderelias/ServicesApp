@@ -32,6 +32,8 @@ export class ItemsComponent implements OnInit {
 
   constructor(private firebaseService: FirebaseService, private authService: AuthService, private router: Router) {
 
+    this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+
     this.firebaseService.getItems().snapshotChanges().subscribe(items => {
       this.items = [];
       this.temp = [];
@@ -78,7 +80,7 @@ export class ItemsComponent implements OnInit {
     // filter our data
     const temp = this.temp.filter(function (d) {
       console.log(d)
-      return d.name.toLowerCase().indexOf(val) !== -1 || !val;
+      return d.product_id.toLowerCase().indexOf(val) !== -1 || !val;
     });
 
     // update the rows

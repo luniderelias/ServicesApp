@@ -18,26 +18,39 @@ exports.newOrderNotification = functions.database.ref('/orders/{order_id}')
       },
     };
 
-    admin.database()
-    .ref(`/notifications/user001`).push(payload);
+    saveNotification('/notifications/admin',payload);
+    saveNotification('/notifications/store_one',payload);
 
-    const getDeviceTokensPromise = admin.database()
-    .ref(`/fcmTokens/user001`).once('value');
 
-    let tokensSnapshot;
-      let tokens: any;
-      const results = await Promise.all([getDeviceTokensPromise]);
-      tokensSnapshot = results[0];
-
-      tokens = tokensSnapshot.val();
-
-    const response = await admin.messaging().sendToDevice(tokens, payload);
-    response.results.forEach((result: any, index: any) => {
-      const error = result.error;
-      if (error) {
-        console.error('Failure sending notification to', tokens[index], error);
-      }
-    });
+    sendNotificationToUser(
+      admin.database().ref(`/fcmTokens/admin`).once('value'),payload);
+    
+    
+    sendNotificationToUser(
+      admin.database().ref(`/fcmTokens/store_one`).once('value'),payload);
 }
   return true;
 });
+
+async function saveNotification(path:string, payload:any){
+  admin.database()
+  .ref(path).push(payload);
+}
+
+async function sendNotificationToUser(tokensPromise:any,payload:any){
+  let tokensSnapshot;
+  let tokens: any;
+  const results = await Promise.all([tokensPromise]);
+  tokensSnapshot = results[0];
+
+  tokens = tokensSnapshot.val();
+
+const response = await admin.messaging().sendToDevice(tokens, payload);
+response.results.forEach((result: any, index: any) => {
+  const error = result.error;
+  if (error) {
+    console.error('Failure sending notification to', tokens[index], error);
+  }
+});
+}
+

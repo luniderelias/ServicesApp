@@ -1,4 +1,4 @@
-<section class="row mt-5">
+<section class="row mt-5" *ngIf="isAdmin">
     <div class="col">
         <form (submit)="save()" ngNativeValidate>
             <div class="form-group">

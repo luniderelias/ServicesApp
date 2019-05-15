@@ -65,7 +65,7 @@ export const Full_ROUTES: Routes = [
     { path: 'categorias/detalhes/:id', component: CategoryDetailsComponent, canActivate: [AuthGuard]},
     { path: 'categorias/editar/:id', component: EditCategoryComponent, canActivate: [AuthGuard]},
     { path: 'produtos/listar', component: ItemsComponent, canActivate: [AuthGuard]},
-    { path: 'produtos/visualizar/:id', component: ItemDetailsComponent, canActivate: [AuthGuard]},
+    { path: 'produtos/detalhes/:id', component: ItemDetailsComponent, canActivate: [AuthGuard]},
     { path: 'produtos/editar/:id', component: EditItemComponent, canActivate: [AuthGuard]},
     { path: 'produtos/adicionar', component: AddItemComponent, canActivate: [AuthGuard]},
     { path: 'pedidos', component: OrdersComponent, canActivate: [AuthGuard]},

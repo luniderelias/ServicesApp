@@ -10,7 +10,7 @@ const routes: Routes = [
     path: '',
     children: [
       {
-        path: '',
+        path: 'eCommerce',
         component: EcommerceComponent,
         data: {
           title: 'eCommerce'

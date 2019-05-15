@@ -26,6 +26,7 @@ export class FirebaseService {
   item_details: AngularFireObject<any>;
 
   orders: AngularFireList<any[]>;
+  dashboardOrders: AngularFireList<any[]>;
   order_details: AngularFireObject<any>;
 
   allTableOrders: AngularFireList<any[]>;
@@ -42,6 +43,7 @@ export class FirebaseService {
 
   buildings: AngularFireList<any[]>;
   buildingDetail: AngularFireObject<any>;
+
 
   extraItemList: AngularFireList<any[]>;
   extraItemDetail: AngularFireObject<any>;
@@ -61,11 +63,14 @@ export class FirebaseService {
   notification_details: AngularFireObject<any>;
   eraseNotificationsPath: any;
 
+  dashboard: AngularFireObject<any>;
 
 
 
 
 
+
+  users: any;
   folder: any;
   itemFolder: any;
   restaurantFolder: any;
@@ -88,9 +93,16 @@ export class FirebaseService {
     this.restaurants = this.af.list('/restaurants') as AngularFireList<Listing[]>;
     this.categories = this.af.list('/category') as AngularFireList<Category[]>;
     this.items = this.af.list('/items') as AngularFireList<Item[]>;
-    this.orders = this.af.list('/orders') as AngularFireList<Order[]>;
-    this.notifications = this.af.list('/notifications/user001') as AngularFireList<Notification[]>;
-    this.eraseNotificationsPath = firebase.database().ref('/notifications/user001');
+    this.orders = this.af.list('/orders', (ref) => {
+      return ref.orderByChild('timeStamp').limitToLast(100);
+    }
+  );
+    this.dashboardOrders = this.af.list('/orders', (ref) => {
+        return ref.limitToLast(10).orderByChild('timeStamp');
+      }
+    );
+    this.notifications = this.af.list('/notifications/' + localStorage.getItem('current_user_role')) as AngularFireList<Notification[]>;
+    this.eraseNotificationsPath = firebase.database().ref('/notifications/' + localStorage.getItem('current_user_role'));
     this.orderList = firebase.database().ref('/orders');
     this.itemExtraList = firebase.database().ref('/items');
     this.userDetail = firebase.database().ref('/users');
@@ -102,6 +114,8 @@ export class FirebaseService {
     this.districts = this.af.list('/districts') as AngularFireList<District[]>;
     this.streets = this.af.list('/streets') as AngularFireList<Street[]>;
     this.buildings = this.af.list('/apartments') as AngularFireList<Building[]>;
+
+    this.users = firebase.database().ref('/users');
 
 
     this.chooseCategories = this.af.list('/categoryChoose') as AngularFireList<Category[]>;
@@ -199,7 +213,6 @@ export class FirebaseService {
   getStreetDetails(id) {
     this.streetDetail = this.af.object('/streets/' + id) as AngularFireObject<Street>
     return this.streetDetail;
-
   }
 
   updateDistrict(id, district) {
@@ -216,12 +229,21 @@ export class FirebaseService {
   }
 
   getCityDetails(id) {
-    this.cityDetail = this.af.object('/city/' + id) as AngularFireObject<City>
+    this.cityDetail = this.af.object('/city/' + id) as AngularFireObject<City>;
     return this.cityDetail;
   }
 
   addNewBuilding(buildingName) {
     return this.buildings.push(buildingName);
+  }
+
+  addNewUser(user) {
+    return this.users.push(user.email.split('@')[0]).update(user);
+  }
+
+  getUserDetails(id) {
+    this.userDetail = this.af.object('/users/' + id) as AngularFireObject<User>;
+    return this.userDetail;
   }
 
   addNewStreet(streetName) {
@@ -292,8 +314,11 @@ export class FirebaseService {
 
 
   getOrders() {
-
     return this.orders;
+  }
+
+  getDashboardOrders() {
+    return this.dashboardOrders;
   }
 
   addItem(item) {
@@ -545,6 +570,12 @@ export class FirebaseService {
     return this.restaurant;
   }
 
+
+  getDashBoardData() {
+    this.dashboard = this.af.object('/dashboard') as AngularFireObject<Dashboard>;
+    return this.dashboard;
+  }
+
 }
 
 
@@ -563,6 +594,17 @@ interface Notification {
   $key?: string;
   notification?: any;
   data?: any;
+}
+
+interface Dashboard {
+  $key?: string;
+  totalSales?: any;
+  totalOrdersValue?: any;
+  totalOrders?: any;
+  dailyRevenue?: any;
+  dailyOrders?: any;
+  cityRevenue?: any;
+  cityOrders?: any;
 }
 
 interface Restaurant {
@@ -609,6 +651,17 @@ interface Street {
 interface Building {
   $key?: string;
   name?: string;
+}
+
+interface User {
+  $key?: string;
+  name?: string;
+  address?: string;
+  displayName?: string;
+  email?: string;
+  lat?: string;
+  lng?: string;
+  phone?: string;
 }
 
 

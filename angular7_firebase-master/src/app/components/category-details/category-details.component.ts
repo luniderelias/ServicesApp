@@ -30,6 +30,8 @@ export class CategoryDetailsComponent implements OnInit {
 	imageUrl: any;
 	categories: any;
 
+	isAdmin: boolean;
+
 
 	private RestaurantInterface: RestaurantInterface[];
 	private CategoryInterface: CategoryInterface[];
@@ -39,7 +41,9 @@ export class CategoryDetailsComponent implements OnInit {
 	category_details: any;
 
 	constructor(private firebaseService: FirebaseService, private authService: AuthService,
-		private router: Router, private route: ActivatedRoute) { }
+		private router: Router, private route: ActivatedRoute) {
+			this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+		 }
 
 	ngOnInit() {
 

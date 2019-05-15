@@ -14,10 +14,17 @@ export class AppComponent {
   title = 'bookStore';
 
   ngOnInit() {
-    const userId = 'user001';
+    let userId = 'user001';
+    switch (localStorage.getItem('current_user_role')) {
+      case 'admin':
+        userId = 'admin';
+        break;
+      case 'store_one':
+        userId = 'store_one';
+        break;
+    }
     this.messagingService.requestPermission(userId);
     this.messagingService.receiveMessage();
     this.message = this.messagingService.currentMessage;
-    console.log(this.message);
   }
 }

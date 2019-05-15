@@ -25,8 +25,8 @@
 		-->
                 <div class="col" style="margin-top: 15px">
                     <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/lojas/listar']">Voltar</button>
-                    <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" [routerLink]="['/lojas/editar/'+restaurant.$key]">Editar</button>
-                    <button (click)="onRestaurantDelete(id)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger">Deletar</button>
+                    <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" [routerLink]="['/lojas/editar/'+restaurant.$key]" *ngIf="isAdmin">Editar</button>
+                    <button (click)="onRestaurantDelete(id)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger" *ngIf="isAdmin">Deletar</button>
                 </div>
 
             </div>
@@ -41,7 +41,7 @@
                             <h4>{{category.cat_name}}</h4>
                         </a>
 
-                        <img style="width:100%;height:150px;" class="thumbnail" src="{{category.firebase_url}}">
+                        <img style="width:100%" class="thumbnail" src="{{category.firebase_url}}">
 
                     </div>
 

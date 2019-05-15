@@ -31,15 +31,15 @@ export class RestaurantDetailsComponent implements OnInit {
 	categories: any;
 	
   
-  private RestaurantInterface: RestaurantInterface[];  
-  private CategoryInterface: CategoryInterface[];  
-  
-  
+  private RestaurantInterface: RestaurantInterface[];
+  private CategoryInterface: CategoryInterface[];
   public isAdmin: any = null;
   public userUid: string = null;
 
-  constructor(private firebaseService:FirebaseService, private authService: AuthService , 
-  private router: Router, private route: ActivatedRoute) { }
+  constructor(private firebaseService: FirebaseService, private authService: AuthService ,
+  private router: Router, private route: ActivatedRoute) {
+	this.isAdmin = localStorage.getItem('current_user_role') === 'admin';
+   }
   
    ngOnInit() {
 
