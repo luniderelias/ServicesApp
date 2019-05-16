@@ -21,6 +21,7 @@ export class AddItemComponent implements OnInit {
 	description: any;
 	image: any;
 	name: any;
+	popularity: any;
 	price: any;
 	stock: any;
 	categories: any;
@@ -107,6 +108,7 @@ export class AddItemComponent implements OnInit {
 				description: this.description,
 				product_id: this.product_id,
 				name: this.name,
+				popularity: this.popularity,
 				price: this.price,
 				stock: this.stock,
 				categories: this.categories,

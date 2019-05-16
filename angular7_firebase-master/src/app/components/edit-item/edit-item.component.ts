@@ -32,6 +32,7 @@ export class EditItemComponent implements OnInit {
 	categories: any;
 	description: any;
 	available: any;
+	popularity: any;
 	price: any;
 	stock: any;
 	image: any;
@@ -112,6 +113,7 @@ export class EditItemComponent implements OnInit {
 			this.description = this.item.description;
 			this.available = this.item.available;
 			this.product_id = this.item.product_id;
+			this.popularity = this.item.popularity;
 			this.price = this.item.price;
 			this.stock = this.item.stock;
 			this.image_firebase_url = this.item.image_firebase_url;
@@ -152,6 +154,7 @@ export class EditItemComponent implements OnInit {
 				description: this.description,
 				available: this.available,
 				product_id: this.product_id,
+				popularity: this.popularity,
 				price: this.price,
 				stock: this.stock,
 				image: this.image_firebase_url,
@@ -178,6 +181,7 @@ export class EditItemComponent implements OnInit {
 				description: this.description,
 				available: this.available,
 				product_id: this.product_id,
+				popularity: this.popularity,
 				price: this.price,
 				stock: this.stock,
 				image: this.inputImageUser.nativeElement.value,

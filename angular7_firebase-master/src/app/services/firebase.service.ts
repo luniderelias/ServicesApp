@@ -667,8 +667,9 @@ interface Item {
   description?: string;
   image?: string;
   name?: string;
-  price?: string;
-  stock?: string;
+  price?: number;
+  stock?: number;
+  popularity?: number;
   categories?: string;
   percent?: string;
   image_firebase_url?: string;

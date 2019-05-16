@@ -1,5 +1,4 @@
 export interface ItemInterface {
-
   $key?: string;
   available?: string;
   category?: string;
@@ -7,10 +6,11 @@ export interface ItemInterface {
   product_id?: string;
   image?: string;
   name?: string;
-  price?: string;
-  stock?: string;
+  price?: number;
+  stock?: number;
   categories?: string;
   percent?: string;
+  popularity?: number;
   image_firebase_url?: string;
   lenght?: string;
 }
