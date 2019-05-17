@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { ThemeProvider } from '../../providers/theme';
+import { MenuController, Events } from '@ionic/angular';
+import { UsersProvider } from 'src/providers/users';
+import { Router } from '@angular/router';
+import { Values } from 'src/providers/values';
+
+import { Storage } from '@ionic/storage';
 
 @Component({
 	selector: 'app-setting',
@@ -8,14 +12,33 @@ import { ThemeProvider } from '../../providers/theme';
 	styleUrls: ['./setting.page.scss'],
 })
 export class SettingPage {
+	user: any;
+	profile = '/profile';
+	forgot = '/forgot';
 
-	list_theme: any;
+	constructor(
+		private storage: Storage,
+		public menuCtrl: MenuController,
+		public usersProv: UsersProvider,
+		private router: Router,
+		public values: Values,
+		public events: Events) {
 
-	constructor(private themeProvider: ThemeProvider) {
-		this.list_theme = environment.themes;
+			this.events.subscribe('user: change', (user) => {
+				if (user || user != null) {
+				  this.user = user;
+				}
+			  });
 	}
+	
 
-	changeTheme(name) {
-		this.themeProvider.setTheme(name);
-	}
+	logout() {
+		this.usersProv.logoutUser().then(() => {
+		  this.storage.remove('user');
+		  this.user = null;
+		  this.storage.remove('cart_list');
+		  this.router.navigateByUrl('/login');
+		  this.menuCtrl.enable(false);
+		});
+	  }
 }

@@ -6,7 +6,7 @@ export const environment = {
 	production: false,
 	AdMobFreeBannerConfig: {
 		isTesting: true,
- 		autoShow: true
+		autoShow: true
 	},
 	firebase: {
 		apiKey: 'AIzaSyC_XK8JWBdU85Q1YdED3XBfL67vyh1lvYc',
@@ -24,43 +24,33 @@ export const environment = {
 	paypal_sandbox_client_id: 'Ac-QK_Lkar46qQDWcp1kega6aPk13SxXv3dkCVX7A2Nlw7BViP3JyDUQQg-6W386yjgaeEHTuaO9BxGx',
 	paypal_live_client_id: '',
 	languages: {
-   		'en':'English',
-   		'vi':'Vietnamese'
+		'en': 'English',
+		'vi': 'Vietnamese'
 	},
 	menu: [{
-		name: 'Restaurants',
+		name: 'Produtos',
 		path: '/home',
 		component: 'HomePage',
-		icon: 'md-home',
-	},{
-		name: 'MyCart',
-		path: '/cart',
-		component: 'CartPage',
-		icon: 'md-cart',
-	},{
-		name: 'FoodSearch',
-		path: '/food-search',
-		component: 'FoodSearchPage',
 		icon: 'md-search',
-	},{
-		name: 'MyOrder',
+	}, {
+		name: 'Meus Pedidos',
 		path: '/orders',
 		component: 'OrdersPage',
 		icon: 'md-clipboard',
-	},{
-		name: 'Map',
-		path: '/map',
-		component: 'MapPage',
-		icon: 'md-compass',
-	},{
-		name: 'WishList',
+	}, {
+		name: 'Lista de Desejos',
 		path: '/wishlist',
 		component: 'WishlistPage',
 		icon: 'md-heart-empty',
-	},{
-		name: 'MyAddresses',
-		path: '/my-address',
-		component: 'MyAddressPage',
+	}, {
+		name: 'Mapa',
+		path: '/map',
+		component: 'MapPage',
+		icon: 'md-compass',
+	}, {
+		name: 'Configurações',
+		path: '/settings',
+		component: 'SettingPage',
 		icon: 'md-create',
 	},
 	/*{
@@ -69,28 +59,11 @@ export const environment = {
 		component: 'ChatListPage',
 		icon: 'chatboxes',
 	}, */
-	{
-		name: 'MyProfile',
-		path: '/profile',
-		component: 'ProfilePage',
-		icon: 'md-person',
-	},{
-		name: 'ForgotPassword',
-		path: '/forgot',
-		component: 'ForgotPage',
-		icon: 'lock',
-	},
-	/*{
-		name: 'Languages',
-		path: '/translate',
-		component: 'TranslatePage',
-		icon: 'globe',
-	}*/
-],
+	],
 
-	
+
 	themes: [{
-		name:'Orange',
+		name: 'Orange',
 		primary: '#ff9800',
 		secondary: '#7d65e8',
 		tertiary: '#ffab40',
@@ -99,12 +72,3 @@ export const environment = {
 		dark: '#1a1714'
 	}],
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
- // import 'zone.js/dist/zone-error';  // Included with Angular CLI.

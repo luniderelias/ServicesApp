@@ -7,7 +7,7 @@ const routes: Routes = [
   { path: 'forgot', loadChildren: './forgot/forgot.module#ForgotPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
   { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
-  { path: 'setting', loadChildren: './setting/setting.module#SettingPageModule' },
+  { path: 'settings', loadChildren: './setting/setting.module#SettingPageModule' },
   { path: 'signup', loadChildren: './signup/signup.module#SignupPageModule' },
   { path: 'categories', loadChildren: './categories/categories.module#CategoriesPageModule' },
   { path: 'products', loadChildren: './products/products.module#ProductsPageModule' },

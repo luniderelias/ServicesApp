@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Events, LoadingController, AlertController } from '@ionic/angular';
+import { Events, LoadingController, AlertController, MenuController } from '@ionic/angular';
 import { FormBuilder, Validators } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
 import { UsersProvider } from '../../providers/users';
@@ -38,12 +38,18 @@ export class LoginPage implements OnInit {
 		public fb: Facebook,
 		public values: Values,
 		public service: ServiceProvider,
+		public menuCtrl: MenuController,
 	) {
 		this.loginForm = formBuilder.group({
 			email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
 			password: ['', Validators.compose([Validators.minLength(6), Validators.required])]
 		});
 	}
+
+	ionViewWillEnter() {
+		this.menuCtrl.enable(false);
+		this.menuCtrl.close();
+	  }
 
 	async presentAlert() {
 		const alert = await this.alertCtrl.create({
@@ -203,17 +209,13 @@ export class LoginPage implements OnInit {
 
 	continueLogin(user) {
 
-
 		this.currentUser = firebase.auth().currentUser;
-
-		console.log(user);
 
 		this.service.getRestaurantUserProfile(user.uid).on('value', (snapshot) => {
 			console.log(snapshot.val());
 			
 			this.userProfiles = snapshot.val();
 			if (this.userProfiles) {
-			console.log(this.userProfiles);
 			
 					this.loading.dismiss().then(() => {
 						let user = {
@@ -228,7 +230,6 @@ export class LoginPage implements OnInit {
 						}
 						this.storage.set('user', user);
 						this.events.publish('user: change', user);
-					//	console.log(data);
 						this.router.navigateByUrl('/home');
 					});
 			}else{
@@ -239,7 +240,6 @@ export class LoginPage implements OnInit {
 	
 
 	ngOnInit() {
-		
 	}
 
 }

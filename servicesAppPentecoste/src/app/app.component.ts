@@ -136,14 +136,4 @@ export class AppComponent {
 
   }
 
-  logout() {
-    this.usersProv.logoutUser().then(() => {
-      this.storage.remove('user');
-      this.user = null;
-      this.storage.remove('cart_list');
-      this.router.navigateByUrl('/login');
-      this.menuCtrl.enable(false);
-    });
-  }
-
 }
