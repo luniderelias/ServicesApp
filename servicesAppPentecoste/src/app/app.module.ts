@@ -33,6 +33,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 import { AppComponent } from './app.component';
 
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 
 export function customTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -46,6 +47,7 @@ export function customTranslateLoader(http: HttpClient) {
 	BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
+    AngularFireDatabaseModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
 	HttpClientModule,

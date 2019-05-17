@@ -1,15 +1,16 @@
-import { Component , OnInit} from '@angular/core';
-import { NavController, LoadingController, ToastController, Events } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { NavController, LoadingController, ToastController, Events, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { ServiceProvider } from '../../providers/service';
 
 import { Values } from '../../providers/values';
-
+import { debounceTime } from 'rxjs/operators/debounceTime';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 
 import { Router } from '@angular/router';
 
 import * as firebase from 'firebase';
+import { FormControl } from '@angular/forms';
 
 
 @Component({
@@ -19,7 +20,7 @@ import * as firebase from 'firebase';
 })
 export class HomePage {
 
-	
+	public items: any = {};
 	list_product: any;
 	list_product_new: any;
 	list_product_slide: any;
@@ -29,55 +30,73 @@ export class HomePage {
 	favo_str: string = '';
 	id_favo_str: any;
 	list_cart: Array<any>;
-	
 	shops: any;
-	
 	userProfiles: any;
 	currentUser: any;
+	public chats: any = {};
+	searching: any = false;
+	searchControl: FormControl;
 
-	constructor(public events: Events, 
-		public toastCtrl: ToastController, 
-		private storage: Storage, 
+	constructor(public events: Events,
+		public toastCtrl: ToastController,
+		private storage: Storage,
 		public navCtrl: NavController,
 		public service: ServiceProvider,
 		public loadingCtrl: LoadingController,
 		private callNumber: CallNumber,
 		public values: Values,
-		public router: Router
-		){
-
-		
-		
+		public router: Router,
+		public platform: Platform
+	) {
+		this.searchControl = new FormControl();
+		this.items = [];
 		this.presentLoading();
-
-
-		this.shops = [];
-
-
 		this.events.subscribe('cart_list: change', (lst) => {
 			this.list_cart = lst;
 		});
 
 		this.events.subscribe('user: change', (user) => {
-			
-			if(user || user != null){
-				console.log(user)
+			if (user || user != null) {
+				console.log(user);
 				this.id_user = user.uid;
-				
-				console.log(this.id_user);
-				
-		
-				
-			
-
-			
-
-			
-
-				
 			}
 		});
+
+
+		this.platform.ready().then(() => {
+			var options = {
+				timeout: 5000
+			};
+		});
+
+		this.searchControl.valueChanges
+		.pipe(debounceTime(500))
+		.subscribe(search => {
+			this.searching = false;
+			this.setFilteredItems(search);
+		});
+
 	}
+
+	onSearchInput() {
+		this.searching = true;
+}
+
+	setFilteredItems(searchTerm) {
+    this.service.getFilterItems(searchTerm).snapshotChanges().subscribe(snapshot => {
+			this.items = [];
+
+			
+				snapshot.forEach(snap => {
+					 let a = snap.payload.toJSON();
+					a['$key'] = snap.key;
+	
+					console.log(a);
+	
+					this.items.push(a as ItemInterface);
+				});
+			});
+  }
 
 
 	async presentLoading() {
@@ -88,7 +107,7 @@ export class HomePage {
 		return await this.loading.present();
 	}
 
-	loadMore(event){
+	loadMore(event) {
 		/**
 		this.productsProv.getProduct(this.start, 2).then(data => {
 			this.list_product = this.list_product.concat(data);
@@ -105,18 +124,9 @@ export class HomePage {
 		
 		*/
 	}
-	
 
-
-
-
-
-
-
-	addCart(item){
-
+	addCart(item) {
 		console.log(item);
-
 		let itemCv = {
 			id: item.payload.doc.id,
 			name: item.payload.doc.data().name,
@@ -136,16 +146,16 @@ export class HomePage {
 		}
 
 		let temp = this.list_cart.filter((element) => {
-			if(element.id == itemCv.id){
+			if (element.id == itemCv.id) {
 				element.quantity = 1 + element.quantity;
 				return true;
 			}
 		})
 		console.log(temp);
-		if(temp.length == 0){
+		if (temp.length === 0) {
 			this.list_cart = this.list_cart.concat(itemCv);
 		}
-		
+
 		this.presentToast();
 
 		// this.list_cart = new Array();
@@ -162,122 +172,77 @@ export class HomePage {
 		});
 		toast.present();
 	}
-	
-	 ngOnInit(){
 
-  
-  
-			  
-			 
-	
-	
+	ngOnInit() {
 
-     
-  }
-  
-  ionViewWillEnter(){
-		
-			
-			 this.service.getRestaurantsList().on('value', snapshot =>{
-				
-				console.log(snapshot.val());
-			 
-			 
-				this.shops = [];
-				
-				snapshot.forEach( snap =>{
-					//this.params.data.items.push({
-					this.shops.push({
-					  id: snap.key,
-					  title: snap.val().title,
-					  subtitle:  snap.val().info,
-					  backgroundImage: snap.val().firebase_url,
-					  icon: "ios-arrow-dropright",
-					  iconText: "Saiba Mais",
-					  phonenumber: snap.val().phonenumber,
-					  lat: snap.val().lat,
-					  long: snap.val().long,
-					  description: snap.val().info,
-					  firebase_url:snap.val().firebase_url,
-					  address:snap.val().address,
-					  category:snap.val().category,
-					  images:snap.val().image,
-					  img: snap.val().img,
-					  info: snap.val().info,
-					  mark: snap.val().mark,
-					  option: snap.val().option,
-					  outlet: snap.val().outlet,
-					  owner_id:snap.val().user_id,
-					  market:true,
-					});  
-				  });
-				  
-				  console.log(this.shops);
-				});
-				
-		
 	}
-	
-	
-  
-   call(data){
-	  
-	  console.log(data);
-	  this.callNumber.callNumber(data.phonenumber, true)
-            .then(() =>{} )
-            .catch(() =>{});
-  }
-  
-  
-  chat(data){
-	  
-	  
-	  this.currentUser = firebase.auth().currentUser;
-	  
-	  
-      this.service.getUserProfile(this.currentUser.uid).on('value', (snapshot) =>{
-       this.userProfiles = snapshot.val();
-	   
-	  
-	   
-	  
 
-      });
-     
-	 
-	 console.log(this.userProfiles);
-	 
-	  if(this.userProfiles.photoURL ){
-			this.service.addRoom(this.currentUser.uid,data,this.userProfiles.displayName,this.userProfiles.photoURL);
+	ionViewWillEnter() {
+		this.service.getAllChooseItems().on('value', snapshot => {
 			
+		this.items = [];
+			snapshot.forEach(snap => {
+				this.items.push({
+					id: snap.key,
+					image_firebase_url: snap.val().image_firebase_url,
+					name: snap.val().name,
+					price: snap.val().price,
+					stock: snap.val().stock,
+					category: snap.val().category,
+					restaurant_image: snap.val().restaurant_image,
+					restaurant_lat: snap.val().restaurant_lat,
+					restaurant_long: snap.val().restaurant_long,
+					restaurant_name: snap.val().restaurant_name,
+					res_id: snap.val().res_id,
+					owner_id: snap.val().user_id,
+				});
+			});
+		});
+	}
+
+	call(data) {
+		console.log(data);
+		this.callNumber.callNumber(data.phonenumber, true)
+			.then(() => { })
+			.catch(() => { });
+	}
+
+	chat(data) {
+		this.currentUser = firebase.auth().currentUser;
+		this.service.getUserProfile(this.currentUser.uid).on('value', (snapshot) => {
+			this.userProfiles = snapshot.val();
+		});
+
+		if (this.userProfiles.photoURL) {
+			this.service.addRoom(this.currentUser.uid, data, this.userProfiles.displayName, this.userProfiles.photoURL);
 			console.log(data);
-                         
 			this.values.userChatUserId = this.currentUser.uid;
 			this.values.userChatData = data;
-						 
-			
-
-			this.router.navigateByUrl('chat');			
-		}
-		
-		else{
-			this.service.addRoom(this.currentUser.uid,data,this.userProfiles.displayName,"assets/imgs/no-avt.png");
-			
+			this.router.navigateByUrl('chat');
+		} else {
+			this.service.addRoom(this.currentUser.uid, data, this.userProfiles.displayName, "assets/imgs/no-avt.png");
 			console.log(data);
-			
 			this.values.userChatUserId = this.currentUser.uid;
 			this.values.userChatData = data;
-						 
-            this.router.navigateByUrl('chat');             
-			
+			this.router.navigateByUrl('chat');
 		}
-	  
-	 		   
-		
-	
-                     
-	  
-	  
-  }
 
+	}
+
+}
+export interface ItemInterface {
+  $key?: string;
+  available?: string;
+  category?: string;
+  description?: string;
+  product_id?: string;
+  image?: string;
+  name?: string;
+  price?: number;
+  stock?: number;
+  categories?: string;
+  percent?: string;
+  popularity?: number;
+  image_firebase_url?: string;
+  lenght?: string;
 }
