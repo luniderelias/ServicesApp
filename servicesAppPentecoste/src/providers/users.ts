@@ -7,6 +7,7 @@ import * as firebase from 'firebase';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { auth } from 'firebase/app';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 @Injectable()
 export class UsersProvider {
@@ -14,30 +15,30 @@ export class UsersProvider {
   private snapshotChangesSubscription: any;
 
   downloadURL: Observable<string>;
-  
+
   /**added**/
-  public fireAuth : any;
+  public fireAuth: any;
   public restaurantUserInfo: any;
 
-  constructor(public afs: AngularFirestore,public facebook: Facebook, public alertCtrl: AlertController ) {
-	  
-	  this.fireAuth = firebase.auth(); 
-	  
-	  this.restaurantUserInfo = firebase.database().ref('/users');
-	  
+  constructor(private af: AngularFireDatabase, public afs: AngularFirestore, public facebook: Facebook, public alertCtrl: AlertController) {
+
+    this.fireAuth = firebase.auth();
+
+    this.restaurantUserInfo = firebase.database().ref('/users');
+
   }
 
   uploadAvt(file) {
     const randomId = Math.random().toString(36).substring(2);
 
     const storageRef = firebase.storage().ref();
-    const uploadTask = storageRef.child('/users/'+randomId).put(file);
-     
+    const uploadTask = storageRef.child('/users/' + randomId).put(file);
+
     return new Promise<any>((resolve, reject) => {
       uploadTask.on(
         firebase.storage.TaskEvent.STATE_CHANGED,
-        (snapshot) => {},
-        (error) => {},
+        (snapshot) => { },
+        (error) => { },
         () => {
           uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
             this.downloadURL = downloadURL;
@@ -54,13 +55,13 @@ export class UsersProvider {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
-  signupUser(email, password, firstname, lastname , phone, address ) {
-	  return this.fireAuth.createUserWithEmailAndPassword(email, password)
-  	.then((newUser) => {
-      this.createUser(newUser.user, email, firstname, lastname, address, phone);
-  	});
-	  
-	  
+  signupUser(email, password, firstname, lastname, phone, address) {
+    return this.fireAuth.createUserWithEmailAndPassword(email, password)
+      .then((newUser) => {
+        this.createUser(newUser.user, email, firstname, lastname, address, phone);
+      });
+
+
 	  /**
     return new Promise<any>((resolve, reject) => {
       firebase.auth().createUserWithEmailAndPassword(email, password).then((newUser) => {
@@ -93,73 +94,73 @@ export class UsersProvider {
   createUser(newUser, email, firstname, lastname, address, phone) {
     return new Promise<any>((resolve, reject) => {
       this.restaurantUserInfo.child(newUser.uid).set({
-      email: email,
-      displayName: firstname,
-      lastName: lastname,
-      address: address,
-      phone: phone,
-      facebook: false
+        email: email,
+        displayName: firstname,
+        lastName: lastname,
+        address: address,
+        phone: phone,
+        facebook: false
       }).then(res => console.log(res));
     });
   }
 
   loginGoogleUser() {
-    return  new Promise<any>((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
       this.fireAuth.signInWithPopup(new auth.GoogleAuthProvider())
-      .then(credential => {
-        console.log(credential);
-        const googleCredential = firebase.auth.GoogleAuthProvider
-                  .credential(credential.credential.idToken);
-        firebase.auth().signInWithCredential(googleCredential)
-      .then( success => {
-        console.log("Firebase success: " + JSON.stringify(success)); 
-        
-        resolve(success);
+        .then(credential => {
+          console.log(credential);
+          const googleCredential = firebase.auth.GoogleAuthProvider
+            .credential(credential.credential.idToken);
+          firebase.auth().signInWithCredential(googleCredential)
+            .then(success => {
+              console.log("Firebase success: " + JSON.stringify(success));
 
-      });
-    });
-  }).catch((error) => { console.log(error)});
+              resolve(success);
+
+            });
+        });
+    }).catch((error) => { console.log(error) });
   }
 
-  facebookLogin(){
+  facebookLogin() {
     return new Promise<any>((resolve, reject) => {
-      this.facebook.login(['email']).then( response => {
-        
+      this.facebook.login(['email']).then(response => {
+
         const facebookCredential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
 
-        firebase.auth().signInWithCredential(facebookCredential).then( success => { 
-          console.log("Firebase success: " + JSON.stringify(success)); 
-          
+        firebase.auth().signInWithCredential(facebookCredential).then(success => {
+          console.log("Firebase success: " + JSON.stringify(success));
+
           resolve(success);
-/**
-          this.afs.collection('users', ref => ref.where('id_auth', '==', success.uid)).snapshotChanges().subscribe(snapshots => {
-
-            if(snapshots.length <= 0){
-              let tempIndex = success.email.indexOf('@');
-
-              this.snapshotChangesSubscription = this.afs.collection('users').add({
-                created: Date(),
-                active: true,
-                username: success.email.slice(0, tempIndex),
-                fullname: success.displayName,
-                email: success.email,
-                phone: (success.phoneNumber != null)? success.phoneNumber : '',
-                address: '',
-                avt: success.photoURL,
-                id_auth: success.uid
-              })
-            }
-
-          });
-		  
-		  */
+          /**
+                    this.afs.collection('users', ref => ref.where('id_auth', '==', success.uid)).snapshotChanges().subscribe(snapshots => {
+          
+                      if(snapshots.length <= 0){
+                        let tempIndex = success.email.indexOf('@');
+          
+                        this.snapshotChangesSubscription = this.afs.collection('users').add({
+                          created: Date(),
+                          active: true,
+                          username: success.email.slice(0, tempIndex),
+                          fullname: success.displayName,
+                          email: success.email,
+                          phone: (success.phoneNumber != null)? success.phoneNumber : '',
+                          address: '',
+                          avt: success.photoURL,
+                          id_auth: success.uid
+                        })
+                      }
+          
+                    });
+                
+                */
 
         })
       })
     }).catch((error) => { console.log(error) });
   }
 
-  getUser(uid){
+  getUser(uid) {
 	  /**
     return new Promise<any>((resolve, reject) => {
       this.snapshotChangesSubscription = this.afs.collection('users', ref => ref.where('id_auth', '==', uid)).snapshotChanges()
@@ -170,17 +171,8 @@ export class UsersProvider {
 	*/
   }
 
-  updateUser(id_user, val){
-	  /**
-    return new Promise<any>((resolve, reject) => {
-      this.snapshotChangesSubscription = this.afs.collection('users').doc(id_user).update(val)
-      .then(
-        res => resolve(res),
-        err => reject(err)
-      )
-    })
-	
-	*/
+  updateUser(val) {
+      return firebase.database().ref('/users').child(firebase.auth().currentUser.uid).update(val);
   }
 
   resetPassword(email) {

@@ -9,7 +9,7 @@
 
         <ion-buttons slot="end">
 
-            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
                 <ion-icon name="cart"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -20,7 +20,6 @@
 
 <ion-content fullscreen>
 
-
     <div class="backdrop">
         <img src="{{'assets/imgs/delivery.jpg' }}">
     </div>
@@ -28,44 +27,10 @@
     <div class="backdrop-separator2"></div>
 
     <div class="title" padding>
-
-
-        <ion-button class="add" [routerLink]="['/new-address']">
-            <ion-icon name="add"></ion-icon>Adicionar Novo Endereço</ion-button>
-
+        <ion-button color="secondary" shape="round" fill="outline" expand="full" [routerLink]="['/new-address', {redirectLink: '/choose-address', cod: this.cod}]">
+            <ion-icon slot="start" name="add-circle"></ion-icon> Adicionar novo Endereço
+        </ion-button>
     </div>
-    <!--
-			<div class="top-slide">
-					<div class="wrap-slide">
-						<ion-slides>
-							<ion-slide *ngIf="deliver_method_image">
-								<div class="thumb flex-ali-center flex-jus-center ovfl-hidden">
-									
-									
-									<img src="{{deliver_method_image}}" >
-								</div>
-							</ion-slide>
-						
-				
-						</ion-slides>
-					</div>
-					
-								<div class="title" padding>
-	
-											
-										<ion-button class="add" [routerLink]="['/new-address']"><ion-icon name="add"></ion-icon>Add New Address</ion-button>
-		
-								</div>
-					
-					
-		
-			
-					
-					
-			</div>
-			
-			-->
-
     <ion-list>
         <ion-radio-group>
             <ion-list-header>
@@ -77,29 +42,22 @@
                     <p class="show-address"><b>Cidade:</b> {{address.city}} </p>
                     <p class="show-address"><b>Bairro:</b> {{address.district}}</p>
                     <p class="show-address"><b>Endereço:</b> {{address.street}}</p>
-                    <p class="show-address"><b>>Número:</b> {{address.number}}</p>
+                    <p class="show-address"><b>Número:</b> {{address.number}}</p>
                     <p class="show-address"><b>Telefone:</b> {{address.phone}}</p>
                     <p class="show-address"><b>Complemento:</b> {{address.complement}}</p>
                 </ion-label>
 
                 <ion-radio (ionSelect)="selectAddress(address.id,address)"></ion-radio>
 
-
-
             </ion-item>
         </ion-radio-group>
     </ion-list>
 
-
-
-
-
 </ion-content>
-
-
-
 <ion-footer>
     <ion-toolbar position="bottom">
-        <ion-button expand="full" color="primary" (click)="placeOrder(service.cart.line_items)">Confirmar Pedido</ion-button>
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="checkAddressNotNull(service.cart.line_items)">
+            Confirmar Pedido
+        </ion-button>
     </ion-toolbar>
 </ion-footer>

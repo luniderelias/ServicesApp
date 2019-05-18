@@ -26,8 +26,10 @@
         </div>
 
         <div class="movie-data" *ngIf="user">
+            <div class="title" *ngIf="loading">
+                <ion-spinner name="dots"></ion-spinner>
+            </div>
             <div class="title">{{ user.username }} {{user.fullname}}</div>
-
         </div>
 
 

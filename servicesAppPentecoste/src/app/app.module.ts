@@ -39,6 +39,7 @@ export function customTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
+import * as $ from 'jquery';
 
 @NgModule({
   declarations: [AppComponent],

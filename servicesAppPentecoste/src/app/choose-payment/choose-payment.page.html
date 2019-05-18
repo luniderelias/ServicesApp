@@ -9,7 +9,7 @@
 
         <ion-buttons slot="end">
 
-            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
                 <ion-icon name="cart"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -35,7 +35,7 @@
 
             <ion-item>
                 <ion-label>À Vista (10% Desconto)</ion-label>
-                <ion-radio value="cod" (ionSelect)="radioChecked('cod')"></ion-radio>
+                <ion-radio value="cod" (ionSelect)="radioChecked('cash')"></ion-radio>
             </ion-item>
 
             <!--       <ion-item>
@@ -46,7 +46,7 @@
 
             <ion-item>
                 <ion-label>Cartão de Crédito</ion-label>
-                <ion-radio value="cart" (ionSelect)="radioChecked('cart')"></ion-radio>
+                <ion-radio value="card" (ionSelect)="radioChecked('card')"></ion-radio>
             </ion-item>
             <!-- 
             <ion-item>
@@ -166,6 +166,8 @@
 
 <ion-footer>
     <ion-toolbar position="bottom">
-        <ion-button expand="full" color="primary" [routerLink]="['/choose-address', {cod: cod}]">Selecionar Endereço</ion-button>
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="savePaymentMethod()">
+            Selecionar Endereço
+        </ion-button>
     </ion-toolbar>
 </ion-footer>

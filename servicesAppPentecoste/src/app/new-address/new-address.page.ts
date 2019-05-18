@@ -1,3 +1,4 @@
+import { URLSearchParams } from '@angular/http';
 import { Component, OnInit } from '@angular/core';
 import { Events, LoadingController, AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
@@ -31,10 +32,12 @@ export class NewAddressPage implements OnInit {
 	cityDistrictName: any;
 	streetName: any;
 	apartmentOfficeName: any;
-
+	redirectLink: any;
+	cod: any;
+	loading = false;
 	public addressForm;
-	loading: any;
 	submitted = false;
+	selectedCity: any;
 
 	constructor(public events: Events,
 		public service: ServiceProvider,
@@ -46,10 +49,18 @@ export class NewAddressPage implements OnInit {
 		public loadingCtrl: LoadingController,
 		public alertCtrl: AlertController,
 		public formBuilder: FormBuilder) {
+			this.loading = true;
+			this.route.params.subscribe(params => {
+
+				console.log(params);
+		  
+				this.redirectLink = params.redirectLink;
+				this.cod = params.cod;
+				this.loading = false;
+			  });
 
 		this.form = {};
 		this.currentUser = firebase.auth().currentUser;
-		console.log(this.currentUser);
 
 		this.addressForm = formBuilder.group({
 			city: ['', Validators.compose([Validators.required])],
@@ -61,17 +72,16 @@ export class NewAddressPage implements OnInit {
 		})
 
 		this.customer = [];
-
+		this.loading = true;
 		this.service.getRestaurantUserProfile(this.currentUser.uid).on('value', snapshot => {
-
 			this.customer.displayName = snapshot.val().displayName;
 			this.customer.email = snapshot.val().email;
-
+			this.loading = false;
 		});
 
 
 
-
+		this.loading = true;
 		this.service.getRestaurantsList().on('value', snapshot => {
 
 			this.restaurantName = [];
@@ -83,9 +93,10 @@ export class NewAddressPage implements OnInit {
 
 				});
 			});
+			this.loading = false;
 		});
 
-
+		this.loading = true;
 		this.service.getCityName().on('value', snapshot => {
 
 			this.cityName = [];
@@ -93,48 +104,12 @@ export class NewAddressPage implements OnInit {
 			snapshot.forEach(snap => {
 				this.cityName.push({
 					id: snap.key,
-					name: snap.val().name
+					name: snap.val().name,
+					fare: snap.val().fare
 				});
 			});
+			this.loading = false;
 		});
-
-		this.service.getCityDistrictName().on('value', snapshot => {
-
-			this.cityDistrictName = [];
-
-			snapshot.forEach(snap => {
-				this.cityDistrictName.push({
-					id: snap.key,
-					name: snap.val().name
-				});
-			});
-		});
-
-
-		this.service.getStreetName().on('value', snapshot => {
-
-			this.streetName = [];
-
-			snapshot.forEach(snap => {
-				this.streetName.push({
-					id: snap.key,
-					name: snap.val().name
-				});
-			});
-		});
-
-		this.service.getApartmentOfficeName().on('value', snapshot => {
-
-			this.apartmentOfficeName = [];
-
-			snapshot.forEach(snap => {
-				this.apartmentOfficeName.push({
-					id: snap.key,
-					name: snap.val().name
-				});
-			});
-		});
-
 	}
 
 	ngOnInit() {
@@ -144,31 +119,56 @@ export class NewAddressPage implements OnInit {
 	addNewAddress() {
 
 	}
-
+	public selectObjectById(list: any[], id: string, property: string) {
+		var item = list.find(item => item.name === id);
+		this.selectedCity = item;
+	}
 
 	sendAddress() {
-		if (!this.addressForm.valid) {
-			this.submitted = true;
-		} else {
-			this.presentLoading();
-
+			this.loading = true;
 			this.submitted = false;
-			this.service.saveNewAddress(this.addressForm.value.city,
+			this.service.saveNewAddress(this.selectedCity,
 				this.addressForm.value.district, this.addressForm.value.street, this.addressForm.value.number,
 				this.customer.displayName, this.customer.email, this.addressForm.value.phone,
 				this.addressForm.value.complement, this.currentUser.uid)
-				.then(() => {
-					this.router.navigateByUrl('/cart');
+				.then((res) => {
+						this.loading = false;
+						this.presentAlert('Sucesso!', 'Endereço cadastrado com sucesso!');
+						this.router.navigate([this.redirectLink, {cod: this.cod}]);
+				}, (error) => {
+						this.loading = false;
+						this.presentAlert('Erro!', 'Desculpe. Ocorreu um erro ao cadastrar enderço');
 				});
+		}
+
+	checkFormValid() {
+		if (!this.addressForm.valid) {
+			this.submitted = true;
+		} else {
+			this.presentConfirmAlert();
 		}
 	}
 
-	async presentLoading() {
-		this.loading = await this.loadingCtrl.create({
-			message: 'Carregando',
-			duration: 2000
+	async presentAlert(title, msg) {
+		const alert = await this.alertCtrl.create({
+			header: title,
+			message: msg,
+			buttons: ['OK']
 		});
-		return await this.loading.present();
+		await alert.present();
+	}
+
+	async presentConfirmAlert() {
+		const alert = await this.alertCtrl.create({
+			message: 'Deseja confirmar esta ação?',
+			buttons: [{
+				text: 'Sim',
+				handler: () => {
+					this.sendAddress();
+				}
+			}]
+		});
+		await alert.present();
 	}
 
 }

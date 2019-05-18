@@ -98,6 +98,8 @@
 
 <ion-footer>
     <ion-toolbar position="bottom">
-        <ion-button *ngIf="service.total != 0" expand="full" color="primary" [routerLink]="['/choose-payment']">Escolher Forma de Pagamento</ion-button>
+        <ion-button color="primary" shape="round" fill="outline" expand="full" *ngIf="service.total != 0" [routerLink]="['/choose-payment']">
+            Escolher Forma de Pagamento
+        </ion-button>
     </ion-toolbar>
 </ion-footer>

@@ -76,11 +76,11 @@ export class AppComponent {
 
     this.events.subscribe('user: change', (user) => {
       if (user || user != null) {
-        console.log('userchange');
-        console.log(user);
         this.user = user;
 
         this.values.isLoggedIn = true;
+
+        if (this.user.updated) { return; }
 
         this.router.navigateByUrl('home');
         this.menuCtrl.enable(true);

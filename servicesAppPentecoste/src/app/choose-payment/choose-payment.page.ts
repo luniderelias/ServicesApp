@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
+import { Events, AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Values } from '../../providers/values';
 import { ServiceProvider } from '../../providers/service';
@@ -14,42 +14,52 @@ import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
-  selector: 'app-choose-payment',
-  templateUrl: './choose-payment.page.html',
-  styleUrls: ['./choose-payment.page.scss'],
+	selector: 'app-choose-payment',
+	templateUrl: './choose-payment.page.html',
+	styleUrls: ['./choose-payment.page.scss'],
 })
 export class ChoosePaymentPage implements OnInit {
 
-  	public signupForm;
+	public signupForm;
 	zeroPrice: any;
 	form: any;
 	payment_method: any;
 	cod: any;
-	
+
 	payment_method_image: any;
-	
-	
 
-  constructor(public events: Events,
-  public service: ServiceProvider, 
-  public values:Values, private payPal: PayPal, 
-  private stripe: Stripe,
+	constructor(public events: Events,
+		public service: ServiceProvider,
+		public values: Values, private payPal: PayPal,
+		private stripe: Stripe,
 		private router: Router,
-		private route: ActivatedRoute) { 
-		
-		
-					this.payment_method_image = "assets/imgs/payment.png";
-		
-		}
+		public alertCtrl: AlertController,
+		private route: ActivatedRoute) {
+		this.payment_method_image = "assets/imgs/payment.png";
+	}
 
-  ngOnInit() {
-  }
-  
-   radioChecked(val){
-	  this.cod = val;
-	  //console.log(val);
-	  
-	  console.log(this.cod);
-  }
+	ngOnInit() {
+	}
+
+	savePaymentMethod() {
+		if (this.cod === '' || this.cod === undefined || this.cod === null) {
+			this.presentAlert('', 'Por favor, selecione um método de pagamento');
+		} else {
+			this.router.navigate(['/choose-address', {cod: this.cod}]);
+		}
+	}
+
+	radioChecked(val) {
+		this.cod = val;
+	}
+
+	async presentAlert(title, msg) {
+		const alert = await this.alertCtrl.create({
+			header: title,
+			message: msg,
+			buttons: ['OK']
+		});
+		await alert.present();
+	}
 
 }

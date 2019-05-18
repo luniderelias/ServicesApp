@@ -5,6 +5,7 @@ import { EmailValidator } from '../../validators/email';
 import { UsersProvider } from '../../providers/users';
 import { Storage } from '@ionic/storage';
 import { FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 @Component({
 	selector: 'app-forgot',
@@ -12,21 +13,21 @@ import { FormGroup } from '@angular/forms';
 	styleUrls: ['./forgot.page.scss'],
 })
 export class ForgotPage implements OnInit {
-	
+
 	public resetPasswordForm;
-	
-	
+
+
 	user: any;
-	loading: any;
 	my_photo: any = null;
-	addressForm : FormGroup;
+	addressForm: FormGroup;
+	loading = false;
 
 	constructor(
-		public usersProv: UsersProvider, 
-		public alertCtrl: AlertController, 
+		public usersProv: UsersProvider,
+		public alertCtrl: AlertController,
 		public formBuilder: FormBuilder,
-		private storage: Storage, 
-		) {
+		private storage: Storage,
+	) {
 
 		this.resetPasswordForm = formBuilder.group({
 			email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
@@ -37,20 +38,23 @@ export class ForgotPage implements OnInit {
 		if (!this.resetPasswordForm.valid) {
 			console.log(this.resetPasswordForm.value);
 		} else {
+			this.loading = true;
 			this.usersProv.resetPassword(this.resetPasswordForm.value.email).then((user) => {
-				this.presentAlertErr('Por favor, confira seu Email. Enviamos um link para redefinição de senha. Obrigado!');
+				this.loading = false;
+				this.presentAlert('Sucesso!', 'Por favor, confira seu Email. Enviamos um link para redefinição de senha. Obrigado!');
 			}, (error) => {
-				this.presentAlertErr(error.message);
+				this.loading = false;
+				this.presentAlert('Erro!', 'Não foi possível enviar o Email');
 			});
 		}
 	}
 
-	async presentAlertErr(err) {
+	async presentAlert(title, msg) {
 		const alert = await this.alertCtrl.create({
-			message: err,
+			header: title,
+			message: msg,
 			buttons: [{
-				text: "Ok",
-				role: 'cancel'
+				text: 'OK',
 			}]
 		});
 		await alert.present();
@@ -58,9 +62,9 @@ export class ForgotPage implements OnInit {
 
 	ngOnInit() {
 	}
-	
-	
-	ionViewWillEnter(){
+
+
+	ionViewWillEnter() {
 		this.storage.ready().then(() => {
 			this.storage.get('user').then((val) => {
 				console.log(val);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
+import { Events, AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Values } from '../../providers/values';
 import { ServiceProvider } from '../../providers/service';
@@ -25,16 +25,14 @@ export class ChooseAddressPage implements OnInit {
   form: any;
   payment_method: any;
   cod: any;
+  paymentChange: any;
 
   addressList: any = [];
 
   currentUserAddress: any;
   currentUser: any;
 
-  //old variables
-
-  buttonText: any;
-  disableSubmit: boolean = false;
+  disableSubmit = false;
 
   paypalPayments: any;
 
@@ -71,40 +69,24 @@ export class ChooseAddressPage implements OnInit {
 
   deliver_method_image: any;
 
-
-
-  //end here
-
   constructor(public events: Events,
-    public service: ServiceProvider,
-    public values: Values, private payPal: PayPal,
-    private stripe: Stripe,
-    private router: Router,
-    private route: ActivatedRoute) {
+              public service: ServiceProvider,
+              public values: Values,
+              private payPal: PayPal,
+              private stripe: Stripe,
+              private router: Router,
+		          public alertCtrl: AlertController,
+              private route: ActivatedRoute) {
 
     this.categoryList = [];
     this.firebasedata = [];
     this.restaurants = [];
 
-
-
-    console.log('data');
-
-    this.deliver_method_image = "assets/imgs/delivery.jpg";
-
+    this.deliver_method_image = 'assets/imgs/delivery.jpg';
 
     this.form = {};
-    this.buttonText = "Confirmar Pedido";
-
-
-    console.log(firebase.auth().currentUser.uid);
-
-    console.log(this.service.cart.line_items);
-
 
     this.currentUser = firebase.auth().currentUser;
-
-    console.log(this.currentUser.uid);
 
     this.addressList = [];
 
@@ -113,14 +95,8 @@ export class ChooseAddressPage implements OnInit {
     this.extraCartItem = [];
     this.extraOptions = [];
 
-    console.log(this.service.cart.line_items);
-
     this.route.params.subscribe(params => {
-
-      console.log(params);
-
       this.cod = params.cod;
-
     });
 
     this.service.getCurrentUserAddresses(this.currentUser.uid).on('value', snapshot => {
@@ -129,9 +105,9 @@ export class ChooseAddressPage implements OnInit {
 
       snapshot.forEach(snap => {
         this.addressList.push({
-
           id: snap.key,
           city: snap.val().city,
+          fare: snap.val().fare,
           district: snap.val().district,
           street: snap.val().street,
           phone: snap.val().phone,
@@ -140,328 +116,115 @@ export class ChooseAddressPage implements OnInit {
 
         });
       });
+    
 
       console.log(this.addressList);
     });
-
-
   }
 
   ngOnInit() {
   }
 
   selectAddress(key, address) {
-
-
-    console.log(key);
-    console.log(address);
-
-    console.log(this.cod);
-
-    console.log(this.service.cart.line_items);
-
     this.currentUserAddress = address;
-
   }
 
+  checkAddressNotNull(item) {
+    if (this.currentUserAddress === '' || this.currentUserAddress === undefined) {
+      this.presentAlert('', 'Por favor, selecione um endereço de entrega.');
+    } else {
+      this.checkIfPhone(item);
+    }
+  }
 
   placeOrder(item) {
-    this.disableSubmit = true;
-    this.buttonText = "Confirmando Pedido";
-
-    console.log("inside");
     if (this.values.isLoggedIn) {
-
-      console.log("inside2");
-
       this.currentUser = firebase.auth().currentUser;
 
-      this.service.getRestaurantUserProfile(this.currentUser.uid).on('value', snapshot => {
-        this.userProfiles = snapshot.val();
-      });
-
-
-      console.log(this.userProfiles);
-
-      if (this.currentUserAddress == '' || this.currentUserAddress == undefined) {
-        alert("Por favor, selecione um endereço de entrega.");
-        console.log(this.userProfiles);
-        //this.nav.push(AddressPage,this.userProfiles);
-        //this.nav.push(AddressPage, this.userProfiles);
-        this.disableSubmit = false;
-      } else {
-        if (this.cod == "paypal") {
-          console.log(this.paypalConfigurations.sandbox);
-          console.log(this.paypalConfigurations.production);
-
-          this.payPal.init({
-            PayPalEnvironmentProduction: this.paypalConfigurations.production,
-            PayPalEnvironmentSandbox: this.paypalConfigurations.sandbox
-            //PayPalEnvironmentProduction: "Ab7Hh7a_TmrzJq8Qf-R8ziJZdWJvVN-NLKifFEsUR4g5hClO3buRFcrO59NL-2HMEtBmmUVEeKOkqmRC",
-            //PayPalEnvironmentSandbox: "EJ6nvu7uhIJ5GATfG-rNQmucomyVCOd9NOP5jVPv2V_EdOmJUiizFRXfRaBuIDOiZ0LI03z8-1byrK6b"
-
-          }).then(() => {
-            // Environments: PayPalEnvironmentNoNetwork, PayPalEnvironmentSandbox, PayPalEnvironmentProduction
-            this.payPal.prepareToRender('PayPalEnvironmentSandbox', new PayPalConfiguration({
-              // Only needed if you get an "Internal Service Error" after PayPal login!
-              //payPalShippingAddressOption: 2 // PayPalShippingAddressOptionPayPal
-            })).then(() => {
-              this.disableSubmit = false;
-              let payment = new PayPalPayment(this.service.total.toString(), this.values.currency, 'Sales of Goods', 'sale');
-              this.payPal.renderSinglePaymentUI(payment).then((success) => {
-
-                this.paypalPayments = success;
-                // Successfully paid
-
-                // Example sandbox response
-                //
-                // {
-                //   "client": {
-                //     "environment": "sandbox",
-                //     "product_name": "PayPal iOS SDK",
-                //     "paypal_sdk_version": "2.16.0",
-                //     "platform": "iOS"
-                //   },
-                //   "response_type": "payment",
-                //   "response": {
-                //     "id": "PAY-1AB23456CD789012EF34GHIJ",
-                //     "state": "approved",
-                //     "create_time": "2016-10-03T13:33:33Z",
-                //     "intent": "sale"
-                //   }
-                // }
-                this.payments.paymentType = this.cod;
-                //this.currentUserAddress = this.form.currentUserAddress;
-
-                this.payments.id = this.paypalPayments.response.id;
-                this.payments.status = this.paypalPayments.response.state;
-                this.disableSubmit = false;
-                //this.customerDetails = this.userProfiles;
-
-                this.smallUserProfiles = [];
-
-
-                this.smallUserProfiles.address = this.userProfiles.address;
-                this.smallUserProfiles.displayName = this.userProfiles.displayName;
-                this.smallUserProfiles.email = this.userProfiles.email;
-                this.smallUserProfiles.facebook = this.userProfiles.facebook;
-                this.smallUserProfiles.lastName = this.userProfiles.lastName;
-                this.smallUserProfiles.lat = this.userProfiles.lat;
-                this.smallUserProfiles.lng = this.userProfiles.lng;
-                this.smallUserProfiles.phone = this.userProfiles.phone;
-                this.smallUserProfiles.photoURL = this.userProfiles.photoURL;
-                this.smallUserProfiles.reverseOrder = this.userProfiles.reverseOrder;
-                this.smallUserProfiles.timeStamp = this.userProfiles.timeStamp;
-                this.smallUserProfiles.userTimeStamp = this.userProfiles.userTimeStamp;
-
-
-                //this.functions.showAlert('Success',  'Your order has been placed Successfully');
-                this.service.addOrders(item, this.service.total, this.currentUser.uid, this.payments, this.smallUserProfiles, this.currentUserAddress).then(() => {
-                  //  this.nav.setRoot('OrderList');
-                  this.service.cart.line_items = [];
-                  this.service.cart.extraOptions = [];
-                  this.values.qty = null;
-                  this.service.proqty = [];
-                  this.service.total = 0;
-                  //  this.nav.setRoot(MyorderPage);
-                });
-              }, (error) => {
-                // Error or render dialog closed without being successful
-                console.log(error);
-                //  this.functions.showAlert('Error', error.message);
-              });
-
-            }, (error) => {
-              // Error in configuration
-              console.log(error);
-              //this.functions.showAlert('Error1', error.message);
-            });
-          }, (error) => {
-            console.log(error);
-            // Error in initialization, maybe PayPal isn't supported or something else
-            //  this.functions.showAlert('Error2', error);
-            this.disableSubmit = false;
-          });
-        }
-
-
-        else if (this.cod == "stripe") {
-          this.service.getUserProfile(this.currentUser.uid).on('value', snapshot => {
-            this.userProfiles = snapshot.val();
-          });
-
-          if (this.currentUserAddress != undefined && this.userProfiles.address != undefined && this.userProfiles.phone != undefined) {
-
-            //this.stripe.setPublishableKey(this.setting.publish_key);
-
-            this.stripe.setPublishableKey(publishableKey);
-
-            alert(this.form.stripe_number);
-            let card = {
-              number: this.form.stripe_number,
-              expMonth: this.form.stripe_exp_month,
-              expYear: this.form.stripe_exp_year,
-              cvc: this.form.stripe_code
-            };
-
-            this.stripe.createCardToken(card)
-              .then((token) => {
-                console.log(token);
-                this.getToken = token;
-
-                alert("token:" + token.id);
-
-                if (this.getToken) {
-                  alert("this.gettoken:" + this.getToken.id); //this.service.chargeStripe(this.getToken, this.values.currency, this.service.total, this.setting.secret_kay)
-                  /***							 this.service.chargeStripe(this.getToken, this.values.currency,Math.round(this.service.total).toFixed(),stripe_secret_key)
-                                       .then((result) => {
-                         this.getPayments = result;
-                         alert("result" + result);
-                         }, error => {
-                                           alert("stripe"+error);
-                                       }).catch((error) =>{
-                                 
-                                 alert('Errorsivw'+ error);
-                                 
-                                 console.error(error)}); 
-                     
-                     */
-
-
-                }
-
-                this.payments.paymentType = this.cod;
-                console.log(this.getPayments);
-                //		alert("getpaymetn"+this.getPayments);
-                //	alert("id"+this.getPayments.id);
-                //	alert("status:"+this.getPayments.status);
-                //	alert("amount:"+this.getPayments.amount);
-                //    this.payments.id = this.getPayments.id;
-                //    this.payments.status = this.getPayments.status;
-                //    this.payments.amount = this.getPayments.amount;
-
-                //	this.currentUserAddress = this.form.currentUserAddress;
-
-                this.smallUserProfiles = [];
-
-
-                this.smallUserProfiles.address = this.userProfiles.address;
-                this.smallUserProfiles.displayName = this.userProfiles.displayName;
-                this.smallUserProfiles.email = this.userProfiles.email;
-                this.smallUserProfiles.facebook = this.userProfiles.facebook;
-                this.smallUserProfiles.lastName = this.userProfiles.lastName;
-                this.smallUserProfiles.lat = this.userProfiles.lat;
-                this.smallUserProfiles.lng = this.userProfiles.lng;
-                this.smallUserProfiles.phone = this.userProfiles.phone;
-                this.smallUserProfiles.photoURL = this.userProfiles.photoURL;
-                this.smallUserProfiles.reverseOrder = this.userProfiles.reverseOrder;
-                this.smallUserProfiles.timeStamp = this.userProfiles.timeStamp;
-                this.smallUserProfiles.userTimeStamp = this.userProfiles.userTimeStamp;
-
-
-                this.disableSubmit = false;
-                //    this.functions.showAlert('Success',  'Your order has been placed Successfully');
-                alert("Sucesso");
-                this.service.addOrders(item, this.service.total, this.currentUser.uid, this.payments, this.smallUserProfiles, this.currentUserAddress).then(() => {
-                  //  this.nav.setRoot('OrderList');
-                  this.service.cart.line_items = [];
-                  this.service.cart.extraOptions = [];
-                  this.values.qty = null;
-                  this.service.proqty = [];
-                  this.service.total = 0;
-                  // this.nav.setRoot(MyorderPage)
-                });
-              })
-              .catch((error) => {
-                this.disableSubmit = false;
-                //  this.functions.showAlert('Errors', error);
-                this.disableSubmit = false;
-                console.error(error)
-              })
-              .catch((error) => {
-                //  this.functions.showAlert('Error1', error);
-                this.disableSubmit = false;
-              });
-          }
-        }
-
-        else if (this.cod === 'cod' || this.cod === 'bank' || this.cod === 'cart') {
-
-          this.service.getUserProfile(this.currentUser.uid).on('value', snapshot => {
-            this.userProfiles = snapshot.val();
-          });
-
-          if (this.currentUserAddress !== undefined && this.userProfiles.address !== undefined && this.userProfiles.phone !== undefined) {
-            this.payments.PaymentType = this.cod;
-            console.log(this.form.currentUserAddress);
-            console.log(this.currentUserAddress);
-
-
-            this.smallUserProfiles = [];
-
-
-            this.smallUserProfiles.address = this.userProfiles.address;
-            this.smallUserProfiles.displayName = this.userProfiles.displayName;
-            this.smallUserProfiles.email = this.userProfiles.email;
-            this.smallUserProfiles.facebook = this.userProfiles.facebook;
-            this.smallUserProfiles.lastName = this.userProfiles.lastName;
-
-            if (this.userProfiles.lat) {
-              this.smallUserProfiles.lat = this.userProfiles.lat;
-            }
-
-            if (this.userProfiles.lng) {
-              this.smallUserProfiles.lng = this.userProfiles.lng;
-            }
-            this.smallUserProfiles.phone = this.userProfiles.phone;
-
-            if (this.userProfiles.photoURL) {
-              this.smallUserProfiles.photoURL = this.userProfiles.photoURL;
-            }
-            if (this.userProfiles.reverseOrder) {
-              this.smallUserProfiles.reverseOrder = this.userProfiles.reverseOrder;
-            }
-            if (this.userProfiles.timeStamp) {
-              this.smallUserProfiles.timeStamp = this.userProfiles.timeStamp;
-            }
-            if (this.userProfiles.userTimeStamp) {
-              this.smallUserProfiles.userTimeStamp = this.userProfiles.userTimeStamp;
-            }
-
-            alert("Pedido Realizado com Sucesso!");
-
-            this.service.addOrders(item, this.service.total, this.currentUser.uid, this.payments, this.smallUserProfiles, this.currentUserAddress).then(newOrder => {
-              // this.nav.setRoot('OrderList');
-              this.service.cart.line_items = [];
-              this.service.cart.extraOptions = [];
-              this.disableSubmit = false;
-              this.values.qty = null;
-              this.service.proqty = [];
-              this.service.total = 0;
-
-              console.log(newOrder);
-
-              this.service.addIdToOrder(newOrder.key);
-
-              this.addOrderToRestaurant(newOrder.key);
-
-
-            });
-
-
-          }
+      if (this.cod === 'cash' || this.cod === 'bank' || this.cod === 'card') {
+        if (this.cod === 'cash') {
+          this.presentNeedsChange(item);
+        } else {
+          this.presentConfirmAlert(item);
         }
       }
-    }
-
-    else {
-      //  this.nav.parent.select(2);
-      this.disableSubmit = false;
+    } else {
+      this.presentAlert('Usuário não autenticado!', 'Por favor, faça login e tente novamente!');
     }
   }
 
 
-  addOrderToRestaurant(id) {
+  checkIfPhone(item) {
+    this.service.getUserProfile(this.currentUser.uid).on('value', snapshot => {
+      this.userProfiles = snapshot.val();
+      if (this.userProfiles.phone === undefined || this.userProfiles.phone === null || this.userProfiles.phone === '') {
+        this.presentNeedsPhone(item);
+      } else if (this.currentUserAddress !== undefined && this.userProfiles.address !== undefined) {
+        this.placeOrder(item);
+      } else {
+        this.presentAlert('Dados Inválidos!', 'Por favor, efetue novamente seu pedido.');
+      }
+    });
+  }
+
+
+  continueSendingOrder(item) {
+    this.payments.PaymentType = this.cod;
+    this.payments.PaymentChange = this.paymentChange;
+    this.smallUserProfiles = [];
+    this.smallUserProfiles.address = this.userProfiles.address;
+    this.smallUserProfiles.displayName = this.userProfiles.displayName;
+    this.smallUserProfiles.email = this.userProfiles.email;
+    this.smallUserProfiles.facebook = this.userProfiles.facebook;
+    this.smallUserProfiles.lastName = this.userProfiles.lastName;
+    if (this.userProfiles.lat) {
+      this.smallUserProfiles.lat = this.userProfiles.lat;
+    }
+
+    if (this.userProfiles.lng) {
+      this.smallUserProfiles.lng = this.userProfiles.lng;
+    }
+    this.smallUserProfiles.phone = this.userProfiles.phone;
+
+    if (this.userProfiles.photoURL) {
+      this.smallUserProfiles.photoURL = this.userProfiles.photoURL;
+    }
+    if (this.userProfiles.reverseOrder) {
+      this.smallUserProfiles.reverseOrder = this.userProfiles.reverseOrder;
+    }
+    if (this.userProfiles.timeStamp) {
+     this.smallUserProfiles.timeStamp = this.userProfiles.timeStamp;
+    }
+    if (this.userProfiles.userTimeStamp) {
+      this.smallUserProfiles.userTimeStamp = this.userProfiles.userTimeStamp;
+    }
+    
+    if (this.payments.PaymentType === 'cash') {
+      this.service.total -= 0.1 * this.service.total; // Discount
+    }
+
+    this.service.total += this.currentUserAddress.fare; // Fare
+
+
+    this.service.addOrders(item, this.service.total, this.currentUser.uid, this.payments,
+    this.smallUserProfiles, this.currentUserAddress).then(newOrder => {
+    // this.nav.setRoot('OrderList');
+    this.service.cart.line_items = [];
+    this.service.cart.extraOptions = [];
+    this.disableSubmit = false;
+    this.values.qty = null;
+    this.service.proqty = [];
+    this.service.total = 0;
+
+    console.log(newOrder);
+
+    this.service.addIdToOrder(newOrder.key);
+
+    this.addOrderToRestaurant(newOrder.key);
+  });
+  }
+
+addOrderToRestaurant(id) {
 
     console.log(id);
 
@@ -470,13 +233,12 @@ export class ChooseAddressPage implements OnInit {
       this.newOrderAddresses = snapshot.val().addresses;
       this.newOrderItems = snapshot.val().items;
 
-      console.log(this.newOrderItems);
-
       this.newOrderItems.forEach(snap => {
         console.log(snap);
 
         this.service.addNewOrdersToEachRestaurantExtra(id, snap.restaurantId, snap.restaurantName,
-          snap, snap.image, snap.name, snap.price, snap.product_id, snap.quantity, snap.restaurantId, snap.restaurantName, this.newOrderDetails);
+          snap, snap.image, snap.name, snap.price, snap.product_id, snap.quantity,
+          snap.restaurantId, snap.restaurantName, this.newOrderDetails);
 
         this.service.categorizedRestaurantOrder(id, snap.restaurantId, snap.owner_id);
 
@@ -484,4 +246,75 @@ export class ChooseAddressPage implements OnInit {
       });
     });
   }
+
+  async presentAlert(title, msg) {
+		const alert = await this.alertCtrl.create({
+			header: title,
+			message: msg,
+			buttons: ['OK']
+		});
+		await alert.present();
+	}
+
+async presentNeedsChange(item) {
+		const alert = await this.alertCtrl.create({
+      header: 'Necessita de Troco para quanto?',
+      message: 'Total a pagar com Frete e Desconto: R$' + (this.service.total - (0.1 * this.service.total) + this.currentUserAddress.fare),
+			inputs: [
+				{
+				  name: 'change',
+				  type: 'text',
+				  placeholder: 'Insira o valor'
+        },
+      ],
+			buttons: [{
+				text: 'Sim',
+				handler: (res) => {
+          console.log(res.change);
+          this.paymentChange = res.change;
+          this.continueSendingOrder(item);
+        }
+			}]
+		});
+		await alert.present();
+	}
+async presentNeedsPhone(item) {
+		const alert = await this.alertCtrl.create({
+      header: 'Contato',
+			message: 'Por favor, insira um telefone para contato',
+			inputs: [
+				{
+				  name: 'phone',
+				  type: 'text',
+				  placeholder: '(85) 9 8888-8888'
+        },
+      ],
+			buttons: [{
+				text: 'Sim',
+				handler: (res) => {
+          console.log(res.phone);
+          this.userProfiles.phone = res.phone;
+          this.placeOrder(item);
+        }
+			}]
+		});
+		await alert.present();
+  }
+  
+  
+
+	async presentConfirmAlert(item) {
+		const alert = await this.alertCtrl.create({
+      header: 'Deseja confirmar esta ação?',
+      message: 'Total a pagar com Frete: R$' + (this.service.total + this.currentUserAddress.fare),
+			buttons: [{
+				text: 'Sim',
+				handler: () => {
+          this.paymentChange = 0;
+					this.continueSendingOrder(item);
+				}
+			}]
+		});
+		await alert.present();
+	}
 }

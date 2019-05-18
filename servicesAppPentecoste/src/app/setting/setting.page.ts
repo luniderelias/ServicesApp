@@ -13,9 +13,6 @@ import { Storage } from '@ionic/storage';
 })
 export class SettingPage {
 	user: any;
-	profile = '/profile';
-	forgot = '/forgot';
-	myAddress = '/my-address';
 	constructor(
 		private storage: Storage,
 		public menuCtrl: MenuController,

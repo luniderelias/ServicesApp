@@ -17,9 +17,9 @@
                     <div class="wrap-top">
 
                         <div class="avt-thumb">
-                            <img src="{{(user.avt != '' && user.avt != null)? user.avt : 'assets/imgs/profile2.jpg' }}">
+                            <img [routerLink]="['/profile']" src="{{(user.avt != '' && user.avt != null)? user.avt: 'assets/imgs/profile2.jpg'}}">
                         </div>
-                        <h2 class="spacing-1 mgb-15 fs-20 capitalize txt1 fw-600">{{user.username}} {{user.fullname}}</h2>
+                        <h2 class="spacing-1 mgb-15 fs-20 capitalize txt1 fw-600">{{user.username}}</h2>
 
                     </div>
 
