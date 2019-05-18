@@ -5,8 +5,18 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-block">
-                        <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtar pelo Código' (keyup)='updateFilter($event)' />
-                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='items' [sorts]="[{prop: 'name', dir: 'asc'},{prop: 'available', dir: 'asc'},{prop: 'description', dir: 'asc'},{prop: 'price', dir: 'asc'},{prop: 'stock', dir: 'asc'}]">
+                        <table style="width: 100%">
+                            <tr>
+                                <td>
+                                    <input type='text' style='padding:4px;margin:5px auto;' placeholder='Filtrar pelo Código' (keyup)='updateFilter($event)' />
+                                </td>
+                                <td style="text-align:right;">
+                                    <a [routerLink]="['/produtos/adicionar']" style="margin-top:15px" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary " *ngIf="isAdmin ">Adicionar Novo Produto</a>
+                                </td>
+                            </tr>
+                        </table>
+                        <ngx-datatable #table class="bootstrap" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50 " [rowHeight]=" 'auto' " [limit]="10 " [rows]='items' [sorts]="[{prop: 'name', dir: 'asc'},{prop: 'available', dir:
+                                    'asc'},{prop: 'description', dir: 'asc'},{prop: 'price', dir: 'asc'},{prop: 'stock', dir: 'asc'}] ">
                             <ngx-datatable-column prop="image_firebase_url">
 
                                 <ng-template let-column="Imagem" ngx-datatable-header-template>
@@ -14,7 +24,7 @@
                                 </ng-template>
                                 <ng-template let-value="value" ngx-datatable-cell-template>
 
-                                    <img style="width:100px;height:100px;" class="thumbnail" src="{{value}}">
+                                    <img style="width:100px;height:100px;" class="thumbnail" src="{{value}} ">
                                 </ng-template>
 
                             </ngx-datatable-column>
@@ -67,16 +77,12 @@
                                 </ng-template>
 
                                 <ng-template let-value="value" ngx-datatable-cell-template>
-                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/produtos/detalhes/{{value}}">Visualizar</button>
+                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary " routerLink="/produtos/detalhes/{{value}}">Visualizar</button>
                                 </ng-template>
                             </ngx-datatable-column>
 
 
                         </ngx-datatable>
-
-                        <div align="right" style="margin-top:15px;">
-                            <a [routerLink]="['/produtos/adicionar']" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" *ngIf="isAdmin">Adicionar Novo Produto</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -84,4 +90,3 @@
     </div>
 </section>
 <!-- Filter Datatable Options Ends -->
-<app-modal [userUid]="userUid"></app-modal>

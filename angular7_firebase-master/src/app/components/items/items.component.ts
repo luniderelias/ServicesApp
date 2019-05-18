@@ -46,6 +46,7 @@ export class ItemsComponent implements OnInit {
         a['$key'] = item.key;
 
         console.log(a);
+        
 
         this.items.push(a as ItemInterface);
         this.temp.push(a as ItemInterface);
