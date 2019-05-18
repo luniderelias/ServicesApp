@@ -19,64 +19,31 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
-    <div class="your-cart bg-thime" *ngIf="!myOrderList">
+<ion-content fullscreen>
+    <div *ngIf="!myOrderList">
         Você não possui nenhum pedido
     </div>
 
+    <div class="movies" *ngIf="myOrderList">
+        <ion-virtual-scroll [items]="myOrderList">
+            <div class="movie" *virtualItem="let order">
+                <div class="order-card" *ngFor="let item of order.items">
+                    <div class="poster" [routerLink]="['/order-details', {id: order.id}]">
+                        <img class="poster-effect" [src]="item.image">
+                    </div>
 
+                    <div class="data" [routerLink]="['/order-details', {id: order.id}]">
+                        <div class="title max-lines">{{item.name}}</div>
+                        <div class="price mgb-5"><b>Sub-Total:</b> R${{item.quantity*item.price}}</div>
+                        <div class="stock">{{item.quantity}} un.</div>
+                    </div>
 
-    <div class="your-cart bg-thime" *ngIf="myOrderList">
-
-
-        <ion-card *ngFor="let orders of myOrderList">
-            <ion-card-content [routerLink]="['/order-details', {id: orders.id}]">
-                <ion-row *ngFor="let post of orders.items">
-
-
-
-                    <ion-col col-3>
-                        <div *ngIf="post.image" class="img-box">
-                            <img data-src="{{post.image}}">
-                        </div>
-                        <div *ngIf="!post.image" class="img-box">
-                            <img src="assets/imgs/suit_PNG8132.png">
-
-                        </div>
-
-                    </ion-col>
-
-
-
-
-                    <ion-col col-9>
-
-                        <p item-title><b>Nome:</b> {{post.name}}</p>
-                        <p item-title><b>Preço:</b> R$ {{post.price}}</p>
-                        <p item-title><b>Quantidade:</b> {{post.quantity}}</p>
-
-                    </ion-col>
-
-
-
-
-
-
-
-
-
-
-                </ion-row>
-
-                <p item-title style="text-align:right;"><b>Status:</b>{{orders.status}}</p>
-
-                <p item-title style="text-align:right;"><b>Total:</b>R$ {{1 * orders.total}}</p>
-            </ion-card-content>
-        </ion-card>
-
-
-
+                </div>
+                <hr>
+                <div class="status" style="text-align:right;"><i>{{order.status === 'Pendente' ? 'Aguardando Aprovação' : order.status}}</i></div>
+                <div class="total" style="text-align:right;"><b>Total:R${{1 * order.total}}</b></div>
+            </div>
+        </ion-virtual-scroll>
     </div>
 
 

@@ -32,6 +32,11 @@ export const environment = {
 		path: '/home',
 		component: 'HomePage',
 		icon: 'md-search',
+	},{
+		name: 'Categorias',
+		path: '/categories',
+		component: 'CategoriesPage',
+		icon: 'md-albums',
 	}, {
 		name: 'Meus Pedidos',
 		path: '/orders',

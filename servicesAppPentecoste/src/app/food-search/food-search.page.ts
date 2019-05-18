@@ -172,9 +172,7 @@ export class FoodSearchPage implements OnInit {
 					item_dis: minute,
 				});
 			});
-			console.log(this.nearestHotels);
 		});
-		console.log(this.nearestHotels);
 		function calcDistance(destination, destination1, res_id, snap) {
 			var userLists: any;
 			firebase.auth().onAuthStateChanged(function (user) {

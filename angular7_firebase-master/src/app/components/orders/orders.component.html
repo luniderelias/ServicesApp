@@ -10,7 +10,7 @@
                             <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtrar por Cliente' (keyup)='updateFilter($event,"name")' />
                             <input type='text' style='padding:8px;margin:15px auto;width:30%;' placeholder='Filtrar por Status' (keyup)='updateFilter($event,"status")' />
                         </div>
-                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='orders' [sorts]="[{prop: 'timeStamp', dir: 'asc'}]">
+                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='orders' [sorts]="[{prop: 'timeStamp', dir: 'desc'}]">
 
                             <ngx-datatable-column prop="customerDetails.displayName" name="customerDetails.displayName">
                                 <ng-template let-column="customerDetails.displayName" ngx-datatable-header-template>

@@ -33,29 +33,16 @@ export class CategoriesPage implements OnInit {
 		public service: ServiceProvider
   
   ) { 
-		//this.presentLoading();
-		
-		
 		this.route.params.subscribe(params => {
 			
-			console.log(params);
 			
-			this.id = params.id;
-			this.title = params.title;
-			this.owner_id = params.owner_id;
-			
-			
-			this.service.getRestaurantCategoryLists(this.id).on('value', snapshot =>{
-					
-					
+			this.service.getRestaurantCategoryLists('-LewaVfmdY4bXgzF_SAD').on('value', snapshot => {
 					
 						this.categoryList = [];
 
-						
 						//this.loading.dismiss().then(() => {	
 							snapshot.forEach( snap =>{
 								this.categoryList.push({
-							  
 								id: snap.key,
 								category: snap.val().cat_id,
 								title: snap.val().cat_name,

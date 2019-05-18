@@ -100,7 +100,6 @@ export class ProductDetailsPage implements OnInit {
 
 									if (snap.key == this.service.cart.line_items[item].extra[extras].id) {
 
-
 										this.currentExtraItemQuantity = this.service.cart.line_items[item].extra[extras].quantity;
 										console.log(this.service.cart.line_items[item].extra[extras].quantity);
 									}

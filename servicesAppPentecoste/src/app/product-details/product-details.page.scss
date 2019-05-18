@@ -1,76 +1,86 @@
-.top-slide{
-	position: relative;
-	.wrap-slide{
-		z-index: 10;
-		position: relative;
-		.slide-zoom{
-			height: 100%;
-		}
-		.thumb{
-			height: 300px;
-			width: 100%;
-			img{
-				height: 100%;
-				min-width: 100%;
-			}
-		}
-	}
-	.title{
-		z-index: 100;
-		position: absolute;
-		bottom: 0px;
-		left: 0;
-		right: 0;
-		display: flex;
-		align-items: flex-end;
-		/*background-image: linear-gradient(0deg, rgba(0,0,0,0.7), rgba(0,0,0,0));*/
-		.wrap-txt{
-			flex: 1;
-		}
-	}
+.top-slide {
+    position: relative;
+    .wrap-slide {
+        z-index: 10;
+        position: relative;
+        .slide-zoom {
+            height: 100%;
+        }
+        .thumb {
+            height: 300px;
+            width: 100%;
+            img {
+                height: 100%;
+                min-width: 100%;
+            }
+        }
+    }
 }
 
-
-.fact{
-	display:flex;
-	border-bottom: 1px solid #ebebeb;
-	>div{
-		overflow: auto;
-		flex: 1;
-	}
-}
-.wrap-quantity{
-	display: flex;
-	.quantity{
-		flex: 1;
-		display: flex;
-	}
-	ion-input{
-		height: 100%;
-	}
-}
-.social{
-	display: flex;
-	border-bottom: 1px solid #ebebeb;
-	button{
-		flex: 1;
-	}
+hr {
+    border: 0;
+    clear: both;
+    display: block;
+    width: 100%;
+    background-color: #888;
+    height: 1px;
 }
 
-.wrap-related{
-	width: 130%;
-	ion-slides{
-		width: 100%;
-	}
-	.slide-zoom{
-		height: 100%;
-	}
-	.thumb{
-		height: 150px;
-	}
-	img{
-		width: 100%;
-		min-height: 100%;
-		max-height: unset;
-	}
+.title {
+    z-index: 100;
+    position: relative;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: flex-end;
+    /*background-image: linear-gradient(0deg, rgba(0,0,0,0.7), rgba(0,0,0,0));*/
+    .wrap-txt {
+        flex: 1;
+    }
+}
+
+.fact {
+    display: flex;
+    border-bottom: 1px solid #ebebeb;
+    >div {
+        overflow: auto;
+        flex: 1;
+    }
+}
+
+.wrap-quantity {
+    display: flex;
+    .quantity {
+        flex: 1;
+        display: flex;
+    }
+    ion-input {
+        height: 100%;
+    }
+}
+
+.social {
+    display: flex;
+    border-bottom: 1px solid #ebebeb;
+    button {
+        flex: 1;
+    }
+}
+
+.wrap-related {
+    width: 130%;
+    ion-slides {
+        width: 100%;
+    }
+    .slide-zoom {
+        height: 100%;
+    }
+    .thumb {
+        height: 150px;
+    }
+    img {
+        width: 100%;
+        min-height: 100%;
+        max-height: unset;
+    }
 }

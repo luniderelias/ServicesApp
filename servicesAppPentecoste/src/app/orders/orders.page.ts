@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Events , LoadingController} from '@ionic/angular';
+import { Events, LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Values } from '../../providers/values';
 import { ServiceProvider } from '../../providers/service';
@@ -10,122 +10,87 @@ import { Router } from '@angular/router';
 
 import { ActivatedRoute } from '@angular/router';
 
-
-
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.page.html',
-  styleUrls: ['./orders.page.scss'],
+	selector: 'app-orders',
+	templateUrl: './orders.page.html',
+	styleUrls: ['./orders.page.scss'],
 })
 export class OrdersPage implements OnInit {
-	
+
 	currentUser: any;
 	myOrderList: any = {};
-	id:any;
-	
-	params:any = {};
-	
+	id: any;
+
+	params: any = {};
+
 	loading: any;
-	
+
 	tests: any;
 
-  constructor(public events: Events, public service: ServiceProvider, 
-  public values:Values, private payPal: PayPal, private stripe: Stripe,
-  private router: Router, private route: ActivatedRoute, public loadingCtrl: LoadingController) { 
-  
-			  this.currentUser = firebase.auth().currentUser;
-			  
-			  this.tests = "name";
-	  
-	  this.myOrderList = [];
-			//this.params.data.items = [];
-			/**
-			this.presentLoading();
+	constructor(
+		private storage: Storage, public events: Events, public service: ServiceProvider,
+		public values: Values, private payPal: PayPal, private stripe: Stripe,
+		private router: Router, private route: ActivatedRoute, public loadingCtrl: LoadingController) {
 			
-			
-						this.myOrderList = [];
-			
-				this.service.getMyOrderList(this.currentUser.uid).on('value', snapshot =>{
-					
-					
-							//this.loading.dismiss().then(() => {
-											console.log(snapshot.val());
-										 snapshot.forEach( snap => {
-											 this.myOrderList.push({
-												  id: snap.key,
-												 //customerDetails: snap.val().customerDetails,
-												  items: snap.val().items,
-												  total: snap.val().total,
-												  status: snap.val().status,
-												  timeStamp: snap.val().timeStamp
-										   });
-										  });
-										
-										  
-										  console.log(this.myOrderList);
-							//});
-					//this.params.data.items = [];
-				
-			  });
-			
-						*/
-			
-		
-  }
-  
- 
+			this.myOrderList = [];
 
-  ngOnInit() {
-	  
-			
-			
-	  
-			
-	  
-  
-  }
-  
-  
-  async presentLoading() {
+			this.tests = "name";
+			this.presentLoading();
+			this.getOrders();
+
+	}
+
+	ngOnInit() {
+	}
+
+	async presentLoading() {
 		this.loading = await this.loadingCtrl.create({
 			message: 'Carregando',
 			duration: 2000
 		});
 		return await this.loading.present();
 	}
-	
-	ionViewWillEnter(){
-		
-		
-		
-		this.presentLoading();
-			
-			
-						this.myOrderList = [];
-			
-				this.service.getMyOrderList(this.currentUser.uid).on('value', snapshot =>{
-					
-					
-							//this.loading.dismiss().then(() => {
-											console.log(snapshot.val());
-										 snapshot.forEach( snap => {
-											 this.myOrderList.push({
-												  id: snap.key,
-												 //customerDetails: snap.val().customerDetails,
-												  items: snap.val().items,
-												  total: snap.val().total,
-												  status: snap.val().status,
-												  timeStamp: snap.val().timeStamp
-										   });
-										  });
-										
-										  
-										  console.log(this.myOrderList);
-							//});
-					//this.params.data.items = [];
-				
-			  });
-		
+
+	ionViewWillEnter() {
 	}
 
+	getOrders() {
+		this.service.getMyOrderList().snapshotChanges().subscribe(snapshot => {
+			this.myOrderList = [];
+			snapshot.forEach(snap => {
+					 let a = snap.payload.val();
+					a['$key'] = snap.key;
+	
+					this.myOrderList.push(a as OrderInterface);
+				});
+			this.myOrderList = this.myOrderList.reverse();
+			});
+  	}
+
 }
+
+export interface OrderInterface {
+
+	$key?:string;
+	addresses?:any;
+	customerDetails?: any;
+	items?: any;
+	payments: any;
+	address_id?:string;
+	created?:string;
+	item_qty?:string;
+	order_date_time?:string;
+	payment_id?:string;
+	product_firebase?:string;
+	product_id?:string;
+	product_image?:string;
+	product_price?:string;
+	product_total_price?:string;
+	restaurant_id?:string;
+	restaurant_name?:string;
+	status?:string;
+	user_id?:string;
+	user_name?:string;
+	restaurant_owner_id?:string;
+	checked?:string;
+  }

@@ -99,12 +99,16 @@ export class AddItemComponent implements OnInit {
 			if (category.key != null || category.key !== 'null') {
 				res['$key'] = category.key;
 			}
-
+			const categories = this.categories;
 			this.category_details = res as CategoryInterface;
+			var found = this.categoryList.find(function(element) {
+				return element.$key === categories;
+			  });
 
+			console.log(found)
 			const item = {
 				available: this.available,
-				category: this.category,
+				category: found.cat_name,
 				description: this.description,
 				product_id: this.product_id,
 				name: this.name,

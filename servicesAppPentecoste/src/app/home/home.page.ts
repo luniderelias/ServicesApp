@@ -50,7 +50,6 @@ export class HomePage {
 	) {
 		this.searchControl = new FormControl();
 		this.items = [];
-		this.presentLoading();
 		this.events.subscribe('cart_list: change', (lst) => {
 			this.list_cart = lst;
 		});
@@ -60,13 +59,6 @@ export class HomePage {
 				console.log(user);
 				this.id_user = user.uid;
 			}
-		});
-
-
-		this.platform.ready().then(() => {
-			var options = {
-				timeout: 5000
-			};
 		});
 
 		this.searchControl.valueChanges
@@ -156,7 +148,7 @@ export class HomePage {
 			this.list_cart = this.list_cart.concat(itemCv);
 		}
 
-		this.presentToast();
+		//this.presentToast();
 
 		// this.list_cart = new Array();
 		this.events.publish('cart_list: change', this.list_cart);
@@ -178,26 +170,18 @@ export class HomePage {
 	}
 
 	ionViewWillEnter() {
-		this.service.getAllChooseItems().on('value', snapshot => {
-			
-		this.items = [];
-			snapshot.forEach(snap => {
-				this.items.push({
-					id: snap.key,
-					image_firebase_url: snap.val().image_firebase_url,
-					name: snap.val().name,
-					price: snap.val().price,
-					stock: snap.val().stock,
-					category: snap.val().category,
-					restaurant_image: snap.val().restaurant_image,
-					restaurant_lat: snap.val().restaurant_lat,
-					restaurant_long: snap.val().restaurant_long,
-					restaurant_name: snap.val().restaurant_name,
-					res_id: snap.val().res_id,
-					owner_id: snap.val().user_id,
+		this.service.getAllChooseItems().snapshotChanges().subscribe(snapshot => {
+			this.items = [];
+
+				snapshot.forEach(snap => {
+					 let a = snap.payload.toJSON();
+					a['$key'] = snap.key;
+	
+					console.log(a as ItemInterface);
+					this.items.push(a as ItemInterface);
 				});
 			});
-		});
+
 	}
 
 	call(data) {

@@ -182,7 +182,7 @@ export class ServiceProvider {
 		});
 	}
 
-	addOrders(order: String, total: number, uid: String, payments: String, userProfiles: String, currentUserAddress: any) {
+	addOrders(order: string, total: number, uid: string, payments: string, userProfiles: string, currentUserAddress: any) {
 
 		console.log(userProfiles);
 		return this.orderList.push({
@@ -192,7 +192,7 @@ export class ServiceProvider {
 			payments: payments,
 			customerDetails: userProfiles,
 			addresses: currentUserAddress,
-			status: "Queued",
+			status: 'Pendente',
 			timeStamp: firebase.database.ServerValue.TIMESTAMP,
 			reverseOrder: 0 - Date.now()
 		});
@@ -234,13 +234,6 @@ export class ServiceProvider {
 
 	addNewOrdersToEachRestaurantExtra(orderKey, restaurantKey, restaurantName,/**extras,*/order, imagess, name, price, productId, quantity, restaurantId, restaurantNames, newOrderDetails) {
 
-		console.log(orderKey);
-		console.log(restaurantKey);
-		console.log(restaurantName);
-		console.log(order);
-		console.log(newOrderDetails);
-
-
 		return this.categorizedOrders.child(restaurantKey).child(orderKey).set({
 			addresses: newOrderDetails.addresses,
 			customerDetails: newOrderDetails.customerDetails,
@@ -270,10 +263,10 @@ export class ServiceProvider {
 	}
 
 
-	getMyOrderList(id) {
-		console.log(id);
-		this.orderLists = this.orderList.orderByChild("email").equalTo(id);
-		return this.orderLists;
+	getMyOrderList() {
+		return this.af.list('/orders', (ref) => {
+			return ref.orderByChild('email').equalTo(firebase.auth().currentUser.uid);
+		});
 	}
 
 
@@ -411,10 +404,9 @@ export class ServiceProvider {
 	}
 
 	getAllChooseItems(): any {
-
-		console.log(this.allChoosenItems);
-		return this.allChoosenItems;
-
+		return this.af.list('/items', (ref) => {
+			return ref.limitToFirst(20).orderByChild('popularity');
+		});
 	}
 
 	getFilterItems(search): any {

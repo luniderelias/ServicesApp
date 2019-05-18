@@ -59,7 +59,6 @@ export class NavbarComponent {
 
     onLogout() {
         this.afsAuth.auth.signOut();
-        this.router.navigate(['/user/login']);
     }
 
 
@@ -94,8 +93,11 @@ export class NavbarComponent {
         this.reloadChildView();
     }
 
-    removeNotification(id) {
-        this.firebaseService.deleteNotification(id);
+    removeNotification(notification, route) {
+        if (route) {
+            this.router.navigate([route]);
+        }
+        this.firebaseService.deleteNotification(notification.$key);
         this.getNotifications();
     }
 

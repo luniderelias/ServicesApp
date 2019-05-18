@@ -33,88 +33,64 @@
                         <img src="{{params.data?.image_firebase_url}}">
                     </div>
                 </ion-slide>
-
-
             </ion-slides>
         </div>
-        <div class="title" padding>
-            <div class="wrap-txt">
-                <h3 class="txt-primary fs-22 spacing-1 fw-600"><b>{{params.data?.name}}</b></h3>
-            </div>
-
-            <span *ngIf="!favorite" style="float:right;padding-right:20px;">
-
-								<ion-icon class="mgr-5 txt-danger" name="heart-empty" (click)="addToFavourite(params.data)" style="position:relative; font-size:2em;"></ion-icon>
-													
-
-								
-								
-								
-								</span>
-
-            <span *ngIf="favorite" style="float:right;padding-right:20px;">
-								<ion-icon class="mgr-5 txt-danger" name="heart" (click)="removeFavourite()" style="position:relative; font-size:2em;"></ion-icon>
-								
-														
-								
-								
-								
-								</span>
-
-        </div>
     </div>
 
-
-    <div class="fact pdl-25 pdr-25 pdb-15 pdt-10">
-        <div text-left class="">
-            <p class="txt3 uppercase spacing-1 fs-12">Descrição</p>
-            <span class="fw-600">
-				<!--
-				{{params.data.name}}
-				-->
-				
-				{{params.data?.description}}
-			</span>
-
-
-            <!--		
-
-				<br>
-				<div class="description pdl-25 pdr-25">
-					<h5 class="uppercase fs-12 spacing-1 txt1"></h5>
-					<p class="txt3"></p>
-					<br>
-				</div>
-				
-				-->
-
+    <div class="title" padding>
+        <div class="wrap-txt">
+            <h3 class="fs-18 spacing-1 fw-600"><b>{{params.data?.name}}</b></h3>
         </div>
-        <div text-right class="price">
-            <p class="txt3 spacing-1 uppercase fs-12">Preço</p>
-            <span class="fw-600">
-				R$ {{params.data?.price}}
-			</span>
-
-
-        </div>
+        <span *ngIf="!favorite" style="float:right;padding-right:10px;">
+            <ion-icon class="txt-danger" name="heart-empty" (click)="addToFavourite(params.data)" style="position:relative; font-size:2em; margin-bottom:0.5em"></ion-icon>
+        </span>
+        <span *ngIf="favorite" style="float:right;padding-right:10px;">
+            <ion-icon class="txt-danger" name="heart" (click)="removeFavourite()" style="position:relative; font-size:2em; margin-bottom:0.5em"></ion-icon>
+        </span>
     </div>
 
-
-
+    <div class="pdl-15 pdr-15">
+        <div class="price mgb-10">
+            <span class="fw-700 fs-22">
+				R${{params.data?.price}}
+            </span>
+        </div>
+        <hr>
+        <div>
+            <table style="width:100%" class="mgb-10">
+                <tr>
+                    <td class="fs-16" style="color: grey">
+                        Categoria
+                    </td>
+                    <td class="fw-600 fs-14">
+                        {{params.data?.category}}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="fs-16" style="color: grey">
+                        Estoque
+                    </td>
+                    <td class="fw-600 fs-14">
+                        {{params.data?.stock}} un.
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <hr>
+        <div>
+            <span class="fw-400 fs-16">
+	    		{{params.data?.description}}
+    		</span>
+        </div>
+        <hr>
+    </div>
     <ion-list class="extra-list" *ngIf="params.data?.extraOptions">
-
         <ion-list-header class="header" text-center>ITENS ADICIONAIS</ion-list-header>
-
         <ion-item *ngFor="let option of params.data.extraOptions; let i= index" class="list-item">
             <ion-label>{{option.name}} ({{option.value}} $)</ion-label>
             <ion-toggle [(ngModel)]="option.selected" (ionChange)="checkOptions(option)" checked="true"></ion-toggle>
         </ion-item>
-
     </ion-list>
-
-
-
-
 </ion-content>
 
 <ion-footer>
