@@ -16,161 +16,150 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 
 @Component({
-  selector: 'app-new-address',
-  templateUrl: './new-address.page.html',
-  styleUrls: ['./new-address.page.scss'],
+	selector: 'app-new-address',
+	templateUrl: './new-address.page.html',
+	styleUrls: ['./new-address.page.scss'],
 })
 export class NewAddressPage implements OnInit {
-	
-		form: any;
-	  currentUser: any;
-	  errorMessage: any;
-	  customer: any;
-	  restaurantName: any;
-	  cityName: any;
-	  cityDistrictName: any;
-	  streetName: any;
-	  apartmentOfficeName: any;
-  
-	public signupForm;
+
+	form: any;
+	currentUser: any;
+	errorMessage: any;
+	customer: any;
+	restaurantName: any;
+	cityName: any;
+	cityDistrictName: any;
+	streetName: any;
+	apartmentOfficeName: any;
+
+	public addressForm;
 	loading: any;
+	submitted = false;
 
-   constructor(public events: Events,
-				public service: ServiceProvider, 
-				public values:Values, private payPal: PayPal, 
-				private stripe: Stripe,
-				private router: Router,
-				private route: ActivatedRoute,
-				public loadingCtrl: LoadingController,
-				public alertCtrl: AlertController, 
-				public formBuilder: FormBuilder) { 
-				
-				
+	constructor(public events: Events,
+		public service: ServiceProvider,
+		public values: Values, 
+		private payPal: PayPal,
+		private stripe: Stripe,
+		private router: Router,
+		private route: ActivatedRoute,
+		public loadingCtrl: LoadingController,
+		public alertCtrl: AlertController,
+		public formBuilder: FormBuilder) {
 
-		
-	   	    this.form = {};
-			this.currentUser = firebase.auth().currentUser;
-			console.log(this.currentUser);
-			
-		this.signupForm = formBuilder.group({
-			city: ['', Validators.compose([Validators.required,])],
-			district: ['', Validators.compose([Validators.required,])],
+		this.form = {};
+		this.currentUser = firebase.auth().currentUser;
+		console.log(this.currentUser);
+
+		this.addressForm = formBuilder.group({
+			city: ['', Validators.compose([Validators.required])],
+			district: ['', Validators.compose([Validators.required])],
 			street: ['', Validators.compose([Validators.required])],
 			number: ['', Validators.compose([Validators.required])],
-			phone: ['', Validators.compose([ Validators.required])],
+			phone: ['', Validators.compose([Validators.required])],
 			complement: ['', Validators.compose([Validators.required])],
 		})
-    
-	this.customer = [];
-	
-	this.service.getRestaurantUserProfile(this.currentUser.uid).on('value', snapshot => {
-	  
-	  this.customer.displayName = snapshot.val().displayName;
-	  this.customer.email = snapshot.val().email;
 
-    });
-	
-	
-	
-	
-	this.service.getRestaurantsList().on('value', snapshot => {
+		this.customer = [];
 
-      this.restaurantName = [];
+		this.service.getRestaurantUserProfile(this.currentUser.uid).on('value', snapshot => {
 
-      snapshot.forEach( snap => {
-        this.restaurantName.push({
-        id: snap.key,
-        name: snap.val().title,
-      
-        });
-      });
-    });
-	
-	
-	this.service.getCityName().on('value', snapshot => {
+			this.customer.displayName = snapshot.val().displayName;
+			this.customer.email = snapshot.val().email;
 
-      this.cityName = [];
+		});
 
-      snapshot.forEach( snap => {
-        this.cityName.push({
-        id: snap.key,
-        name: snap.val().name
-        });
-      });
-    });
-	
-	this.service.getCityDistrictName().on('value', snapshot => {
 
-      this.cityDistrictName = [];
 
-      snapshot.forEach( snap => {
-        this.cityDistrictName.push({
-			id: snap.key,
-			name: snap.val().name
-        });
-      });
-    });
-	
-	
-	this.service.getStreetName().on('value', snapshot => {
 
-      this.streetName = [];
+		this.service.getRestaurantsList().on('value', snapshot => {
 
-      snapshot.forEach( snap => {
-        this.streetName.push({
-			id: snap.key,
-			name: snap.val().name
-        });
-      });
-    });
-	
-	this.service.getApartmentOfficeName().on('value', snapshot => {
+			this.restaurantName = [];
 
-      this.apartmentOfficeName = [];
+			snapshot.forEach(snap => {
+				this.restaurantName.push({
+					id: snap.key,
+					name: snap.val().title,
 
-      snapshot.forEach( snap => {
-        this.apartmentOfficeName.push({
-			id: snap.key,
-			name: snap.val().name
-        });
-      });
-    });
-		
+				});
+			});
+		});
+
+
+		this.service.getCityName().on('value', snapshot => {
+
+			this.cityName = [];
+
+			snapshot.forEach(snap => {
+				this.cityName.push({
+					id: snap.key,
+					name: snap.val().name
+				});
+			});
+		});
+
+		this.service.getCityDistrictName().on('value', snapshot => {
+
+			this.cityDistrictName = [];
+
+			snapshot.forEach(snap => {
+				this.cityDistrictName.push({
+					id: snap.key,
+					name: snap.val().name
+				});
+			});
+		});
+
+
+		this.service.getStreetName().on('value', snapshot => {
+
+			this.streetName = [];
+
+			snapshot.forEach(snap => {
+				this.streetName.push({
+					id: snap.key,
+					name: snap.val().name
+				});
+			});
+		});
+
+		this.service.getApartmentOfficeName().on('value', snapshot => {
+
+			this.apartmentOfficeName = [];
+
+			snapshot.forEach(snap => {
+				this.apartmentOfficeName.push({
+					id: snap.key,
+					name: snap.val().name
+				});
+			});
+		});
+
 	}
 
-  ngOnInit() {
-  }
-  
-  
-  addNewAddress(){
-      
-  }
-  
-  
-  signupUser(){
-		if (!this.signupForm.valid) {
-			console.log(this.signupForm.value);
+	ngOnInit() {
+	}
+
+
+	addNewAddress() {
+
+	}
+
+
+	sendAddress() {
+		if (!this.addressForm.valid) {
+			this.submitted = true;
 		} else {
 			this.presentLoading();
-			
 
-			this.service.saveNewAddress(this.signupForm.value.city,
-					  this.signupForm.value.district, this.signupForm.value.street , this.signupForm.value.number,
-					  this.customer.displayName, this.customer.email, this.signupForm.value.phone, 
-					  this.signupForm.value.complement, this.currentUser.uid)
-					  .then(() =>{
-						//this.nav.pop();
-						
-						console.log("Address added");
-						
-						this.router.navigateByUrl('/cart');
-						
-					  });
-			
-			
-				
-
-			
+			this.submitted = false;
+			this.service.saveNewAddress(this.addressForm.value.city,
+				this.addressForm.value.district, this.addressForm.value.street, this.addressForm.value.number,
+				this.customer.displayName, this.customer.email, this.addressForm.value.phone,
+				this.addressForm.value.complement, this.currentUser.uid)
+				.then(() => {
+					this.router.navigateByUrl('/cart');
+				});
 		}
 	}
 

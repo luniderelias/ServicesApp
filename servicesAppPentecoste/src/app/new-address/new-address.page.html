@@ -20,92 +20,46 @@
 
 <ion-content padding>
     <div class="wrapp-pst" padding>
-
-        <h2>Adicionar Novo Endereço</h2>
-
-        <div class="wrapp-form mgt--50" padding>
-            <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
+        <div class="mgt--50" padding>
+            <form [formGroup]="addressForm" (submit)="sendAddress()" novalidate>
                 <br>
-
-
-
-
-
-                <!---
-						<ion-input #email formControlName="city" type="text" placeholder="Your name" [class.invalid]="!signupForm.controls.city.valid && signupForm.controls.city.dirty" class=""></ion-input>
-						--->
-
                 <ion-list>
-
-
-
                     <ion-item>
-                        <ion-label>Cidade</ion-label>
-                        <ion-select formControlName="city" okText="Okay" cancelText="Dismiss" [class.invalid]="!signupForm.controls.city.valid && signupForm.controls.city.dirty">
+                        <ion-label>Selecione a cidade</ion-label>
+                        <ion-select formControlName="city" okText="Confirmar" cancelText="Fechar" [class.invalid]="!addressForm.controls.city.valid && addressForm.controls.city.dirty">
                             <ion-select-option *ngFor="let item of cityName" value="{{item.name}}">{{item.name}}</ion-select-option>
-
                         </ion-select>
+                        <span style="color: red" *ngIf="submitted && addressForm.controls['city'].hasError('required')">*Campo Obrigatório</span>
                     </ion-item>
 
-                </ion-list>
-
-
-                <div class="error-message" *ngIf="!signupForm.controls.city.valid && signupForm.controls.city.dirty">
-                    <p class="fs-11 mgt-5">Por favor, selecione uma cidade válida.</p>
-                </div>
-                <br>
-                <ion-label stacked class="mgb-5">Bairro</ion-label>
-                <ion-list class="ani-bottom-to-top mgb-0">
                     <ion-item class="white-opct bdra-30">
-                        <ion-input formControlName="district" type="text" placeholder="Seu Bairro" class=""></ion-input>
+                        <ion-input formControlName="district" type="text" placeholder="Bairro"></ion-input>
+                        <span style="color: red" *ngIf="submitted && addressForm.controls['district'].hasError('required')">*Campo Obrigatório</span>
                     </ion-item>
-                </ion-list>
-                <br>
-                <ion-label stacked class="mgb-5">Endereço</ion-label>
-                <ion-list class="ani-bottom-to-top mgb-0">
+
                     <ion-item class="white-opct bdra-30">
-                        <ion-input #email formControlName="street" type="text" placeholder="Seu endereço" class=""></ion-input>
+                        <ion-input formControlName="street" type="text" placeholder="Rua" class=""></ion-input>
+                        <span style="color: red" *ngIf="submitted && addressForm.controls['street'].hasError('required')">*Campo Obrigatório</span>
                     </ion-item>
-                </ion-list>
-                <br>
-                <ion-label stacked class="mgb-5">Número</ion-label>
-                <ion-list class="ani-bottom-to-top mgb-0">
+
                     <ion-item class="white-opct bdra-30">
-                        <ion-input #email formControlName="number" type="text" placeholder="Número do Endereço" class=""></ion-input>
+                        <ion-input formControlName="number" type="text" placeholder="Número" class=""></ion-input>
+                        <span style="color: red" *ngIf="submitted && addressForm.controls['number'].hasError('required')">*Campo Obrigatório</span>
                     </ion-item>
-                </ion-list>
-                <br>
 
-                <ion-label stacked class="mgb-5">Telefone</ion-label>
-                <ion-list class="ani-bottom-to-top mgb-0">
                     <ion-item class="white-opct bdra-30">
-                        <ion-input #email formControlName="phone" type="text" placeholder="Seu Telefone/Celular" [class.invalid]="!signupForm.controls.phone.valid && signupForm.controls.phone.dirty" class=""></ion-input>
+                        <ion-input formControlName="complement" type="text" placeholder="Complemento" class=""></ion-input>
+                        <span style="color: red" *ngIf="submitted && addressForm.controls['complement'].hasError('required')">*Campo Obrigatório</span>
                     </ion-item>
-                </ion-list>
-                <br>
 
-                <ion-label stacked class="mgb-5">Complemento</ion-label>
-                <ion-list class="ani-bottom-to-top mgb-0">
                     <ion-item class="white-opct bdra-30">
-                        <ion-input #email formControlName="complement" type="text" placeholder="Complement" class=""></ion-input>
+                        <ion-input formControlName="phone" type="text" placeholder="(85) 9 8888-8888" [class.invalid]="!addressForm.controls.phone.valid && addressForm.controls.phone.dirty" class=""></ion-input>
+                        <span style="color: red" *ngIf="submitted && addressForm.controls['phone'].hasError('required')">*Campo Obrigatório</span>
                     </ion-item>
                 </ion-list>
-
-                <br>
-
-
-
-
 
                 <ion-button expand="full" color="primary" type="submit">Salvar Endereço</ion-button>
-
-
             </form>
         </div>
-
-        <br>
-        <br>
-        <br>
-
     </div>
 </ion-content>

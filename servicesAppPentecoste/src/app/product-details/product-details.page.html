@@ -66,7 +66,7 @@
                         {{params.data?.category}}
                     </td>
                 </tr>
-                <tr>
+                <tr *ngIf="params.data?.category !== 'Serviços'">
                     <td class="fs-16" style="color: grey">
                         Estoque
                     </td>
@@ -84,13 +84,6 @@
         </div>
         <hr>
     </div>
-    <ion-list class="extra-list" *ngIf="params.data?.extraOptions">
-        <ion-list-header class="header" text-center>ITENS ADICIONAIS</ion-list-header>
-        <ion-item *ngFor="let option of params.data.extraOptions; let i= index" class="list-item">
-            <ion-label>{{option.name}} ({{option.value}} $)</ion-label>
-            <ion-toggle [(ngModel)]="option.selected" (ionChange)="checkOptions(option)" checked="true"></ion-toggle>
-        </ion-item>
-    </ion-list>
 </ion-content>
 
 <ion-footer>
