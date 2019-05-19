@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Events, ToastController, LoadingController } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
+import { Events, ToastController, LoadingController, AlertController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ServiceProvider } from '../../providers/service';
@@ -54,6 +54,8 @@ export class ProductDetailsPage implements OnInit {
 		private storage: Storage,
 		public socialSharing: SocialSharing,
 		public service: ServiceProvider,
+		private router: Router,
+		public alertCtrl: AlertController,
 		public values: Values,
 	) {
 
@@ -67,50 +69,23 @@ export class ProductDetailsPage implements OnInit {
 			this.product_id = params.cat_id;
 			this.service.getItemDetail(this.product_id).on('value', (snapshot) => {
 
-				console.log(snapshot.val());
-
-
 				this.params.data = [];
-
-
 				this.params.data.extraOptions = [];
-
 				this.currentExtraItemQuantity = 0;
-
-				console.log(this.service.cart.line_items);
-
 
 				this.service.getItemExtraOptionsDetail(this.product_id).on('value', (snapshot) => {
 
-					console.log(snapshot.val());
-
 					this.extraOptions = [];
-
-
-
-
-
 					snapshot.forEach(snap => {
-
-
 						for (let item in this.service.cart.line_items) {
-
 							if (this.product_id == this.service.cart.line_items[item].product_id) {
 								for (let extras in this.service.cart.line_items[item].extra) {
-
 									if (snap.key == this.service.cart.line_items[item].extra[extras].id) {
-
 										this.currentExtraItemQuantity = this.service.cart.line_items[item].extra[extras].quantity;
-										console.log(this.service.cart.line_items[item].extra[extras].quantity);
 									}
-
 								}
 							}
-
-
 						}
-
-
 						this.extraOptions.push({
 
 							id: snap.key,
@@ -119,14 +94,7 @@ export class ProductDetailsPage implements OnInit {
 							product_id: this.product_id,
 							quantity: this.currentExtraItemQuantity
 						});
-
-
-
 					});
-
-					console.log(this.extraOptions);
-
-
 				});
 
 				this.params.data.id = snapshot.key;
@@ -151,29 +119,27 @@ export class ProductDetailsPage implements OnInit {
 				console.log(this.params.data);
 			});
 		});
-
-
 	}
 
-
-	addToCart(name, price, image, extra) {
-
-
+	addToCart(stock, name, price, image, extra) {
 		var itemAdded = false;
 		for (let item in this.service.cart.line_items) {
-			if (this.product_id == this.service.cart.line_items[item].product_id) {
+			if (this.product_id === this.service.cart.line_items[item].product_id) {
+				if (stock <= 0) {
+					this.presentAlert('Ops!', 'Não temos este produto em estoque no momento.');
+					return;
+				}
 
 				this.extraPrice = 0;
 
 				this.cartsItem = [];
 
-
 				this.service.proqty[this.product_id] += 1;
 
-				console.log(this.service.proqty[this.product_id]);
 				this.cartsItem.name = name;
 				this.cartsItem.image = image;
 				this.cartsItem.price = price;
+				this.cartsItem.stock = stock;
 				this.cartsItem.product_id = this.product_id;
 				this.cartsItem.restaurantId = this.id;
 				this.cartsItem.restaurantName = this.title;
@@ -182,34 +148,20 @@ export class ProductDetailsPage implements OnInit {
 				this.cartsItem.quantity = this.service.cart.line_items[item].quantity;
 
 				this.cartsItem.extra = [];
-
 				this.service.cart.line_items[item] = [];
 
-
-				for (var i = 0; i <= extra.length - 1; i++) {
-
-
-
-					if (this.product_id == extra[i].product_id) {
-
-
-						this.cartsItem.extra[i] = extra[i];
-
-						console.log(this.cartsItem.extra);
-
+				for (let ii = 0; ii <= extra.length - 1; ii++) {
+					if (this.product_id === extra[ii].product_id) {
+						this.cartsItem.extra[ii] = extra[ii];
 					}
-
 				}
-
-
-
 				this.service.cart.line_items[item].image = this.cartsItem.image;
 
 				this.service.cart.line_items[item].name = this.cartsItem.name;
+				
+				this.service.cart.line_items[item].stock = this.cartsItem.stock;
 
 				this.service.cart.line_items[item].product_id = this.cartsItem.product_id;
-
-
 
 				this.service.cart.line_items[item].price = this.cartsItem.price;
 
@@ -221,368 +173,160 @@ export class ProductDetailsPage implements OnInit {
 
 				this.service.cart.line_items[item].extra = extra;
 
-				console.log(this.service.cart.line_items[item].extra);
-
 				if (this.service.cart.line_items[item].extra) {
 
-					for (var i = 0; i <= this.service.cart.line_items[item].extra.length - 1; i++) {
-
-
-
-
-						if (this.product_id == this.service.cart.line_items[item].extra[i].product_id) {
-
-
-							console.log(extra[i].selected);
-
-							if (extra[i].selected == true) {
-								this.service.cart.line_items[item].extra[i].quantity += 1;
+					for (let ii = 0; ii <= this.service.cart.line_items[item].extra.length - 1; ii++) {
+						if (this.product_id === this.service.cart.line_items[item].extra[ii].product_id) {
+							if (extra[ii].selected === true) {
+								this.service.cart.line_items[item].extra[ii].quantity += 1;
+							} else {
+								this.service.cart.line_items[item].extra[ii].quantity += 0;
 							}
-							else {
-								this.service.cart.line_items[item].extra[i].quantity += 0;
-							}
-
-
-							console.log(this.service.total);
-
-
-
 						}
-
 					}
 				}
-
-
-
 				this.service.cart.line_items[item].quantity += 1;
-
-
-
-				console.log(this.service.cart.line_items[item].quantity);
 				this.service.proqty[this.product_id] += 1;
-				console.log(this.service.proqty[this.product_id]);
-
-
 				this.service.total += parseFloat(this.service.cart.line_items[item].price);
 
-				console.log(this.extraPrice);
-
-				console.log(this.service.cart.extraOptions);
-
 				if (this.service.cart.extraOptions) {
-
-					for (var i = 0; i <= this.service.cart.extraOptions.length - 1; i++) {
-
-
-
-
-						if (this.product_id == this.service.cart.extraOptions[i].product_id) {
-
-							this.service.total += parseFloat(this.service.cart.extraOptions[i].value);
-
-							//	this.cartsItem.extra[i] = extra[i];
-
-							console.log(this.service.total);
-
-
-
+					for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
+						if (this.product_id === this.service.cart.extraOptions[ii].product_id) {
+							this.service.total += parseFloat(this.service.cart.extraOptions[ii].value);
 						}
-
 					}
 				}
-
-
-
-				console.log(this.service.cart.extraOptions);
-				console.log(this.service.total);
 				this.values.qty += 1;
 
-				console.log(this.values.qty);
 				var itemAdded = true;
-				console.log(this.service.cart.line_items);
-
-				console.log(this.service.cart);
 			}
 		}
 
 		if (!itemAdded) {
-			console.log(itemAdded);
-
 			this.extraPrice = 0;
-
-
 
 			this.cartItem = [];
 
-
-
-
-
 			this.cartItem.product_id = this.product_id;
-			console.log(this.cartItem.product_id);
 
 			this.cartItem.quantity = 1;
 			this.service.proqty[this.product_id] = 1;
 
-			console.log(this.service.proqty[this.product_id]);
 			this.cartItem.name = name;
 			this.cartItem.image = image;
 			this.cartItem.price = price;
+			this.cartItem.stock = stock;
 
 			this.cartItem.restaurantId = this.id;
 			this.cartItem.restaurantName = this.title;
 			this.cartItem.restaurantName = this.owner_id;
 
-			console.log(this.cartItem.restaurantId);
-
 			this.cartItem.extra = [];
-
-			console.log(extra.length);
-
-
-
-			for (var i = 0; i <= this.service.cart.extraOptions.length - 1; i++) {
-
-
-
-				if (this.product_id == this.service.cart.extraOptions[i].product_id) {
-
-
-					//	this.cartItem.extra[i] = this.service.cart.extraOptions[i];
-
-					console.log(this.cartItem.extra);
-
-					this.service.total += parseFloat(this.service.cart.extraOptions[i].value);
-
-
-
-					//	this.cartsItem.extra[i] = extra[i];
-
-					console.log(this.service.total);
-
-					//this.service.removeExtraProductCart(this.id,this.service.cart.extraOptions[i]);
-
-					//this.service.updateExtraProductToCart(this.id,this.service.cart.extraOptions[i]);
-
-
+			for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
+				if (this.product_id === this.service.cart.extraOptions[ii].product_id) {
+					this.service.total += parseFloat(this.service.cart.extraOptions[ii].value);
 				}
-
 			}
-
-
-			for (var i = 0; i <= extra.length - 1; i++) {
-
-
-
-				if (this.product_id == extra[i].product_id) {
-
-
-					if (extra[i].selected == true) {
-						extra[i].quantity = 1;
+			for (let ii = 0; ii <= extra.length - 1; ii++) {
+				if (this.product_id === extra[ii].product_id) {
+					if (extra[ii].selected === true) {
+						extra[ii].quantity = 1;
+					} else {
+						extra[ii].quantity = 0;
 					}
-					else {
-						extra[i].quantity = 0;
-					}
-
-
-					this.cartItem.extra[i] = extra[i];
-
-
-
-					console.log(this.cartItem.extra);
-
-
+					this.cartItem.extra[ii] = extra[ii];
 				}
-
 			}
-
-
 			this.service.total += parseFloat(price);
 			this.service.total += parseFloat(this.extraPrice);
-			console.log(this.service.total);
 			this.values.qty += 1;
-			console.log(this.values.qty);
-
-
-
 			this.service.cart.line_items.push(this.cartItem);
-
-			console.log(this.cartItem);
-
-
-			//  this.service.addProductToCart(this.cartItem);
-
-
-
-			console.log(this.service.cart.line_items);
-			console.log(this.service.cart.extraOptions);
-
-			console.log(this.service.cart);
 		}
-
 		this.cartItem = {};
-
+		this.router.navigate(['/cart']);
 	}
 
 	getFavoriteItem() {
 		this.service.getFavoriteItem(this.product_id).on('value', (snapshot) => {
-			//this.params.data.items = snapshot.val();
-
 			if (snapshot.val() == null) {
 				this.favorite = false;
 				console.log(this.favorite);
-			}
-			else {
-				console.log(snapshot.val());
-
+			} else {
 				this.favorite = true;
-
-
 			}
-
-
-
 		});
-
-
 	}
 
 	addToFavourite(data) {
-		console.log(data);
 		this.service.addToFavorite(data, this.product_id);
-
 		this.favorite = true;
 	}
 
 	removeFavourite() {
-		console.log("product detail remove");
 		this.service.removeFavourite(this.product_id);
-
 		this.favorite = false;
 	}
 
 	ngOnInit() {
 	}
 
-
 	checkOptions(extraOption) {
-		console.log(extraOption.selected);
-
-
-
-
-
-		if (extraOption.selected && this.service.cart.extraOptions.length != 0) {
-
-			for (var i = 0; i <= this.service.cart.extraOptions.length - 1; i++) {
-
-
-				if (this.service.cart.extraOptions[i].id == extraOption.id) {
-
-
-					this.service.cart.extraOptions.splice(i, 1);
+		if (extraOption.selected && this.service.cart.extraOptions.length !== 0) {
+			for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
+				if (this.service.cart.extraOptions[ii].id === extraOption.id) {
+					this.service.cart.extraOptions.splice(ii, 1);
 					extraOption.product_id = this.product_id;
-
-
 					this.service.cart.extraOptions.push(extraOption);
-
-
-
-
-					//this.service.addExtraProductToCart(this.service.cart.extraOptions[i]);
-
-
-
-
-					console.log(this.service.cart.extraOptions);
-
 					break;
-				}
-
-				else {
+				} else {
 					extraOption.product_id = this.product_id;
-
 					this.service.cart.extraOptions.push(extraOption);
-
-					for (var i = 0; i <= this.service.cart.extraOptions.length - 1; i++) {
-
-
-
-						if (this.product_id == this.service.cart.extraOptions[i].product_id) {
-
-
-							//this.service.addExtraProductToCart(this.service.cart.extraOptions[i]);
-
-
+					for (let jj = 0; jj <= this.service.cart.extraOptions.length - 1; jj++) {
+						if (this.product_id === this.service.cart.extraOptions[jj].product_id) {
 						}
-
 					}
-
-					console.log(this.service.cart.extraOptions);
-
 					break;
-
 				}
-
-
 			}
-		}
-
-		else if (!extraOption.selected && this.service.cart.extraOptions.length != 0) {
-			for (var i = 0; i <= this.service.cart.extraOptions.length - 1; i++) {
-				if (this.service.cart.extraOptions[i].id == extraOption.id) {
-
-					//this.service.removeExtraProductToCart(this.service.cart.extraOptions[i]);
-					this.service.cart.extraOptions.splice(i, 1);
-
-					//
-
-					console.log(this.service.cart.extraOptions);
+		} else if (!extraOption.selected && this.service.cart.extraOptions.length !== 0) {
+			for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
+				if (this.service.cart.extraOptions[ii].id === extraOption.id) {
+					this.service.cart.extraOptions.splice(ii, 1);
 					break;
-
 				}
-
 			}
-
-		}
-
-
-		else {
-
-
-
-
+		} else {
 			extraOption.product_id = this.product_id;
-			//extraOption.quantity = 1;
 			this.service.cart.extraOptions.push(extraOption);
-			console.log(this.service.cart.extraOptions);
 
+			for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
 
-
-			//this.service.updateExtraProductToCart(this.id,this.service.cart.extraOptions[i]);
-
-			for (var i = 0; i <= this.service.cart.extraOptions.length - 1; i++) {
-
-
-
-				if (this.product_id == this.service.cart.extraOptions[i].product_id) {
-
-
-					//this.service.addExtraProductToCart(this.service.cart.extraOptions[i]);
-
-
+				if (this.product_id === this.service.cart.extraOptions[ii].product_id) {
 				}
-
 			}
-
-
-
-
 		}
-
-
-
-
 	}
 
+	async presentAlert(title, msg) {
+		const alert = await this.alertCtrl.create({
+			header: title,
+			message: msg,
+			buttons: ['OK']
+		});
+		await alert.present();
+	}
+	
+
+	async presentConfirmAlert(stock, name, price, image, extra) {
+		const alert = await this.alertCtrl.create({
+			message: 'Deseja Adicionar esse Produto ao Carrinho?',
+			buttons: [{
+				text: 'Sim',
+				handler: () => {
+					this.addToCart(stock, name, price, image, extra);
+				}
+			}]
+		});
+		await alert.present();
+	}
 }

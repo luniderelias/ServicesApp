@@ -88,7 +88,7 @@
 
 <ion-footer>
     <ion-toolbar position="bottom">
-        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="addToCart( params.data.name, params.data.price, params.data.image_firebase_url , params.data.extraOptions )">
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="presentConfirmAlert( params.data.stock, params.data.name, params.data.price, params.data.image_firebase_url , params.data.extraOptions )">
             ADICIONAR AO CARRINHO
         </ion-button>
     </ion-toolbar>

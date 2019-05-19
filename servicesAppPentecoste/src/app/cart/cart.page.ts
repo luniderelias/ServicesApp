@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Events } from '@ionic/angular';
+import { Events, AlertController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { Values } from '../../providers/values';
 import { ServiceProvider } from '../../providers/service';
@@ -30,35 +30,28 @@ export class CartPage implements OnInit {
 
 	empty_cart: any;
 
-
 	constructor(public events: Events,
 		public service: ServiceProvider,
+		public alertCtrl: AlertController,
 		public values: Values, private payPal: PayPal,
 		private stripe: Stripe,
-		//	public formBuilder: FormBuilder,
-		private router: Router
-
-	) {
-
+		private router: Router) {
 		this.form = {};
-
 		this.empty_cart = "assets/imgs/empty-cart.png";
-
-
-		for (var i = 0; i <= this.service.cart.line_items.length - 1; i++) {
-			console.log(this.service.cart.line_items[i]);
-
-		}
 	}
 
 	ngOnInit() {
 	}
 
-
 	addToCart(id) {
-
-		for (let item in this.service.cart.line_items) {
-			if (id == this.service.cart.line_items[item].product_id) {
+		for (const item in this.service.cart.line_items) {
+			if (id === this.service.cart.line_items[item].product_id) {
+				console.log(this.values.qty + 1)
+				console.log(this.service.cart.line_items[item])
+				if (this.values.qty + 1 > this.service.cart.line_items[item].stock) {
+					this.presentAlert('Ops!', 'Limite de Estoque excedido.');
+					return;
+				}
 				this.service.cart.line_items[item].quantity += 1;
 				this.service.proqty[id] += 1;
 				this.service.total += parseFloat(this.service.cart.line_items[item].price);
@@ -68,52 +61,34 @@ export class CartPage implements OnInit {
 	}
 
 	deleteFromCart(id) {
-		for (let item in this.service.cart.line_items) {
-			if (id == this.service.cart.line_items[item].product_id) {
+		for (const item in this.service.cart.line_items) {
+			if (id === this.service.cart.line_items[item].product_id) {
 				this.service.cart.line_items[item].quantity -= 1;
 				this.service.proqty[id] -= 1;
 				this.values.qty -= 1;
 				this.service.total -= parseFloat(this.service.cart.line_items[item].price);
 				if (this.service.cart.line_items[item].quantity === 0) {
-
 					for (let extras in this.service.cart.line_items[item].extra) {
 						this.zeroPrice = this.service.cart.line_items[item].extra[extras].value * this.service.cart.line_items[item].extra[extras].quantity;
-
 						this.service.total -= parseFloat(this.zeroPrice);
-
-
-
 					}
-
 					this.service.cart.line_items.splice(item, 1);
-
-
 				}
 			}
 		}
 	}
 
-
 	deleteExtraFromCart(option) {
-		console.log(option);
-
 		for (let item in this.service.cart.line_items) {
 			console.log(item);
 			if (option.product_id == this.service.cart.line_items[item].product_id) {
 				for (let extras in this.service.cart.line_items[item].extra) {
-					//this.service.cart.line_items[item].extra[extras].quantity -= 1;
 					if (option.id == this.service.cart.line_items[item].extra[extras].id) {
 						this.service.cart.line_items[item].extra[extras].quantity -= 1;
-
 						this.service.total -= parseFloat(this.service.cart.line_items[item].extra[extras].value);
-
 						if (this.service.cart.line_items[item].extra[extras].quantity == 0) {
-							//this.service.cart.line_items[item].extra.splice(extras, 1);
-
-
 						}
 					}
-
 				}
 			}
 		}
@@ -121,20 +96,13 @@ export class CartPage implements OnInit {
 
 	addExtraToCart(option) {
 		console.log(option);
-
-		for (let item in this.service.cart.line_items) {
-			console.log(item);
-			if (option.product_id == this.service.cart.line_items[item].product_id) {
-				for (let extras in this.service.cart.line_items[item].extra) {
-					//this.service.cart.line_items[item].extra[extras].quantity -= 1;
-					if (option.id == this.service.cart.line_items[item].extra[extras].id) {
+		for (const item in this.service.cart.line_items) {
+			if (option.product_id === this.service.cart.line_items[item].product_id) {
+				for (const extras in this.service.cart.line_items[item].extra) {
+					if (option.id === this.service.cart.line_items[item].extra[extras].id) {
 						this.service.cart.line_items[item].extra[extras].quantity += 1;
-
 						this.service.total += parseFloat(this.service.cart.line_items[item].extra[extras].value);
-
-
 					}
-
 				}
 			}
 		}
@@ -142,9 +110,17 @@ export class CartPage implements OnInit {
 
 	radioChecked(val) {
 		this.cod = val;
-		//console.log(val);
+	}
 
-		console.log(this.cod);
+	
+
+	async presentAlert(title, msg) {
+		const alert = await this.alertCtrl.create({
+			header: title,
+			message: msg,
+			buttons: ['OK']
+		});
+		await alert.present();
 	}
 
 }

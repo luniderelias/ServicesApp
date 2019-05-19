@@ -141,13 +141,16 @@ export class ChooseAddressPage implements OnInit {
     if (this.values.isLoggedIn) {
       this.currentUser = firebase.auth().currentUser;
 
-      if (this.cod === 'cash' || this.cod === 'bank' || this.cod === 'card') {
+      if (this.cod === 'cash' || this.cod === 'debit' || this.cod === 'card') {
         if (this.cod === 'cash') {
           this.presentNeedsChange(item);
-        } else {
-          this.presentConfirmAlert(item);
+        } else if (this.cod === 'card') {
+          this.presentConfirmAlert(item, 'Total a pagar com Frete: R$' + (this.service.total + this.currentUserAddress.fare));
+        } else if (this.cod === 'debit') {
+          this.presentConfirmAlert(item,
+            'Total a pagar com Frete e Desconto: R$' + (this.service.total - (0.1 * this.service.total) + this.currentUserAddress.fare));
         }
-      }
+    }
     } else {
       this.presentAlert('Usuário não autenticado!', 'Por favor, faça login e tente novamente!');
     }
@@ -198,8 +201,12 @@ export class ChooseAddressPage implements OnInit {
     if (this.userProfiles.userTimeStamp) {
       this.smallUserProfiles.userTimeStamp = this.userProfiles.userTimeStamp;
     }
-    
+
     if (this.payments.PaymentType === 'cash') {
+      this.service.total -= 0.1 * this.service.total; // Discount
+    }
+
+    if (this.payments.PaymentType === 'debit') {
       this.service.total -= 0.1 * this.service.total; // Discount
     }
 
@@ -303,10 +310,10 @@ async presentNeedsPhone(item) {
   
   
 
-	async presentConfirmAlert(item) {
+	async presentConfirmAlert(item, msg) {
 		const alert = await this.alertCtrl.create({
       header: 'Deseja confirmar esta ação?',
-      message: 'Total a pagar com Frete: R$' + (this.service.total + this.currentUserAddress.fare),
+      message: msg,
 			buttons: [{
 				text: 'Sim',
 				handler: () => {
