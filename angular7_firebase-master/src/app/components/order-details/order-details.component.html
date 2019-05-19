@@ -175,7 +175,7 @@
                         <td style="width:40%;">
                             <h4 style="text-align: right; ">Forma de Pagamento: <b>{{paymentType}}</b></h4>
                             <h4 style="text-align: right;" *ngIf="order_details.payments.PaymentType === 'cash'"><b>Levar Troco para: R${{order_details.payments.PaymentChange}}</b></h4>
-                            <h4 style="text-align: right; color: red" *ngIf="order_details.payments.PaymentType === 'cash'"><b>Desconto: R${{-(order_details.total - order_details.addresses.fare - itensPrice)}}</b></h4>
+                            <h4 style="text-align: right; color: red" *ngIf="order_details.payments.PaymentType === 'cash' || order_details.payments.PaymentType === 'debit'"><b>Desconto: R${{-(order_details.total - order_details.addresses.fare - itensPrice)}}</b></h4>
                             <h4 style="text-align: right; color: green"><b>Frete: R${{order_details.addresses.fare}}</b></h4>
                         </td>
                     </tr>
