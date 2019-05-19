@@ -1,0 +1,174 @@
+<!--Statistics cards Starts-->
+<section *ngIf="isAdmin">
+    <div class="row">
+        <div class=" col-lg-6 col-12">
+            <div class="card bg-white">
+                <div class="card-body">
+                    <div class="card-block pt-2 pb-0">
+                        <div class="media">
+                            <div class="media-body text-left">
+                                <h4 class="font-medium-5 card-title mb-0">R$ {{dashboard?.totalSales}}</h4>
+                                <span>Valor em Vendas</span>
+                            </div>
+                            <div class="media-right text-right">
+                                <i class="icon-wallet font-large-1 warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Widget-area-chart2" class="height-150 WidgetAreaChart2 mb-2">
+                        <x-chartist class="" [data]="WidgetAreaChart2.data" [type]="WidgetAreaChart2.type" [options]="WidgetAreaChart2.options" [responsiveOptions]="WidgetAreaChart2.responsiveOptions" [events]="WidgetAreaChart2.events">
+                        </x-chartist>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class=" col-lg-6  col-12">
+            <div class="card bg-white">
+                <div class="card-body">
+                    <div class="card-block pt-2 pb-0">
+                        <div class="media">
+                            <div class="media-body text-left">
+                                <h4 class="font-medium-5 card-title mb-0">Total: {{dashboard?.totalOrders}}</h4>
+                                <span>Quantidade de Pedidos</span>
+                            </div>
+                            <div class="media-right text-right">
+                                <i class="icon-basket-loaded font-large-1 success"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Widget-area-chart3" class="height-150 WidgetAreaChart3 mb-2">
+                        <x-chartist class="" [data]="WidgetAreaChart3.data" [type]="WidgetAreaChart3.type" [options]="WidgetAreaChart3.options" [responsiveOptions]="WidgetAreaChart3.responsiveOptions" [events]="WidgetAreaChart3.events">
+                        </x-chartist>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Statistics cards Ends-->
+    <!--Line with Area Chart 1 Starts-->
+    <div class="row">
+        <div class=" col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-success">
+                        <h4 class="card-title">Valor Diário - Vendas</h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="card-block">
+                        <div id="line-chart" class="height-300 lineChart lineChartShadow">
+                            <x-chartist [data]="lineChart.data" [type]="lineChart.type" [options]="lineChart.options" [responsiveOptions]="lineChart.responsiveOptions" [events]="lineChart.events">
+                            </x-chartist>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 
+    <div class="col-xl-4 col-lg-12 col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-wrap bar-danger">
+                    <h4 class="card-title">Today's Activity</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="col-12 timeline-left" id="activity">
+                    <div class="timeline">
+                        <ul class="list-unstyled base-timeline activity-timeline">
+                            <li class="">
+                                <div class="timeline-icon bg-danger">
+                                    <i class="fa fa-tasks"></i>
+                                </div>
+                                <div class="act-time">Today</div>
+                                <div class="base-timeline-info">
+                                    <a href="#" class="text-uppercase text-danger">Task Added</a>
+                                </div>
+                                <small class="text-muted">
+                                    25 mins ago
+                                </small>
+                            </li>
+                            <li class="">
+                                <div class="timeline-icon bg-primary">
+                                    <i class="fa fa-handshake-o"></i>
+                                </div>
+                                <div class="act-time">Yesterday</div>
+                                <div class="base-timeline-info">
+                                    <a href="#" class="text-uppercase text-primary">Deal Added</a>
+                                </div>
+                                <small class="text-muted">
+                                    23 hours ago
+                                </small>
+                            </li>
+                            <li class="">
+                                <div class="timeline-icon bg-dark">
+                                    <i class="fa fa-tasks"></i>
+                                </div>
+                                <div class="act-time">09 March</div>
+                                <div class="base-timeline-info">
+                                    <a href="#" class="text-uppercase text-dark">Task Updated</a>
+                                </div>
+                                <small class="text-muted">
+                                    15 days ago
+                                </small>
+                            </li>
+                            <li class="">
+                                <div class="timeline-icon bg-warning">
+                                    <i class="fa fa-handshake-o"></i>
+                                </div>
+                                <div class="act-time">04 March</div>
+                                <div class="base-timeline-info">
+                                    <a href="#" class="text-uppercase text-warning">Started Task</a>
+                                </div>
+                                <small class="text-muted">
+                                    20 days ago
+                                </small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+    <!--Line with Area Chart 1 Ends-->
+    <div class="row">
+        <div class="col-12" id="recent-sales">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-wrap bar-primary">
+                        <h4 class="card-title">Pedidos Recentes</h4>
+                    </div>
+                    <a class="heading-elements-toggle">
+                        <i class="la la-ellipsis-v font-medium-3"></i>
+                    </a>
+                </div>
+                <div class="card-content mt-1">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-xl mb-0" id="recent-orders">
+                            <thead>
+                                <tr>
+                                    <th class="border-top-0">ID</th>
+                                    <th class="border-top-0">Data</th>
+                                    <th class="border-top-0">Status</th>
+                                    <th class="border-top-0">Cliente</th>
+                                    <th class="border-top-0">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let order of orders; let i = index">
+                                    <td class="text-truncate">{{order?.$key}}</td>
+                                    <td class="text-truncate">{{order?.timeStamp | date:'dd/MM/yyyy hh:mm'}}</td>
+                                    <td class="text-truncate">{{order?.status}}</td>
+                                    <td class="text-truncate">{{order?.customerDetails?.displayName}}</td>
+                                    <td class="text-truncate">R${{order?.total}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

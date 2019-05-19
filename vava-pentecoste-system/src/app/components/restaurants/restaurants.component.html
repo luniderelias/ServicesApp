@@ -1,0 +1,83 @@
+<!-- Filter Datatable Options Starts -->
+<section id="filter" class="mb-3">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-block">
+                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='stores'>
+                            <ngx-datatable-column prop="firebase_url">
+
+                                <ng-template let-column="Imagem" ngx-datatable-header-template>
+                                    <small><b>IMAGEM</b></small>
+                                </ng-template>
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+
+                                    <img style="width:100px;height:100px;" class="thumbnail" src="{{value}}">
+                                </ng-template>
+
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="title">
+                                <ng-template let-column="title" ngx-datatable-header-template>
+                                    <small><b>NOME</b></small>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="address">
+                                <ng-template let-column="address" ngx-datatable-header-template>
+                                    <small><b>ENDEREÇO</b></small>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="phonenumber">
+                                <ng-template let-column="phonenumber" ngx-datatable-header-template>
+                                    <small><b>TELEFONE</b></small>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="info">
+                                <ng-template let-column="info" ngx-datatable-header-template>
+                                    <small><b>SOBRE</b></small>
+                                </ng-template>
+
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    {{(value.length>60)? (value | slice:0:60)+'..':(value)}}
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="outlet">
+                                <ng-template let-column="outlet" ngx-datatable-header-template>
+                                    <small><b>TIPO DE LOJA</b></small>
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    {{(value.length>60)? (value | slice:0:60)+'..':(value)}}
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="$key">
+                                <ng-template let-column="$key" ngx-datatable-header-template>
+                                    <small><b>AÇÕES</b></small>
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" routerLink="/lojas/detalhes/{{value}}">Visualizar</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+
+                        </ngx-datatable>
+
+                        <!--                         <div align="right" style="margin-top:15px;">
+                            <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" data-toggle="modal" data-target="#modalBook">Adicionar Nova Loja</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Filter Datatable Options Ends -->
+<app-modal [userUid]="userUid"></app-modal>

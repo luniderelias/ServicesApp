@@ -1,0 +1,51 @@
+<!-- Filter Datatable Options Starts -->
+<section id="filter" class="mb-3">
+    <img *ngIf="loading" class="center-spinner" src="assets/spinner.gif" />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-block">
+                        <ngx-datatable #table class='bootstrap' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10" [rows]='order_details'>
+                            <ngx-datatable-column prop="name">
+                                <ng-template let-column="name" ngx-datatable-header-template>
+                                    NOME
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="value">
+                                <ng-template let-column="value" ngx-datatable-header-template>
+                                    PREÇO
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    R$ {{value}}
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column prop="$key">
+                                <ng-template let-column="$key" ngx-datatable-header-template>
+                                    AÇÕES
+                                </ng-template>
+
+                                <ng-template let-value="value" ngx-datatable-cell-template>
+                                    <button (click)="onExtraItemEdit(value)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-warning" *ngIf="isAdmin">Editar</button>
+                                    <button (click)="showQuestion(value)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger" *ngIf="isAdmin">Deletar</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+
+
+                        </ngx-datatable>
+
+                        <div align="right" style="margin-top:15px;">
+                            <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/produtos/detalhes/'+id]">Voltar</button>
+                            <button [routerLink]="['/produtos/adicional/'+id]" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" *ngIf="isAdmin">Adicionar Nova Opção</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Filter Datatable Options Ends -->
+<app-modal [userUid]="userUid"></app-modal>

@@ -1,0 +1,22 @@
+<section class="row mt-5">
+
+    <div class="col">
+        <div class="row">
+            <div class="col-xs-12 col-md-3" *ngFor="let category of categories; index as i" style="padding-top:30px;">
+
+                <div class="card" [routerLink]="['/categorias/detalhes/'+category.$key]">
+                    <div class="card-body">
+                        <div class="card-block">
+                            <h5 style="text-align: center;"><b>{{category.cat_name.toUpperCase()}}</b></h5>
+                            <img style=" width:100% " class="thumbnail " src="{{category.firebase_url}} ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div align="right " style="margin-top:15px; ">
+            <a [routerLink]="[ '/categorias/adicionar'] " class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary " *ngIf="isAdmin ">Adicionar Nova Categoria</a>
+        </div>
+    </div>
+</section>
