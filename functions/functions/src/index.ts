@@ -35,13 +35,24 @@ function getPayload(order: any, order_id: any){
   return {
     'notification': {
       'title': 'Novo Pedido',
-      'body': 'Novo Pedido de ' + order.customerDetails.displayName + ' no valor de R$ ' + order.total + ' para entrega em ' + order.customerDetails.address
-      + '│ Telefone: '+ order.customerDetails.phone + '│ Pagamento: ' + order.payments.PaymentType,
+      'body': 'Novo Pedido de ' + order.customerDetails.displayName + ' │  Valor R$' + order.total + ' │ Entregar em: ' + order.addresses.street + ', ' + order.addresses.number
+      + ' │ Telefone: '+ order.customerDetails.phone + getPaymentTypeText(order),
     },
     'data': {
       'order_id': order_id
     },
   };
+}
+
+function getPaymentTypeText(order:any){
+  switch(order.payments.PaymentType){
+    case 'cash':
+      return ' │ Pagamento: À vista, troco para : R$' + order.payments.PaymentChange;
+    case 'card':
+      return ' │ Pagamento: Cartão';
+      default:
+      return '';
+  }
 }
 
 function saveNotification(path:string, payload:any){

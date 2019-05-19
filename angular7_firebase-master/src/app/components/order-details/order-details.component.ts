@@ -27,6 +27,7 @@ export class OrderDetailsComponent implements OnInit {
 	imageUrl: any;
 	categories: any;
 	button_text: string;
+	paymentType = '';
 
 
 	private RestaurantInterface: RestaurantInterface[];
@@ -40,6 +41,7 @@ export class OrderDetailsComponent implements OnInit {
 	order_id: any;
 	order_details: any;
 	user_details: any;
+	itensPrice = 0;
 
 	constructor(private firebaseService: FirebaseService, private authService: AuthService,
 		private router: Router, private route: ActivatedRoute) { }
@@ -50,6 +52,20 @@ export class OrderDetailsComponent implements OnInit {
 
 		this.firebaseService.getOrderDetail(this.id).on('value', (snapshot) => {
 			this.order_details = snapshot.val();
+
+
+			this.order_details.items.forEach(item => {
+				this.itensPrice += item.price * item.quantity;
+			});
+
+			switch (this.order_details.payments.PaymentType) {
+				case 'card':
+				this.paymentType = 'Cartão';
+				break;
+				case 'cash':
+				this.paymentType = 'À Vista';
+				break;
+			}
 
 			if (this.order_details.status === 'Pendente') {
 				this.onStatusOrderSubmit('Em Andamento');

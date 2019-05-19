@@ -164,7 +164,6 @@ export class EditCategoryComponent implements OnInit {
 				alertFunctions.showError('Erro!', 'Falha ao Editar Categoria!');
 				this.loading = false;
 			});
-
 		}
 
 		if (this.inputImageUser.nativeElement.value) {

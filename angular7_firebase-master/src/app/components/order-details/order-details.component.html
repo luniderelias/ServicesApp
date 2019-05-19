@@ -151,7 +151,7 @@
                         </td>
 
                         <td style="width:20%;">
-                            <p style="text-align: left;">{{order_details.customerDetails.address}}</p>
+                            <p style="text-align: left;">{{order_details.addresses.street + ', ' + order_details.addresses.number}}</p>
                         </td>
 
                         <td style="width:20%;">
@@ -159,7 +159,7 @@
                         </td>
 
                         <td style="width:20%;">
-                            <p style="text-align: left;">{{order_details.timeStamp | date}}</p>
+                            <p style="text-align: left;">{{order_details.timeStamp | date:'dd/MM/yyyy hh:mm'}}</p>
                         </td>
 
                     </tr>
@@ -167,20 +167,23 @@
                 <table style="text-align:right;float:right;width:100%;">
                     <tr>
                         <td>
-                            <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" *ngIf="order_details.status !== 'Finalizado' && order_details.status !== 'Cancelado Pela Loja'" (click)="showCancelOrderQuestion()">Cancelar Pedido</button>
+                            <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-danger" *ngIf="order_details.status !== 'Finalizado' && order_details.status !== 'Cancelado Pela Loja'" (click)="showCancelOrderQuestion()">Cancelar Pedido</button>
                         </td>
                         <td>
                             <button href="javascript:void(0)" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary" *ngIf="order_details.status !== 'Finalizado' && order_details.status !== 'Cancelado Pela Loja'" (click)="showQuestion()">{{button_text}}</button>
                         </td>
                         <td style="width:40%;">
-                            <h4 style="text-align: right;">Forma de Pagamento: <b>{{order_details.payments.PaymentType}}</b></h4>
+                            <h4 style="text-align: right; ">Forma de Pagamento: <b>{{paymentType}}</b></h4>
+                            <h4 style="text-align: right;" *ngIf="order_details.payments.PaymentType === 'cash'"><b>Levar Troco para: R${{order_details.payments.PaymentChange}}</b></h4>
+                            <h4 style="text-align: right; color: red" *ngIf="order_details.payments.PaymentType === 'cash'"><b>Desconto: R${{-(order_details.total - order_details.addresses.fare - itensPrice)}}</b></h4>
+                            <h4 style="text-align: right; color: green"><b>Frete: R${{order_details.addresses.fare}}</b></h4>
                         </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td></td>
                         <td style="width:40%;">
-                            <h4 style="text-align: right;">Total: <b>R$ {{order_details.total}}</b></h4>
+                            <h4 style="text-align: right; color: blue">Total: <b>R$ {{order_details.total}}</b></h4>
                         </td>
                     </tr>
                 </table>
