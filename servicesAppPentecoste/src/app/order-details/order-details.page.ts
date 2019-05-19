@@ -11,41 +11,38 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-order-details',
-  templateUrl: './order-details.page.html',
-  styleUrls: ['./order-details.page.scss'],
+	selector: 'app-order-details',
+	templateUrl: './order-details.page.html',
+	styleUrls: ['./order-details.page.scss'],
 })
 export class OrderDetailsPage implements OnInit {
-	
+
 	currentUser: any;
 	myOrderList: any;
-	id:any;
-	
-	orderDetails : any;
-	addresses : any;
+	id: any;
 
-  constructor(public events: Events, public service: ServiceProvider, 
-  public values:Values, private payPal: PayPal, private stripe: Stripe,
-  private router: Router, private route: ActivatedRoute) { 
-  
-			this.route.params.subscribe(params => {
-			
-								console.log(params);
-								this.id = params.id;
-								
-									this.service.getOrderDetail(this.id).on('value', (snapshot) => {
-										  this.orderDetails = snapshot.val();
-										  this.addresses = snapshot.val().addresses;
-										  
-										  console.log(this.addresses);
-									});
-																						
+	orderDetails: any;
+	addresses: any;
+
+	constructor(public events: Events, public service: ServiceProvider,
+		public values: Values, private payPal: PayPal, private stripe: Stripe,
+		private router: Router, private route: ActivatedRoute) {
+		this.route.params.subscribe(params => {
+			console.log(params);
+			this.id = params.id;
+
+			this.service.getOrderDetail(this.id).on('value', (snapshot) => {
+				this.orderDetails = snapshot.val();
+				this.addresses = snapshot.val().addresses;
+
+
+				console.log(this.orderDetails);
 			});
-  
-		
-  }
 
-  ngOnInit() {
-  }
+		});
+	}
+
+	ngOnInit() {
+	}
 
 }

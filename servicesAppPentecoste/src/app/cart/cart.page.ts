@@ -38,6 +38,7 @@ export class CartPage implements OnInit {
 		private router: Router) {
 		this.form = {};
 		this.empty_cart = "assets/imgs/empty-cart.png";
+
 	}
 
 	ngOnInit() {
@@ -46,8 +47,6 @@ export class CartPage implements OnInit {
 	addToCart(id) {
 		for (const item in this.service.cart.line_items) {
 			if (id === this.service.cart.line_items[item].product_id) {
-				console.log(this.values.qty + 1)
-				console.log(this.service.cart.line_items[item])
 				if (this.values.qty + 1 > this.service.cart.line_items[item].stock) {
 					this.presentAlert('Ops!', 'Limite de Estoque excedido.');
 					return;

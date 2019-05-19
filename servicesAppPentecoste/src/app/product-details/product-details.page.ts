@@ -116,20 +116,19 @@ export class ProductDetailsPage implements OnInit {
 
 
 				this.getFavoriteItem();
-				console.log(this.params.data);
 			});
 		});
 	}
 
-	addToCart(stock, name, price, image, extra) {
+	addToCart(category, stock, name, price, image, extra) {
 		var itemAdded = false;
+		
 		for (let item in this.service.cart.line_items) {
 			if (this.product_id === this.service.cart.line_items[item].product_id) {
 				if (stock <= 0) {
 					this.presentAlert('Ops!', 'Não temos este produto em estoque no momento.');
 					return;
 				}
-
 				this.extraPrice = 0;
 
 				this.cartsItem = [];
@@ -137,6 +136,7 @@ export class ProductDetailsPage implements OnInit {
 				this.service.proqty[this.product_id] += 1;
 
 				this.cartsItem.name = name;
+				this.cartsItem.category = category;
 				this.cartsItem.image = image;
 				this.cartsItem.price = price;
 				this.cartsItem.stock = stock;
@@ -166,6 +166,8 @@ export class ProductDetailsPage implements OnInit {
 				this.service.cart.line_items[item].price = this.cartsItem.price;
 
 				this.service.cart.line_items[item].quantity = this.cartsItem.quantity;
+
+				this.service.cart.line_items[item].category = this.cartsItem.category.
 
 				this.service.cart.line_items[item].restaurantId = this.cartsItem.restaurantId;
 				this.service.cart.line_items[item].restaurantName = this.cartsItem.restaurantName;
@@ -220,6 +222,7 @@ export class ProductDetailsPage implements OnInit {
 			this.cartItem.restaurantId = this.id;
 			this.cartItem.restaurantName = this.title;
 			this.cartItem.restaurantName = this.owner_id;
+			this.cartItem.category = category;
 
 			this.cartItem.extra = [];
 			for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
@@ -317,13 +320,13 @@ export class ProductDetailsPage implements OnInit {
 	}
 	
 
-	async presentConfirmAlert(stock, name, price, image, extra) {
+	async presentConfirmAlert(category, stock, name, price, image, extra) {
 		const alert = await this.alertCtrl.create({
 			message: 'Deseja Adicionar esse Produto ao Carrinho?',
 			buttons: [{
 				text: 'Sim',
 				handler: () => {
-					this.addToCart(stock, name, price, image, extra);
+					this.addToCart(category, stock, name, price, image, extra);
 				}
 			}]
 		});

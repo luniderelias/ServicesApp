@@ -124,6 +124,7 @@ export class HomePage {
 			name: item.payload.doc.data().name,
 			price: item.payload.doc.data().price,
 			discount: item.payload.doc.data().discount,
+			category: item.payload.doc.data().category,
 			description: item.payload.doc.data().description,
 			vote: item.payload.doc.data().vote,
 			created: item.payload.doc.data().created,
@@ -138,7 +139,7 @@ export class HomePage {
 		}
 
 		let temp = this.list_cart.filter((element) => {
-			if (element.id == itemCv.id) {
+			if (element.id === itemCv.id) {
 				element.quantity = 1 + element.quantity;
 				return true;
 			}

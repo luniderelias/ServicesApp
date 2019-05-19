@@ -141,6 +141,7 @@ export class ChooseAddressPage implements OnInit {
     if (this.values.isLoggedIn) {
       this.currentUser = firebase.auth().currentUser;
 
+
       if (this.cod === 'cash' || this.cod === 'debit' || this.cod === 'card') {
         if (this.cod === 'cash') {
           this.presentNeedsChange(item);
