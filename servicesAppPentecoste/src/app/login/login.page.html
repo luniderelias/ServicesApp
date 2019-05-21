@@ -1,36 +1,17 @@
-<!--
-  Generated template for the LoginPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-
 <ion-content>
     <div class="form-center pdl-30 pdr-30">
         <div class="wrapper-form pdl-30 pdr-30">
             <div class="mgt-30 mgb-20">
                 <br>
-
-
                 <h2 class="uppercase txt-light fw-600 fs-20 spacing-2 mgl-20 pdt-0" color="default">VAVÁ PEÇAS E SERVIÇOS</h2>
-
             </div>
-
-
             <br>
-
             <form [formGroup]="loginForm" (submit)="loginUser()" novalidate>
-
-
-
                 <ion-item class="white-opct bdra-30">
                     <ion-label position="fixed" class="mgb-5 fs-13" color="default">E-MAIL</ion-label>
 
                     <ion-input #email formControlName="email" type="email" [class.invalid]="!loginForm.controls.email.valid && loginForm.controls.email.dirty" class=""></ion-input>
                 </ion-item>
-
-
-
 
                 <div class="error-message" *ngIf="!loginForm.controls.email.valid  && loginForm.controls.email.dirty">
                     <p class="fs-11 mgt-5 txt-light">Por favor, insira um email válido.</p>
@@ -50,27 +31,16 @@
                     <p class="fs-11 mgt-5 mgb-0 txt-light">Sua senha precisa ter mais de 6 caracteres.</p>
                 </div>
 
-                <div text-right class="mgb-10 ovfl-auto">
-
+                <div text-center class="mgb-10 ovfl-auto">
                     <br>
-
-
-
-                    <ion-button fill="clear" size="small" color="default" class="capitalize txt-light fs-12 txt3 pull-right pdr-0 fw-300" [routerLink]="'/signup'">
+                    <ion-button fill="clear" size="medium" color="light" class="capitalize txt-light fs-12 txt3 fw-300" [routerLink]="'/signup'">
                         CADASTRE-SE
                     </ion-button>
                 </div>
-
-
                 <br>
-
-
-
                 <ion-button expand="block" color="light" class="mgt-30 uppercase fw-600 spacing1 ani-bottom-to-top shadow-0" type="submit">
                     Entrar
                 </ion-button>
-
-
 
                 <ion-button size="block" (click)="login_fb()" color="primary" class="mgt-30 uppercase fw-600 spacing1 ani-bottom-to-top shadow-0">
                     <ion-icon slot="start" name="logo-facebook"></ion-icon> Facebook
@@ -83,14 +53,12 @@
 
                 <br>
 
-
-
                 <br>
 
             </form>
         </div>
     </div>
     <div class="background-image flex-row flex-ali-center flex-jus-center">
-        <img src="assets/imgs/bg-login.jpg">
+        <img src="assets/imgs/store.jpg">
     </div>
 </ion-content>

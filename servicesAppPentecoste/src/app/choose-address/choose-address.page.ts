@@ -68,6 +68,7 @@ export class ChooseAddressPage implements OnInit {
   newOrderItems: any;
 
   deliver_method_image: any;
+  loading = false;
 
   constructor(public events: Events,
               public service: ServiceProvider,
@@ -130,6 +131,7 @@ export class ChooseAddressPage implements OnInit {
   }
 
   checkAddressNotNull(item) {
+    console.log(item);
     if (this.currentUserAddress === '' || this.currentUserAddress === undefined) {
       this.presentAlert('', 'Por favor, selecione um endereço de entrega.');
     } else {
@@ -173,6 +175,7 @@ export class ChooseAddressPage implements OnInit {
 
 
   continueSendingOrder(item) {
+    this.loading = true;
     this.payments.PaymentType = this.cod;
     this.payments.PaymentChange = this.paymentChange;
     this.smallUserProfiles = [];
@@ -250,6 +253,8 @@ addOrderToRestaurant(id) {
 
         this.service.categorizedRestaurantOrder(id, snap.restaurantId, snap.owner_id);
 
+        
+        this.loading = false;
         this.router.navigateByUrl('orders');
       });
     });
@@ -262,11 +267,12 @@ addOrderToRestaurant(id) {
 			buttons: ['OK']
 		});
 		await alert.present();
-	}
-
+  }
+  
 async presentNeedsChange(item) {
 		const alert = await this.alertCtrl.create({
       header: 'Necessita de Troco para quanto?',
+      subHeader: this.getStoreClosedString(),
       message: 'Total a pagar com Frete e Desconto: R$' + (this.service.total - (0.1 * this.service.total) + this.currentUserAddress.fare),
 			inputs: [
 				{
@@ -314,6 +320,7 @@ async presentNeedsPhone(item) {
 	async presentConfirmAlert(item, msg) {
 		const alert = await this.alertCtrl.create({
       header: 'Deseja confirmar esta ação?',
+      subHeader: this.getStoreClosedString(),
       message: msg,
 			buttons: [{
 				text: 'Sim',
@@ -324,5 +331,16 @@ async presentNeedsPhone(item) {
 			}]
 		});
 		await alert.present();
-	}
+  }
+  
+
+  getStoreClosedString() {
+    const date = new Date(Date.now());
+    switch (date.getDay()) {
+      case 0:
+      return 'Loja Fechada: seu pedido será processado quando a loja abrir';
+      default:
+      return date.getHours() >= 18 || date.getHours() <= 7 ? 'Loja Fechada: seu pedido será processado quando a loja abrir' : '';
+    }
+  }
 }

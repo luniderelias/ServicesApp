@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
             <ion-menu-button>
@@ -9,7 +9,7 @@
 
         <ion-buttons slot="end">
 
-            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
                 <ion-icon name="cart"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -23,16 +23,4 @@
     <div id="map">
 
     </div>
-    <!----
-<h3>Current Latitude: {{locationTracker.lat}}</h3>
-  <h3>Current Longitude: {{locationTracker.lng}}</h3>
-  <h3>Current Longitude: {{locationTracker.timestamp}}</h3>
-  --->
-
-
 </ion-content>
-<ion-footer>
-    <ion-toolbar position="bottom">
-        <ion-button expand="full" color="primary" (click)="placeOrder(service.cart.line_items)">Minha Localização</ion-button>
-    </ion-toolbar>
-</ion-footer>

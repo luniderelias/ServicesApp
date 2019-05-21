@@ -1,7 +1,5 @@
 <ion-header>
-    <ion-toolbar>
-
-
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-menu-button>
                 <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
@@ -25,6 +23,9 @@
     </div>
 
     <div class="movies" *ngIf="myOrderList">
+        <div style="text-align: center;" *ngIf="loading">
+            <ion-spinner name="dots"></ion-spinner>
+        </div>
         <ion-virtual-scroll [items]="myOrderList">
             <div class="movie" *virtualItem="let order">
                 <div class="order-card" *ngFor="let item of order.items">

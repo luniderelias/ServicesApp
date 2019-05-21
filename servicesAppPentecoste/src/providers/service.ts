@@ -412,7 +412,7 @@ export class ServiceProvider {
 
 	getFilterItems(search): any {
 		return this.af.list('/items', (ref) => {
-			return ref.limitToLast(10).orderByChild('name').startAt(search.toLowerCase()).endAt(search.toLowerCase() + '\uf8ff');
+			return ref.limitToLast(10).orderByChild('search').startAt(search).endAt(search + '\uf8ff');
 		});
 	}
 

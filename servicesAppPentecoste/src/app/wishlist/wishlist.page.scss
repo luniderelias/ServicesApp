@@ -74,6 +74,14 @@ ion-toolbar ion-segment {
                 line-height: 18px;
                 padding: 5px 0 5px 0;
             }
+            .vertical-bottom {
+                margin: 0;
+                position: absolute;
+                top: 100%;
+                padding-bottom: 15px;
+                -ms-transform: translateY(-100%);
+                transform: translateY(-100%);
+            }
             .subtitle {
                 width: 100%;
                 color: #aaa;

@@ -6,83 +6,53 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ServiceProvider } from '../../providers/service';
 
 @Component({
-  selector: 'app-categories',
-  templateUrl: './categories.page.html',
-  styleUrls: ['./categories.page.scss'],
+	selector: 'app-categories',
+	templateUrl: './categories.page.html',
+	styleUrls: ['./categories.page.scss'],
 })
 export class CategoriesPage implements OnInit {
-	
+
 	id: any;
 	productsList: any;
 	categoryList: any;
-	params:any = {};
+	params: any = {};
 	items: any;
 	title: any;
 	owner_id: any;
-	
-	loading: any;
 
-  constructor(
-		
-		public loadingCtrl: LoadingController, 
+	loading = false;
+
+	constructor(
+
+		public loadingCtrl: LoadingController,
 		private route: ActivatedRoute,
 		public events: Events,
-		public toastCtrl: ToastController, 
+		public toastCtrl: ToastController,
 		private storage: Storage,
 		public socialSharing: SocialSharing,
-		public service: ServiceProvider
-  
-  ) { 
-		this.route.params.subscribe(params => {
-			
-			
+		public service: ServiceProvider) {
+			this.loading = true;
+			this.route.params.subscribe(params => {
+
 			this.service.getRestaurantCategoryLists('-LewaVfmdY4bXgzF_SAD').on('value', snapshot => {
-					
-						this.categoryList = [];
 
-						//this.loading.dismiss().then(() => {	
-							snapshot.forEach( snap =>{
-								this.categoryList.push({
-								id: snap.key,
-								category: snap.val().cat_id,
-								title: snap.val().cat_name,
-								subtitle: snap.val().cat_name,
-								ionBadge: snap.val().cat_name,
-								image: snap.val().firebase_url
-								});
-							});
-							
-							console.log(this.categoryList);
+				this.categoryList = [];
 
-						//	});
-
-							
-					
-					
-					
-					
+				snapshot.forEach(snap => {
+					this.categoryList.push({
+						id: snap.key,
+						category: snap.val().cat_id,
+						title: snap.val().cat_name,
+						subtitle: snap.val().cat_name,
+						ionBadge: snap.val().cat_name,
+						image: snap.val().firebase_url
+					});
 				});
-				
-				
-				
+				this.loading = false;
+			});
 		});
-			
-			
-		
-		
-  }
-
-  ngOnInit() {
-	  console.log("log");
-  }
-  
-  
-  async presentLoading() {
-		this.loading = await this.loadingCtrl.create({
-			message: 'Carregando',
-			duration: 2000
-		});
-		return await this.loading.present();
 	}
 
+	ngOnInit() {
+	}
 }

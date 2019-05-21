@@ -22,7 +22,7 @@ export class ProductDetailsPage implements OnInit {
 	owner_id: any;
 	product_id: any;
 
-	loading: any;
+	loading = false;
 	quantity: any;
 
 
@@ -58,7 +58,7 @@ export class ProductDetailsPage implements OnInit {
 		public alertCtrl: AlertController,
 		public values: Values,
 	) {
-
+		this.loading = true;
 		this.quantity = "1";
 
 		this.route.params.subscribe(params => {
@@ -257,6 +257,8 @@ export class ProductDetailsPage implements OnInit {
 			} else {
 				this.favorite = true;
 			}
+			
+			this.loading = false;
 		});
 	}
 

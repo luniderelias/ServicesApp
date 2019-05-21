@@ -23,7 +23,7 @@ export class OrdersPage implements OnInit {
 
 	params: any = {};
 
-	loading: any;
+	loading = false;
 
 	tests: any;
 
@@ -31,24 +31,14 @@ export class OrdersPage implements OnInit {
 		private storage: Storage, public events: Events, public service: ServiceProvider,
 		public values: Values, private payPal: PayPal, private stripe: Stripe,
 		private router: Router, private route: ActivatedRoute, public loadingCtrl: LoadingController) {
-			
+			this.loading = true;
 			this.myOrderList = [];
-
 			this.tests = "name";
-			this.presentLoading();
 			this.getOrders();
 
 	}
 
 	ngOnInit() {
-	}
-
-	async presentLoading() {
-		this.loading = await this.loadingCtrl.create({
-			message: 'Carregando',
-			duration: 2000
-		});
-		return await this.loading.present();
 	}
 
 	ionViewWillEnter() {
@@ -64,6 +54,7 @@ export class OrdersPage implements OnInit {
 					this.myOrderList.push(a as OrderInterface);
 				});
 			this.myOrderList = this.myOrderList.reverse();
+			this.loading = false;
 			});
   	}
 

@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-menu-button class="block-content">
                 <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
@@ -17,11 +17,13 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen *ngIf="items">
-
+<ion-content fullscreen>
     <div class="movies" *ngIf="items">
         <ion-searchbar [formControl]="searchControl" (ionChange)="onSearchInput()" placeholder="Procure Produtos aqui...">
         </ion-searchbar>
+        <div style="text-align: center;" *ngIf="loading">
+            <ion-spinner name="dots"></ion-spinner>
+        </div>
         <ion-virtual-scroll [items]="items">
             <div class="movie" *virtualItem="let item">
                 <div class="poster" [routerLink]="['/product-details', {id: id, title: item.categories , owner_id: owner_id , cat_id: item.$key}]">

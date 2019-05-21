@@ -20,13 +20,16 @@ export class OrderDetailsPage implements OnInit {
 	currentUser: any;
 	myOrderList: any;
 	id: any;
+	loading = false;
 
 	orderDetails: any;
 	addresses: any;
+	paymentType: any;
 
 	constructor(public events: Events, public service: ServiceProvider,
 		public values: Values, private payPal: PayPal, private stripe: Stripe,
 		private router: Router, private route: ActivatedRoute) {
+		this.loading = true;
 		this.route.params.subscribe(params => {
 			console.log(params);
 			this.id = params.id;
@@ -34,9 +37,18 @@ export class OrderDetailsPage implements OnInit {
 			this.service.getOrderDetail(this.id).on('value', (snapshot) => {
 				this.orderDetails = snapshot.val();
 				this.addresses = snapshot.val().addresses;
-
-
-				console.log(this.orderDetails);
+				this.loading = false;
+				switch (this.orderDetails.payments.PaymentType) {
+					case 'cash':
+						this.paymentType = 'Dinheiro';
+						break;
+					case 'credit':
+						this.paymentType = 'Cartão de Crédito';
+						break;
+					case 'debit':
+						this.paymentType = 'Cartão de Débito';
+						break;
+				}
 			});
 
 		});

@@ -24,7 +24,6 @@ export class HomePage {
 	list_product: any;
 	list_product_new: any;
 	list_product_slide: any;
-	loading: any;
 	start: any;
 	id_user: any;
 	favo_str: string = '';
@@ -36,6 +35,7 @@ export class HomePage {
 	public chats: any = {};
 	searching: any = false;
 	searchControl: FormControl;
+	loading = false;
 
 	constructor(public events: Events,
 		public toastCtrl: ToastController,
@@ -48,6 +48,7 @@ export class HomePage {
 		public router: Router,
 		public platform: Platform
 	) {
+		this.loading = true;
 		this.searchControl = new FormControl();
 		this.items = [];
 		this.events.subscribe('cart_list: change', (lst) => {
@@ -56,7 +57,6 @@ export class HomePage {
 
 		this.events.subscribe('user: change', (user) => {
 			if (user || user != null) {
-				console.log(user);
 				this.id_user = user.uid;
 			}
 		});
@@ -72,12 +72,12 @@ export class HomePage {
 
 	onSearchInput() {
 		this.searching = true;
-}
+	}
 
 	setFilteredItems(searchTerm) {
-    this.service.getFilterItems(searchTerm).snapshotChanges().subscribe(snapshot => {
+		this.loading = true;
+    	this.service.getFilterItems(searchTerm.toLowerCase()).snapshotChanges().subscribe(snapshot => {
 			this.items = [];
-
 			
 				snapshot.forEach(snap => {
 					 let a = snap.payload.toJSON();
@@ -87,39 +87,14 @@ export class HomePage {
 	
 					this.items.push(a as ItemInterface);
 				});
+				
+			this.loading = false;
 			});
   }
 
-
-	async presentLoading() {
-		this.loading = await this.loadingCtrl.create({
-			message: 'Carregando',
-			duration: 2000
-		});
-		return await this.loading.present();
-	}
-
-	loadMore(event) {
-		/**
-		this.productsProv.getProduct(this.start, 2).then(data => {
-			this.list_product = this.list_product.concat(data);
-			console.log(data);
-			if(data.length > 0){
-				this.start = data[data.length - 1].payload.doc.data().name;
-			}
-			console.log(this.list_product);
-
-			setTimeout(() => {
-				event.target.disabled = true;
-			}, 1500);
-		});
-		
-		*/
-	}
-
 	addCart(item) {
-		console.log(item);
-		let itemCv = {
+		this.loading = true;
+		const itemCv = {
 			id: item.payload.doc.id,
 			name: item.payload.doc.data().name,
 			price: item.payload.doc.data().price,
@@ -138,13 +113,13 @@ export class HomePage {
 			quantity: 1
 		}
 
-		let temp = this.list_cart.filter((element) => {
+		const temp = this.list_cart.filter((element) => {
 			if (element.id === itemCv.id) {
 				element.quantity = 1 + element.quantity;
 				return true;
 			}
 		})
-		console.log(temp);
+
 		if (temp.length === 0) {
 			this.list_cart = this.list_cart.concat(itemCv);
 		}
@@ -154,7 +129,8 @@ export class HomePage {
 		// this.list_cart = new Array();
 		this.events.publish('cart_list: change', this.list_cart);
 		this.storage.set('cart_list', this.list_cart);
-		console.log(this.list_cart);
+		
+		this.loading = false;
 	}
 
 	async presentToast() {
@@ -171,6 +147,7 @@ export class HomePage {
 	}
 
 	ionViewWillEnter() {
+		this.loading = true;
 		this.service.getAllChooseItems().snapshotChanges().subscribe(snapshot => {
 			this.items = [];
 
@@ -181,6 +158,8 @@ export class HomePage {
 					console.log(a as ItemInterface);
 					this.items.push(a as ItemInterface);
 				});
+				
+			this.loading = false;
 			});
 
 	}

@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-back-button class="fs-24 txt1" text="" icon="ios-arrow-round-back"></ion-back-button>
             <ion-menu-button>
@@ -15,7 +15,6 @@
     <div class="wrapp-pst" padding>
 
         <div class="backdrop" *ngIf="user">
-            <img src="{{'assets/imgs/background.jpg' }}">
         </div>
         <div class="backdrop-separator1"></div>
         <div class="backdrop-separator2"></div>
@@ -49,9 +48,7 @@
                 </div>
 
                 <div padding class="">
-
-
-                    <ion-button expand="full" color="primary" type="submit" class="">
+                    <ion-button color="primary" shape="round" type="submit" fill="outline" expand="full">
                         Redefinir Senha
                     </ion-button>
                 </div>

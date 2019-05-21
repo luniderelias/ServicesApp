@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-menu-button>
                 <ion-icon class="fs-24 txt1" name="menu"></ion-icon>
@@ -22,21 +22,20 @@
 </ion-header>
 
 <ion-content fullscreen *ngIf="categoryList">
+    <div style="text-align: center;" *ngIf="loading">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
     <div class="results-flex" *ngIf="categoryList">
         <div class="result" *ngFor="let item of categoryList">
             <div class="poster" [routerLink]="['/product-details', {id: item.id, title: item.title , owner_id: item.restaurantId , cat_id: item.id}]">
-
                 <img class="poster-effect" [src]="item.image">
             </div>
             <div class="data">
-
                 <div class="title">{{item.title }}</div>
-                <div class="subtitle">{{ item.title }}</div>
-
-                <div class="subtitle">
-                    <ion-button (click)="removeFavItem(item)">Remover</ion-button>
-                </div>
-
+                <div class="subtitle">{{ item.category }}</div>
+                <ion-button class="vertical-bottom" color="primary" shape="round" (click)="removeFavItem(item)" fill="outline" expand="full">
+                    Remover
+                </ion-button>
             </div>
         </div>
     </div>
