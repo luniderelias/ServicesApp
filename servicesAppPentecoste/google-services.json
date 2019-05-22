@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "983922821843",
+    "firebase_url": "https://services-app-pentecoste.firebaseio.com",
+    "project_id": "services-app-pentecoste",
+    "storage_bucket": "services-app-pentecoste.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983922821843:android:dfd0d9a4843ba185",
+        "android_client_info": {
+          "package_name": "com.alaskaprojects.vavaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983922821843-akfilvr7tp06mbln8fhitsr5dbgd1ol6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJj3NtWs3lFJgcsUsvGW9nnoSxjx7Mc1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983922821843-akfilvr7tp06mbln8fhitsr5dbgd1ol6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

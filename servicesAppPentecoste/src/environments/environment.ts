@@ -47,12 +47,12 @@ export const environment = {
 		path: '/wishlist',
 		component: 'WishlistPage',
 		icon: 'md-heart-empty',
-	}, {
+	}, /* {
 		name: 'Mapa',
 		path: '/map',
 		component: 'MapPage',
 		icon: 'md-compass',
-	}, {
+	}, */ {
 		name: 'Configurações',
 		path: '/settings',
 		component: 'SettingPage',

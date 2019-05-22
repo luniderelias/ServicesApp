@@ -167,7 +167,7 @@ export class ServiceProvider {
 	}
 
 	saveNewAddress(city, district, street, number, displayName, email, phone, complement, uid) {
-		return this.restaurantUserInfo.child(uid).child("addresses").push({
+		return this.restaurantUserInfo.child(uid).child('addresses').push({
 			city: city.name,
 			fare: city.fare,
 			district: district,

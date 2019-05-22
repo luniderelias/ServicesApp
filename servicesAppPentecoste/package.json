@@ -59,11 +59,8 @@
         "classlist.js": "1.1.20150312",
         "color": "^3.1.1",
         "com.paypal.cordova.mobilesdk": "3.5.0",
-        "cordova-android": "7.1.1",
-        "cordova-android-firebase-gradle-release": "^3.0.0",
-        "cordova-android-play-services-gradle-release": "^3.0.0",
+        "cordova-android": "7.1.4",
         "cordova-browser": "5.0.4",
-        "cordova-play-services-version-adapter": "1.0.2",
         "cordova-plugin-camera": "4.0.3",
         "cordova-plugin-device": "2.0.2",
         "cordova-plugin-facebook4": "4.2.1",
@@ -159,14 +156,7 @@
             "cordova-sqlite-storage": {},
             "cordova-plugin-geolocation": {},
             "cordova-support-google-services": {},
-            "cordova-play-services-version-adapter": {},
             "cordova-plugin-google-analytics": {},
-            "cordova-android-play-services-gradle-release": {
-                "PLAY_SERVICES_VERSION": "12.+"
-            },
-            "cordova-android-firebase-gradle-release": {
-                "FIREBASE_VERSION": "12.+"
-            },
             "cordova-plugin-firebase": {},
             "cordova-plugin-whitelist": {},
             "cordova-plugin-statusbar": {},
