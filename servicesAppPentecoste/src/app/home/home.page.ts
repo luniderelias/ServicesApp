@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 
 import * as firebase from 'firebase';
 import { FormControl } from '@angular/forms';
+import { FcmService } from 'src/providers/fcm.service';
 
 
 @Component({
@@ -142,9 +143,7 @@ export class HomePage {
 		toast.present();
 	}
 
-	ngOnInit() {
-
-	}
+	
 
 	ionViewWillEnter() {
 		this.loading = true;
@@ -192,7 +191,6 @@ export class HomePage {
 		}
 
 	}
-
 }
 export interface ItemInterface {
   $key?: string;

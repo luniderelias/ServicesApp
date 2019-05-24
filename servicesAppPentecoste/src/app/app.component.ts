@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import * as firebase from 'firebase';
 import { TranslateService } from '@ngx-translate/core'; // add this
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { FcmService } from 'src/providers/fcm.service';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class AppComponent {
     public events: Events,
     private storage: Storage,
     public usersProv: UsersProvider,
+    private fcm: FcmService,
     private router: Router,
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -46,7 +48,7 @@ export class AppComponent {
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-
+        this.notificationSetup(user.uid);
         this.values.userRole = firebase.database().ref('/users').child(user.uid).on('value', snapshot => {
           if (snapshot.val()) {
             this.userProfiles = snapshot.val();
@@ -69,10 +71,6 @@ export class AppComponent {
 
       }
     });
-
-
-
-
 
     this.events.subscribe('user: change', (user) => {
       if (user || user != null) {
@@ -118,22 +116,36 @@ export class AppComponent {
   }
 
 
-  async presentToast(msg) {
+	private async presentToast(message) {
     const toast = await this.toastCtrl.create({
-      message: msg.body,
-      duration: 3000,
-      position: 'top'
+      message,
+      duration: 3000
     });
     toast.present();
   }
+
+	ngOnInit() {
+	}
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
-
-
   }
+
+	
+	private notificationSetup(uid) {
+		this.fcm.getToken(uid);
+		this.fcm.onNotifications().subscribe(
+		  (msg) => {
+			if (this.platform.is('ios')) {
+			  this.presentToast(msg.aps.alert);
+			} else {
+			  this.presentToast(msg.body);
+			}
+		  });
+	  }
+
 
 }

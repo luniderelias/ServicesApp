@@ -1,5 +1,3 @@
-
-
 import { Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Observable } from 'rxjs-compat/Observable';
@@ -8,6 +6,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import { auth } from 'firebase/app';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { GooglePlus } from '@ionic-native/google-plus';
 
 @Injectable()
 export class UsersProvider {
@@ -20,7 +19,11 @@ export class UsersProvider {
   public fireAuth: any;
   public restaurantUserInfo: any;
 
-  constructor(private af: AngularFireDatabase, public afs: AngularFirestore, public facebook: Facebook, public alertCtrl: AlertController) {
+  constructor(
+    private af: AngularFireDatabase,
+    public afs: AngularFirestore,
+    public facebook: Facebook,
+    public alertCtrl: AlertController) {
 
     this.fireAuth = firebase.auth();
 
@@ -104,71 +107,54 @@ export class UsersProvider {
     });
   }
 
-  loginGoogleUser() {
-    return new Promise<any>((resolve, reject) => {
-      this.fireAuth.signInWithPopup(new auth.GoogleAuthProvider())
-        .then(credential => {
-          console.log(credential);
-          const googleCredential = firebase.auth.GoogleAuthProvider
-            .credential(credential.credential.idToken);
-          firebase.auth().signInWithCredential(googleCredential)
-            .then(success => {
-              console.log("Firebase success: " + JSON.stringify(success));
+  loginGoogleUser(): Promise<firebase.auth.UserCredential> {
+    try {
+      return GooglePlus.login({
+        webClientId: '983922821843-akfilvr7tp06mbln8fhitsr5dbgd1ol6.apps.googleusercontent.com',
+        offline: true,
+        scopes: 'profile email'
+      }).then( res => {
+        console.log('-------1' + res + '---------');
+        const googleCredential = firebase.auth.GoogleAuthProvider.credential(res.idToken);
 
-              resolve(success);
-
-            });
-        });
-    }).catch((error) => { console.log(error) });
+        console.log('-------2' + googleCredential + '---------');
+        return firebase.auth().signInAndRetrieveDataWithCredential(googleCredential);
+      });
+    } catch (err) {
+      console.log('-------------------- ' + err + '-------------------');
+    }
   }
 
-  facebookLogin() {
-    return new Promise<any>((resolve, reject) => {
-      this.facebook.login(['email']).then(response => {
+  async webGoogleLogin(): Promise<void> {
+    try {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      return await this.fireAuth.signInWithPopup(provider);
+    } catch (err) {
+      console.log('-------------------- ' + err + '-------------------');
+    }
+  }
 
+  async facebookLogin(): Promise<firebase.auth.UserCredential> {
+    try {
+      return this.facebook.login(['email']).then(response => {
+        console.log('-------1' + response + '---------');
         const facebookCredential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
 
-        firebase.auth().signInWithCredential(facebookCredential).then(success => {
-          console.log("Firebase success: " + JSON.stringify(success));
-
-          resolve(success);
-          /**
-                    this.afs.collection('users', ref => ref.where('id_auth', '==', success.uid)).snapshotChanges().subscribe(snapshots => {
-          
-                      if(snapshots.length <= 0){
-                        let tempIndex = success.email.indexOf('@');
-          
-                        this.snapshotChangesSubscription = this.afs.collection('users').add({
-                          created: Date(),
-                          active: true,
-                          username: success.email.slice(0, tempIndex),
-                          fullname: success.displayName,
-                          email: success.email,
-                          phone: (success.phoneNumber != null)? success.phoneNumber : '',
-                          address: '',
-                          avt: success.photoURL,
-                          id_auth: success.uid
-                        })
-                      }
-          
-                    });
-                
-                */
-
-        })
-      })
-    }).catch((error) => { console.log(error) });
+        console.log('-------2' + facebookCredential + '---------');
+        return firebase.auth().signInAndRetrieveDataWithCredential(facebookCredential);
+      });
+    } catch (err) {
+      console.log('-------------------- ' + err + '-------------------');
+    }
   }
 
   getUser(uid) {
-	  /**
     return new Promise<any>((resolve, reject) => {
       this.snapshotChangesSubscription = this.afs.collection('users', ref => ref.where('id_auth', '==', uid)).snapshotChanges()
       .subscribe(snapshots => {
         resolve(snapshots);
-      })
+      });
     });
-	*/
   }
 
   updateUser(val) {
@@ -188,7 +174,7 @@ export class UsersProvider {
     const alert = await this.alertCtrl.create({
       message: err,
       buttons: [{
-        text: "Ok",
+        text: 'Ok',
         role: 'cancel'
       }]
     });

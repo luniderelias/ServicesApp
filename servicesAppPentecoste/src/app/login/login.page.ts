@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Events, LoadingController, AlertController, MenuController } from '@ionic/angular';
+import { Events, LoadingController, AlertController, MenuController, Platform } from '@ionic/angular';
 import { FormBuilder, Validators } from '@angular/forms';
 import { EmailValidator } from '../../validators/email';
 import { UsersProvider } from '../../providers/users';
@@ -23,22 +23,23 @@ export class LoginPage implements OnInit {
 	public loginForm;
 	loading: any;
 	userProfile: any = null;
-	disableLogin: boolean = false;
+	disableLogin = false;
 	userProfiles: any = null;
 	public currentUser: any;
 
 	constructor(
-		public events: Events, 
-		private storage: Storage, 
-		public loadingCtrl: LoadingController, 
+		public events: Events,
+		private storage: Storage,
+		public loadingCtrl: LoadingController,
 		public usersProv: UsersProvider,
-		public alertCtrl: AlertController, 
-		public formBuilder: FormBuilder, 
+		public alertCtrl: AlertController,
+		public formBuilder: FormBuilder,
 		private router: Router,
 		public fb: Facebook,
 		public values: Values,
 		public service: ServiceProvider,
 		public menuCtrl: MenuController,
+		public platform: Platform
 	) {
 		this.loginForm = formBuilder.group({
 			email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
@@ -65,7 +66,7 @@ export class LoginPage implements OnInit {
 		const alert = await this.alertCtrl.create({
 			message: 'Falha ao Entrar!',
 			buttons: [{
-				text: "Ok",
+				text: 'OK',
 				role: 'cancel'
 			}]
 		});
@@ -86,73 +87,9 @@ export class LoginPage implements OnInit {
 		} else {
 			this.usersProv.loginUser(this.loginForm.value.email, this.loginForm.value.password).then(authData => {
 				
-				console.log(authData);
-				
-			
 				this.continueLogin(authData.user);
-				
-				/**
-				  this.userProfile = authData.user;
-			
-				  
-				  
-				  this.values.isLoggedIn = true;
-				  this.disableLogin = false;
-				  console.log(this.values.isLoggedIn);
-
-				  this.service.getUserProfile(authData.user.uid).on('value', (snapshot) =>{
-						this.userProfiles = snapshot.val();
-				  });
-
-				  this.values.userRole = firebase.database().ref('/users').child(authData.user.uid).on('value', snapshot =>{
-					if(snapshot.val()){
-					  this.values.userRole = snapshot.val().role;
-					}
-					
-				  });
-				  
-				  
-				  console.log(this.userProfiles);
-				  let user = {
-						avt: "assets/imgs/no-avt.png",
-						username: this.userProfiles.displayName,
-						fullname: this.userProfiles.lastName,
-						email: this.userProfiles.email,
-						address: this.userProfiles.address,
-						phone: this.userProfiles.phone,
-						id: authData.user.uid,
-						id_auth: authData.user.uid,
-					}
-				  
-				  this.events.publish('user: change', user);
-				  this.router.navigateByUrl('home');
-		  
-		 
-		 */
-		 
-				/**
-				this.usersProv.getUser(authData.user.uid).then(data => {
-					let user = {
-						avt: data[0].payload.doc.data().avt,
-						username: data[0].payload.doc.data().username,
-						fullname: data[0].payload.doc.data().fullname,
-						email: data[0].payload.doc.data().email,
-						address: data[0].payload.doc.data().address,
-						phone: data[0].payload.doc.data().phone,
-						id: data[0].payload.doc.id,
-						id_auth: data[0].payload.doc.data().id_auth
-					}
-					console.log(user);
-					this.storage.set('user', user).then(() => {
-						this.loading.dismiss().then(() => {
-							this.events.publish('user: change', user);
-							this.router.navigateByUrl('home');
-						});
-					});
-				})
-				
-				*/
 			}, error => {
+				console.log('------5' + error + '-------');
 				this.loading.dismiss().then(() => {
 					this.presentAlertErr();
 				});
@@ -163,33 +100,12 @@ export class LoginPage implements OnInit {
 
 
 
-	login_fb(){
+	login_fb() {
 		this.usersProv.facebookLogin().then(authData => {
-			console.log(authData);
-			
-			this.continueLogin(authData);
-			/**
-			this.usersProv.getUser(authData.uid).then(data => {
-				let user = {
-					avt: data[0].payload.doc.data().avt,
-					username: data[0].payload.doc.data().username,
-					fullname: data[0].payload.doc.data().fullname,
-					email: data[0].payload.doc.data().email,
-					address: data[0].payload.doc.data().address,
-					phone: data[0].payload.doc.data().phone,
-					id: data[0].payload.doc.id,
-					id_auth: data[0].payload.doc.data().id_auth
-				}
-				this.storage.set('user', user).then(() => {
-					this.loading.dismiss().then(() => {
-						this.events.publish('user: change', user);
-						this.router.navigateByUrl('home');
-					});
-				});
-			})	
-			
-			*/
+			console.log('-------5' + authData.user + '---------');
+			this.continueLogin(authData.user);
 		}, error => {
+			console.log('------6' + error + '-------');
 			this.loading.dismiss().then(() => {
 				this.presentAlertErr();
 			});
@@ -197,12 +113,20 @@ export class LoginPage implements OnInit {
 		this.presentLoading();
 	}
 
-	onLoginGoogle(): void {
-		this.usersProv.loginGoogleUser()
-		  .then((authData) => {
-			console.log(authData);
-			this.continueLogin(authData);
-		  }).catch(err => console.log('err', err.message));
+	async onLoginGoogle() {
+		if (this.platform.is('cordova')) {
+			this.usersProv.loginGoogleUser()
+			.then((authData) => {
+				console.log('------5' + authData + '-------');
+				this.continueLogin(authData.user);
+			}).catch(err => console.log('------6' + err + '-------'));
+		  } else {
+			this.usersProv.webGoogleLogin()
+			.then((authData: any) => {
+			  console.log(authData);
+			  this.continueLogin(authData.user);
+			}).catch(err => console.log('err', err.message));
+		  }
 		  this.presentLoading();
 	}
 
@@ -216,7 +140,6 @@ export class LoginPage implements OnInit {
 			
 			this.userProfiles = snapshot.val();
 			if (this.userProfiles) {
-			
 					this.loading.dismiss().then(() => {
 						let user = {
 							avt: this.userProfiles.facebook,
@@ -232,7 +155,7 @@ export class LoginPage implements OnInit {
 						this.events.publish('user: change', user);
 						this.router.navigateByUrl('/home');
 					});
-			}else{
+			} else {
 				this.usersProv.createUser(user, user.email, user.displayName, '', '', '').then(res => this.continueLogin(user));
 			}
 	});

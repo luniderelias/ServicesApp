@@ -34,12 +34,12 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AppComponent } from './app.component';
 
 import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { FcmService } from 'src/providers/fcm.service';
+import { Firebase } from '@ionic-native/firebase/ngx';
 
 export function customTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
-
-import * as $ from 'jquery';
 
 @NgModule({
   declarations: [AppComponent],
@@ -65,9 +65,11 @@ import * as $ from 'jquery';
     StatusBar,
     SplashScreen,
     UsersProvider,
+    Firebase,
     ThemeProvider,
-	ServiceProvider,
-	Values,
+    ServiceProvider,
+    FcmService,
+    Values,
     Facebook,
     Stripe,
     CallNumber,
@@ -75,7 +77,7 @@ import * as $ from 'jquery';
     PayPal,
     InAppBrowser,
     Camera,
-	Geolocation,
+    Geolocation,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

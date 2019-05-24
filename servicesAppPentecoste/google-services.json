@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "983922821843-jcdt60is6kcjj0482isv1nhbs3jh02jm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alaskaprojects.vavaapp",
+            "certificate_hash": "1dd0ec0a0cdebab26fcb357e7c3660174512a3e4"
+          }
+        },
+        {
+          "client_id": "983922821843-6h8immfu6imhppr8j46qoqtuknslkm0c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alaskaprojects.vavaapp",
+            "certificate_hash": "e1be8b2b098407cba2a207759358a3a8da735fc2"
+          }
+        },
+        {
           "client_id": "983922821843-akfilvr7tp06mbln8fhitsr5dbgd1ol6.apps.googleusercontent.com",
           "client_type": 3
         }
