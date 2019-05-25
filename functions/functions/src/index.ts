@@ -2,6 +2,48 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const app = admin.initializeApp();
 
+exports.onOrderStatusChange = functions.database.ref('/orders/{order_id}/{status}')
+.onWrite(async (change: any, context: any) => {
+  const order: any = change.after.val();
+  if (change.before.val().status !== null) {
+    const order_id = context.params.order_id;
+    const status = context.params.status;
+    sendNotificationToUser(
+      admin.database().ref(`/devices/` + order.customerDetails.id).once('value'),
+      getStatusChangePayload(order_id, getStatusString(status)));
+  }
+  return true;
+});
+
+function getStatusChangePayload(order_id: any, status: string){
+  return {
+    'notification': {
+      'title': 'Status do Pedido Atualizado',
+      'body': 'Seu pedido ' + status,
+    },
+    'data': {
+      'order_id': order_id
+    },
+  };
+}
+
+function getStatusString(status:string){
+  switch(status){
+    case 'Pendente':
+      return 'está aguardando confirmação';
+    case 'Em Andamento':
+      return 'foi confirmado';
+    case 'Saiu para Entrega':
+      return 'saiu para entrega';
+    case 'Finalizado':
+        return 'foi finalizado';
+    case 'Cancelado Pela Loja':
+        return 'foi cancelado pela loja, entre em contato para mais informações';
+    default:
+      return 'está aguardando confirmação';
+  }
+}
+
 exports.onNewOrderReceived = functions.database.ref('/orders/{order_id}')
 .onWrite(async (change: any, context: any) => {
   const order: any = change.after.val();

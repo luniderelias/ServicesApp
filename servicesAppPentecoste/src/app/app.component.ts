@@ -116,16 +116,25 @@ export class AppComponent {
   }
 
 
-	private async presentToast(message) {
+  private async presentToast(message) {
     const toast = await this.toastCtrl.create({
-      message,
-      duration: 3000
+      header: message.title,
+      message: message.body,
+      position: 'middle',
+      buttons: [{
+				text: 'Visualizar',
+				handler: () => {
+          if (message.data.order_id) {
+            this.router.navigateByUrl('order-details/' + message.data.order_id);
+          }
+        }
+      }]
     });
     toast.present();
   }
 
-	ngOnInit() {
-	}
+  ngOnInit() {
+  }
 
   initializeApp() {
     this.platform.ready().then(() => {
@@ -142,7 +151,7 @@ export class AppComponent {
 			if (this.platform.is('ios')) {
 			  this.presentToast(msg.aps.alert);
 			} else {
-			  this.presentToast(msg.body);
+			  this.presentToast(msg);
 			}
 		  });
 	  }

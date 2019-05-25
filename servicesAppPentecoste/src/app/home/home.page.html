@@ -30,8 +30,7 @@
                     <img class="poster-effect" [src]="item.image_firebase_url">
                 </div>
                 <div class="data" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: item.$key}]">
-                    <div class="title max-lines">{{item.name}}
-                    </div>
+                    <div class="title max-lines">{{item.name}}</div>
                     <div class="price vertical-center">R${{item.price}}</div>
                     <div class="stock vertical-bottom" *ngIf="item.stock <= 5">Restam {{item.stock}} un.</div>
                 </div>

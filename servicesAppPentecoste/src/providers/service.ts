@@ -187,7 +187,7 @@ export class ServiceProvider {
 
 		console.log(userProfiles);
 		return this.orderList.push({
-			email: uid,
+			uid: uid,
 			items: order,
 			total: total,
 			payments: payments,
@@ -203,38 +203,11 @@ export class ServiceProvider {
 		return this.restaurantUserInfo.child(id);
 	}
 
-	chargeStripe(token, currency, amount, secret_kay) {
-		return false;
-		/**
-			this.getSecKey = secret_kay;
-				var headers = new Headers();
-				var params = new URLSearchParams();
-		
-				headers.append('Content-Type', 'application/x-www-form-urlencoded');
-				headers.append('Authorization', 'Bearer ' + secret_kay); 
-				params.append("currency", currency);
-				params.append("amount",  amount);
-				params.append("description", "description");
-				params.append("source", token);
-				alert("params-"+JSON.stringify(params));
-			
-						return new Promise(resolve => {  
-							this.http.post(  'https://api.stripe.com/v1/charges', params, { headers: headers }).map(res => res.json())
-							.subscribe(data => {
-								alert("DATA"+data);
-								resolve(data);
-							});
-						});
-						
-						*/
-	}
-
 	addIdToOrder(newOrderKey) {
 		return this.orderList.child(newOrderKey).child('id').set(newOrderKey);
 	}
 
 	addNewOrdersToEachRestaurantExtra(orderKey, restaurantKey, restaurantName,/**extras,*/order, imagess, name, price, productId, quantity, restaurantId, restaurantNames, newOrderDetails) {
-
 		return this.categorizedOrders.child(restaurantKey).child(orderKey).set({
 			addresses: newOrderDetails.addresses,
 			customerDetails: newOrderDetails.customerDetails,

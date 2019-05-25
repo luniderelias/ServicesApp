@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import * as firebase from 'firebase';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class FcmService {
@@ -12,7 +13,8 @@ export class FcmService {
     private fbase: Firebase,
     private afs: AngularFirestore,
     private platform: Platform,
-    private af: AngularFireDatabase) {
+    private af: AngularFireDatabase,
+    public router: Router) {
   }
 
   async getToken(uid) {

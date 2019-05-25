@@ -227,8 +227,6 @@ export class ChooseAddressPage implements OnInit {
     this.service.proqty = [];
     this.service.total = 0;
 
-    console.log(newOrder);
-
     this.service.addIdToOrder(newOrder.key);
 
     this.addOrderToRestaurant(newOrder.key);
@@ -252,7 +250,6 @@ addOrderToRestaurant(id) {
           snap.restaurantId, snap.restaurantName, this.newOrderDetails);
 
         this.service.categorizedRestaurantOrder(id, snap.restaurantId, snap.owner_id);
-
         
         this.loading = false;
         this.router.navigateByUrl('orders');
