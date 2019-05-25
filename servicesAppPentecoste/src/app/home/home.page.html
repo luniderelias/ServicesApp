@@ -26,10 +26,10 @@
         </div>
         <ion-virtual-scroll [items]="items">
             <div class="movie" *virtualItem="let item">
-                <div class="poster" [routerLink]="['/product-details', {id: id, title: item.categories , owner_id: owner_id , cat_id: item.$key}]">
+                <div class="poster" [routerLink]="['/product-details', {id: item.$key, title: item.name , owner_id: item.res_id , cat_id: item.categories, res_name: item.restaurant_name}]">
                     <img class="poster-effect" [src]="item.image_firebase_url">
                 </div>
-                <div class="data" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: item.$key}]">
+                <div class="data" [routerLink]="['/product-details', {id: item.$key, title: item.name , owner_id: item.res_id , cat_id: item.categories, res_name: item.restaurant_name}]">
                     <div class="title max-lines">{{item.name}}</div>
                     <div class="price vertical-center">R${{item.price}}</div>
                     <div class="stock vertical-bottom" *ngIf="item.stock <= 5">Restam {{item.stock}} un.</div>

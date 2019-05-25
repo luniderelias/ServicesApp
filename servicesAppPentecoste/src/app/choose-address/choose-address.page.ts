@@ -243,14 +243,10 @@ addOrderToRestaurant(id) {
       this.newOrderItems = snapshot.val().items;
 
       this.newOrderItems.forEach(snap => {
-        console.log(snap);
+        this.service.addNewOrdersToEachRestaurantExtra(id, snap.restaurantId, this.newOrderDetails);
 
-        this.service.addNewOrdersToEachRestaurantExtra(id, snap.restaurantId, snap.restaurantName,
-          snap, snap.image, snap.name, snap.price, snap.product_id, snap.quantity,
-          snap.restaurantId, snap.restaurantName, this.newOrderDetails);
+        this.service.categorizedRestaurantOrder(id, snap.restaurantId);
 
-        this.service.categorizedRestaurantOrder(id, snap.restaurantId, snap.owner_id);
-        
         this.loading = false;
         this.router.navigateByUrl('orders');
       });

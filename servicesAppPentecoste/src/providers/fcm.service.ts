@@ -20,13 +20,12 @@ export class FcmService {
   async getToken(uid) {
     let token;
 
+    token = await this.fbase.getToken();
+
     if (this.platform.is('android')) {
       token = await this.fbase.getToken();
     }
 
-    if (this.platform.is('hybrid')) {
-      token = await this.fbase.getToken();
-    }
 
     if (this.platform.is('ios')) {
       token = await this.fbase.getToken();

@@ -18,9 +18,11 @@ export class ProductDetailsPage implements OnInit {
 	categoryList: any;
 	params: any = {};
 	items: any;
-	title: any;
-	owner_id: any;
-	product_id: any;
+	name: any;
+	ownerId: any;
+	productId: any;
+	categoryId: any;
+	restaurantName: any;
 
 	loading = false;
 	quantity: any;
@@ -59,39 +61,39 @@ export class ProductDetailsPage implements OnInit {
 		public values: Values,
 	) {
 		this.loading = true;
-		this.quantity = "1";
+		this.quantity = '1';
 
 		this.route.params.subscribe(params => {
 			console.log(params);
 			this.id = params.id;
-			this.title = params.title;
-			this.owner_id = params.owner_id;
-			this.product_id = params.cat_id;
-			this.service.getItemDetail(this.product_id).on('value', (snapshot) => {
+			this.name = params.name;
+			this.ownerId = params.owner_id;
+			this.categoryId = params.cat_id;
+			this.restaurantName = params.res_name;
+			this.service.getItemDetail(this.id).on('value', (snapshot) => {
 
 				this.params.data = [];
 				this.params.data.extraOptions = [];
 				this.currentExtraItemQuantity = 0;
 
-				this.service.getItemExtraOptionsDetail(this.product_id).on('value', (snapshot) => {
+				this.service.getItemExtraOptionsDetail(this.id).on('value', (extraSnapshot) => {
 
 					this.extraOptions = [];
-					snapshot.forEach(snap => {
-						for (let item in this.service.cart.line_items) {
-							if (this.product_id == this.service.cart.line_items[item].product_id) {
-								for (let extras in this.service.cart.line_items[item].extra) {
-									if (snap.key == this.service.cart.line_items[item].extra[extras].id) {
+					extraSnapshot.forEach(snap => {
+						for (const item in this.service.cart.line_items) {
+							if (this.id === this.service.cart.line_items[item].product_id) {
+								for (const extras in this.service.cart.line_items[item].extra) {
+									if (snap.key === this.service.cart.line_items[item].extra[extras].id) {
 										this.currentExtraItemQuantity = this.service.cart.line_items[item].extra[extras].quantity;
 									}
 								}
 							}
 						}
 						this.extraOptions.push({
-
 							id: snap.key,
 							name: snap.val().name,
 							value: snap.val().value,
-							product_id: this.product_id,
+							product_id: this.id,
 							quantity: this.currentExtraItemQuantity
 						});
 					});
@@ -110,9 +112,9 @@ export class ProductDetailsPage implements OnInit {
 				this.params.data.real_price = snapshot.val().price;
 				this.params.data.stock = snapshot.val().stock;
 				this.params.data.extraOptions = this.extraOptions;
-				this.params.data.restaurantId = this.id;
-				this.params.data.restaurantName = this.title;
-				this.params.data.owner_id = this.owner_id;
+				this.params.data.restaurantId = this.ownerId;
+				this.params.data.restaurantName = this.restaurantName;
+				this.params.data.owner_id = this.ownerId;
 
 
 				this.getFavoriteItem();
@@ -120,11 +122,11 @@ export class ProductDetailsPage implements OnInit {
 		});
 	}
 
-	addToCart(category, stock, name, price, image, extra) {
-		var itemAdded = false;
+	addToCart(categories, category, stock, name, price, image, extra) {
+		let itemAdded = false;
 		
-		for (let item in this.service.cart.line_items) {
-			if (this.product_id === this.service.cart.line_items[item].product_id) {
+		for (const item in this.service.cart.line_items) {
+			if (this.id === this.service.cart.line_items[item].product_id) {
 				if (stock <= 0) {
 					this.presentAlert('Ops!', 'Não temos este produto em estoque no momento.');
 					return;
@@ -133,17 +135,18 @@ export class ProductDetailsPage implements OnInit {
 
 				this.cartsItem = [];
 
-				this.service.proqty[this.product_id] += 1;
+				this.service.proqty[this.id] += 1;
 
 				this.cartsItem.name = name;
 				this.cartsItem.category = category;
+				this.cartsItem.categories = categories;
 				this.cartsItem.image = image;
 				this.cartsItem.price = price;
 				this.cartsItem.stock = stock;
-				this.cartsItem.product_id = this.product_id;
-				this.cartsItem.restaurantId = this.id;
-				this.cartsItem.restaurantName = this.title;
-				this.cartsItem.owner_id = this.owner_id;
+				this.cartsItem.product_id = this.id;
+				this.cartsItem.restaurantId = this.ownerId;
+				this.cartsItem.restaurantName = this.restaurantName;
+				this.cartsItem.owner_id = this.ownerId;
 
 				this.cartsItem.quantity = this.service.cart.line_items[item].quantity;
 
@@ -151,34 +154,26 @@ export class ProductDetailsPage implements OnInit {
 				this.service.cart.line_items[item] = [];
 
 				for (let ii = 0; ii <= extra.length - 1; ii++) {
-					if (this.product_id === extra[ii].product_id) {
+					if (this.id === extra[ii].product_id) {
 						this.cartsItem.extra[ii] = extra[ii];
 					}
 				}
 				this.service.cart.line_items[item].image = this.cartsItem.image;
-
 				this.service.cart.line_items[item].name = this.cartsItem.name;
-				
 				this.service.cart.line_items[item].stock = this.cartsItem.stock;
-
 				this.service.cart.line_items[item].product_id = this.cartsItem.product_id;
-
 				this.service.cart.line_items[item].price = this.cartsItem.price;
-
 				this.service.cart.line_items[item].quantity = this.cartsItem.quantity;
-
-				this.service.cart.line_items[item].category = this.cartsItem.category.
-
+				this.service.cart.line_items[item].category = this.cartsItem.category;
+				this.service.cart.line_items[item].categories = this.cartsItem.categories;
 				this.service.cart.line_items[item].restaurantId = this.cartsItem.restaurantId;
 				this.service.cart.line_items[item].restaurantName = this.cartsItem.restaurantName;
 				this.service.cart.line_items[item].owner_id = this.cartsItem.owner_id;
-
 				this.service.cart.line_items[item].extra = extra;
 
 				if (this.service.cart.line_items[item].extra) {
-
 					for (let ii = 0; ii <= this.service.cart.line_items[item].extra.length - 1; ii++) {
-						if (this.product_id === this.service.cart.line_items[item].extra[ii].product_id) {
+						if (this.id === this.service.cart.line_items[item].extra[ii].product_id) {
 							if (extra[ii].selected === true) {
 								this.service.cart.line_items[item].extra[ii].quantity += 1;
 							} else {
@@ -188,19 +183,19 @@ export class ProductDetailsPage implements OnInit {
 					}
 				}
 				this.service.cart.line_items[item].quantity += 1;
-				this.service.proqty[this.product_id] += 1;
+				this.service.proqty[this.id] += 1;
 				this.service.total += parseFloat(this.service.cart.line_items[item].price);
 
 				if (this.service.cart.extraOptions) {
 					for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
-						if (this.product_id === this.service.cart.extraOptions[ii].product_id) {
+						if (this.id === this.service.cart.extraOptions[ii].product_id) {
 							this.service.total += parseFloat(this.service.cart.extraOptions[ii].value);
 						}
 					}
 				}
 				this.values.qty += 1;
 
-				var itemAdded = true;
+				itemAdded = true;
 			}
 		}
 
@@ -209,10 +204,10 @@ export class ProductDetailsPage implements OnInit {
 
 			this.cartItem = [];
 
-			this.cartItem.product_id = this.product_id;
+			this.cartItem.product_id = this.id;
 
 			this.cartItem.quantity = 1;
-			this.service.proqty[this.product_id] = 1;
+			this.service.proqty[this.id] = 1;
 
 			this.cartItem.name = name;
 			this.cartItem.image = image;
@@ -220,18 +215,19 @@ export class ProductDetailsPage implements OnInit {
 			this.cartItem.stock = stock;
 
 			this.cartItem.restaurantId = this.id;
-			this.cartItem.restaurantName = this.title;
-			this.cartItem.restaurantName = this.owner_id;
+			this.cartItem.restaurantName = this.restaurantName;
+			this.cartItem.restaurantId = this.ownerId;
 			this.cartItem.category = category;
+			this.cartItem.categories = categories;
 
 			this.cartItem.extra = [];
 			for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
-				if (this.product_id === this.service.cart.extraOptions[ii].product_id) {
+				if (this.id === this.service.cart.extraOptions[ii].product_id) {
 					this.service.total += parseFloat(this.service.cart.extraOptions[ii].value);
 				}
 			}
 			for (let ii = 0; ii <= extra.length - 1; ii++) {
-				if (this.product_id === extra[ii].product_id) {
+				if (this.id === extra[ii].product_id) {
 					if (extra[ii].selected === true) {
 						extra[ii].quantity = 1;
 					} else {
@@ -250,25 +246,23 @@ export class ProductDetailsPage implements OnInit {
 	}
 
 	getFavoriteItem() {
-		this.service.getFavoriteItem(this.product_id).on('value', (snapshot) => {
+		this.service.getFavoriteItem(this.id).on('value', (snapshot) => {
 			if (snapshot.val() == null) {
 				this.favorite = false;
-				console.log(this.favorite);
 			} else {
 				this.favorite = true;
 			}
-			
 			this.loading = false;
 		});
 	}
 
 	addToFavourite(data) {
-		this.service.addToFavorite(data, this.product_id);
+		this.service.addToFavorite(data, this.id);
 		this.favorite = true;
 	}
 
 	removeFavourite() {
-		this.service.removeFavourite(this.product_id);
+		this.service.removeFavourite(this.id);
 		this.favorite = false;
 	}
 
@@ -280,14 +274,14 @@ export class ProductDetailsPage implements OnInit {
 			for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
 				if (this.service.cart.extraOptions[ii].id === extraOption.id) {
 					this.service.cart.extraOptions.splice(ii, 1);
-					extraOption.product_id = this.product_id;
+					extraOption.product_id = this.id;
 					this.service.cart.extraOptions.push(extraOption);
 					break;
 				} else {
-					extraOption.product_id = this.product_id;
+					extraOption.product_id = this.id;
 					this.service.cart.extraOptions.push(extraOption);
 					for (let jj = 0; jj <= this.service.cart.extraOptions.length - 1; jj++) {
-						if (this.product_id === this.service.cart.extraOptions[jj].product_id) {
+						if (this.id === this.service.cart.extraOptions[jj].product_id) {
 						}
 					}
 					break;
@@ -301,12 +295,12 @@ export class ProductDetailsPage implements OnInit {
 				}
 			}
 		} else {
-			extraOption.product_id = this.product_id;
+			extraOption.product_id = this.id;
 			this.service.cart.extraOptions.push(extraOption);
 
 			for (let ii = 0; ii <= this.service.cart.extraOptions.length - 1; ii++) {
 
-				if (this.product_id === this.service.cart.extraOptions[ii].product_id) {
+				if (this.id === this.service.cart.extraOptions[ii].product_id) {
 				}
 			}
 		}
@@ -322,13 +316,13 @@ export class ProductDetailsPage implements OnInit {
 	}
 	
 
-	async presentConfirmAlert(category, stock, name, price, image, extra) {
+	async presentConfirmAlert(categories, category, stock, name, price, image, extra) {
 		const alert = await this.alertCtrl.create({
 			message: 'Deseja Adicionar esse Produto ao Carrinho?',
 			buttons: [{
 				text: 'Sim',
 				handler: () => {
-					this.addToCart(category, stock, name, price, image, extra);
+					this.addToCart(categories, category, stock, name, price, image, extra);
 				}
 			}]
 		});

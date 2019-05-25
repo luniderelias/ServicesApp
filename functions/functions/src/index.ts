@@ -2,15 +2,17 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const app = admin.initializeApp();
 
-exports.onOrderStatusChange = functions.database.ref('/orders/{order_id}/{status}')
+exports.onOrderStatusChange = functions.database.ref('/orders/{order_id}')
 .onWrite(async (change: any, context: any) => {
   const order: any = change.after.val();
   if (change.before.val().status !== null) {
     const order_id = context.params.order_id;
-    const status = context.params.status;
+    const status = order.status;
     sendNotificationToUser(
       admin.database().ref(`/devices/` + order.customerDetails.id).once('value'),
-      getStatusChangePayload(order_id, getStatusString(status)));
+      getStatusChangePayload(order_id, getStatusString(status))).catch(res => {
+        // teste
+       });
   }
   return true;
 });
@@ -129,8 +131,7 @@ function saveDashboardData(order:any) {
 
 function saveTotalSales(order:any){
   admin.database().ref(`/dashboard/totalSales`).once('value').then(function (snap:any) {
-      var totalSales = snap.val();
-      totalSales += order.total;
+      const totalSales = snap.val() + order.total;
       admin.database()
       .ref(`/dashboard`).update({'totalSales': totalSales});
   });
@@ -138,7 +139,7 @@ function saveTotalSales(order:any){
 
 function saveTotalOrders(){
   admin.database().ref(`/dashboard/totalOrders`).once('value').then(function (snap:any) {
-    var totalOrders = snap.val() + 1;
+    const totalOrders = snap.val() + 1;
     admin.database()
     .ref(`/dashboard`).update({'totalOrders':totalOrders});
   });
@@ -147,7 +148,7 @@ function saveTotalOrders(){
 function saveDailyRevenue(order:any){
   admin.database().ref(`/dashboard/dailyRevenue`).once('value').then(function (snap:any) {
     const currentTime = order.timeStamp;
-    var dailyRevenue = snap.val();
+    const dailyRevenue = snap.val();
     const currentDay = Math.floor(currentTime/86400000);
     const lastDay = Math.floor(dailyRevenue.label[dailyRevenue.label.length - 1]/86400000);
     if(currentDay > lastDay){
@@ -167,7 +168,7 @@ function saveDailyRevenue(order:any){
 function saveDailyOrders(order:any){
   admin.database().ref(`/dashboard/dailyOrders`).once('value').then(function (snap:any) {
     const currentTime = order.timeStamp;
-    var dailyOrders = snap.val();
+    const dailyOrders = snap.val();
     const currentDay = Math.floor(currentTime/86400000);
     const lastDay = Math.floor(dailyOrders.label[dailyOrders.label.length - 1]/86400000);
     if(currentDay > lastDay){

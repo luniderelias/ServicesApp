@@ -184,7 +184,6 @@ export class ServiceProvider {
 	}
 
 	addOrders(order: string, total: number, uid: string, payments: string, userProfiles: string, currentUserAddress: any) {
-
 		console.log(userProfiles);
 		return this.orderList.push({
 			uid: uid,
@@ -207,11 +206,11 @@ export class ServiceProvider {
 		return this.orderList.child(newOrderKey).child('id').set(newOrderKey);
 	}
 
-	addNewOrdersToEachRestaurantExtra(orderKey, restaurantKey, restaurantName,/**extras,*/order, imagess, name, price, productId, quantity, restaurantId, restaurantNames, newOrderDetails) {
-		return this.categorizedOrders.child(restaurantKey).child(orderKey).set({
+	addNewOrdersToEachRestaurantExtra(orderKey, restaurantId, newOrderDetails) {
+		return this.categorizedOrders.child(restaurantId).child(orderKey).set({
 			addresses: newOrderDetails.addresses,
 			customerDetails: newOrderDetails.customerDetails,
-			email: newOrderDetails.email,
+			email: newOrderDetails.id,
 			items: newOrderDetails.items,
 			payments: newOrderDetails.payments,
 			status: newOrderDetails.status,
@@ -222,12 +221,10 @@ export class ServiceProvider {
 
 	}
 
-	categorizedRestaurantOrder(orderKey, restaurantKey, owner_id) {
+	categorizedRestaurantOrder(orderKey, restaurantKey) {
 
 		return this.categorizedOrders.child(restaurantKey).child(orderKey).update({
-
 			id: orderKey
-
 		});
 
 	}
@@ -239,7 +236,7 @@ export class ServiceProvider {
 
 	getMyOrderList() {
 		return this.af.list('/orders', (ref) => {
-			return ref.orderByChild('email').equalTo(firebase.auth().currentUser.uid);
+			return ref.orderByChild('uid').equalTo(firebase.auth().currentUser.uid);
 		});
 	}
 

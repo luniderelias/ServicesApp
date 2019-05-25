@@ -50,7 +50,7 @@ export class LoginPage implements OnInit {
 	ionViewWillEnter() {
 		this.menuCtrl.enable(false);
 		this.menuCtrl.close();
-	  }
+	}
 
 	async presentAlert() {
 		const alert = await this.alertCtrl.create({
@@ -86,7 +86,7 @@ export class LoginPage implements OnInit {
 			console.log(this.loginForm.value);
 		} else {
 			this.usersProv.loginUser(this.loginForm.value.email, this.loginForm.value.password).then(authData => {
-				
+
 				this.continueLogin(authData.user);
 			}, error => {
 				console.log('------5' + error + '-------');
@@ -101,33 +101,48 @@ export class LoginPage implements OnInit {
 
 
 	login_fb() {
-		this.usersProv.facebookLogin().then(authData => {
-			console.log('-------5' + authData.user + '---------');
-			this.continueLogin(authData.user);
-		}, error => {
-			console.log('------6' + error + '-------');
-			this.loading.dismiss().then(() => {
-				this.presentAlertErr();
+		if (this.platform.is('cordova')) {
+			this.usersProv.facebookLogin().then(authData => {
+				this.continueLogin(authData.user);
+			}, error => {
+				this.loading.dismiss().then(() => {
+					this.presentAlertErr();
+				});
 			});
-		});
+		} else {
+			this.usersProv.webFacebookLogin().then((authData: any) => {
+				this.continueLogin(authData.user);
+			}, error => {
+				this.loading.dismiss().then(() => {
+					this.presentAlertErr();
+				});
+			});
+		}
 		this.presentLoading();
 	}
 
 	async onLoginGoogle() {
 		if (this.platform.is('cordova')) {
 			this.usersProv.loginGoogleUser()
-			.then((authData) => {
-				console.log('------5' + authData + '-------');
-				this.continueLogin(authData.user);
-			}).catch(err => console.log('------6' + err + '-------'));
-		  } else {
+				.then((authData) => {
+					this.continueLogin(authData.user);
+				}).catch(err => {
+					this.loading.dismiss().then(() => {
+						this.presentAlertErr();
+					});
+				});
+		} else {
 			this.usersProv.webGoogleLogin()
-			.then((authData: any) => {
-			  console.log(authData);
-			  this.continueLogin(authData.user);
-			}).catch(err => console.log('err', err.message));
-		  }
-		  this.presentLoading();
+				.then((authData: any) => {
+					console.log(authData);
+					this.continueLogin(authData.user);
+				}).catch(err => {
+					this.loading.dismiss().then(() => {
+						this.presentAlertErr();
+					});
+				});
+		}
+		this.presentLoading();
 	}
 
 
@@ -137,30 +152,30 @@ export class LoginPage implements OnInit {
 
 		this.service.getRestaurantUserProfile(user.uid).on('value', (snapshot) => {
 			console.log(snapshot.val());
-			
+
 			this.userProfiles = snapshot.val();
 			if (this.userProfiles) {
-					this.loading.dismiss().then(() => {
-						let user = {
-							avt: this.userProfiles.facebook,
-							username: this.userProfiles.displayName,
-							fullname: this.userProfiles.lastName,
-							email: this.userProfiles.email,
-							address: this.userProfiles.address,
-							phone: this.userProfiles.phone,
-							id: this.currentUser.uid,
+				this.loading.dismiss().then(() => {
+					let user = {
+						avt: this.userProfiles.facebook,
+						username: this.userProfiles.displayName,
+						fullname: this.userProfiles.lastName,
+						email: this.userProfiles.email,
+						address: this.userProfiles.address,
+						phone: this.userProfiles.phone,
+						id: this.currentUser.uid,
 
-						}
-						this.storage.set('user', user);
-						this.events.publish('user: change', user);
-						this.router.navigateByUrl('/home');
-					});
+					}
+					this.storage.set('user', user);
+					this.events.publish('user: change', user);
+					this.router.navigateByUrl('/home');
+				});
 			} else {
 				this.usersProv.createUser(user, user.email, user.displayName, '', '', '').then(res => this.continueLogin(user));
 			}
-	});
+		});
 	}
-	
+
 
 	ngOnInit() {
 	}

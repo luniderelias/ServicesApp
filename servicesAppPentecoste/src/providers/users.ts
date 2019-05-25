@@ -134,6 +134,16 @@ export class UsersProvider {
     }
   }
 
+
+  async webFacebookLogin(): Promise<void> {
+    try {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      return await this.fireAuth.signInWithPopup(provider);
+    } catch (err) {
+      console.log('-------------------- ' + err + '-------------------');
+    }
+  }
+
   async facebookLogin(): Promise<firebase.auth.UserCredential> {
     try {
       return this.facebook.login(['email']).then(response => {
