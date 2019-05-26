@@ -79,7 +79,6 @@ export class CartPage implements OnInit {
 
 	deleteExtraFromCart(option) {
 		for (let item in this.service.cart.line_items) {
-			console.log(item);
 			if (option.product_id == this.service.cart.line_items[item].product_id) {
 				for (let extras in this.service.cart.line_items[item].extra) {
 					if (option.id == this.service.cart.line_items[item].extra[extras].id) {
@@ -94,7 +93,6 @@ export class CartPage implements OnInit {
 	}
 
 	addExtraToCart(option) {
-		console.log(option);
 		for (const item in this.service.cart.line_items) {
 			if (option.product_id === this.service.cart.line_items[item].product_id) {
 				for (const extras in this.service.cart.line_items[item].extra) {
@@ -120,6 +118,10 @@ export class CartPage implements OnInit {
 			buttons: ['OK']
 		});
 		await alert.present();
+	}
+	
+	formatMoney(n) {
+		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
 	}
 
 }

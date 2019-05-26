@@ -62,15 +62,11 @@ export class ServiceProvider {
 	public hotelCords: any;
 
 	constructor(private af: AngularFireDatabase, public afs: AngularFirestore, public facebook: Facebook, public alertCtrl: AlertController) {
-
 		this.cart = {
-			"line_items": [],
-			"extraOptions": []
+			'line_items': [],
+			'extraOptions': []
 		};
-
 		this.currentUser = firebase.auth().currentUser;
-
-		console.log(this.currentUser);
 
 		this.fireAuth = firebase.auth();
 
@@ -110,54 +106,46 @@ export class ServiceProvider {
 	}
 
 	getRestaurantsList(): any {
-		console.log(this.restaurants);
 		return this.restaurants;
 	}
 
 	getRestaurantCategoryLists(id) {
-		console.log(id);
-		this.category = this.restaurantCategory.orderByChild("res_name").equalTo(id);
+		this.category = this.restaurantCategory.orderByChild('res_name').equalTo(id);
 		return this.category;
 	}
 
 	getItemLists(id) {
-		console.log(id);
-		this.restaurantItems = this.items.orderByChild("categories").equalTo(id);
+		this.restaurantItems = this.items.orderByChild('categories').equalTo(id);
 		return this.restaurantItems;
 
 	}
 
 	getItemDetail(id): any {
-
 		return this.items.child(id);
-
 	}
 
 	getItemExtraOptionsDetail(id) {
 
-		return this.items.child(id).child("extraOptions");
+		return this.items.child(id).child('extraOptions');
 
 	}
 
 	getCurrentUserAddresses(uid) {
 
-		this.userAddressList = this.restaurantUserInfo.child(uid).child("addresses");
+		this.userAddressList = this.restaurantUserInfo.child(uid).child('addresses');
 
 		return this.userAddressList;
 	}
 
 	getCityName() {
-		console.log(this.cityName);
 		return this.cityName;
 	}
 
 	getCityDistrictName() {
-		console.log(this.cityDistrictName);
 		return this.cityDistrictName;
 	}
 
 	getStreetName() {
-		console.log(this.streetName);
 		return this.streetName;
 	}
 
@@ -184,7 +172,6 @@ export class ServiceProvider {
 	}
 
 	addOrders(order: string, total: number, uid: string, payments: string, userProfiles: string, currentUserAddress: any) {
-		console.log(userProfiles);
 		return this.orderList.push({
 			uid: uid,
 			items: order,
@@ -242,12 +229,9 @@ export class ServiceProvider {
 
 
 	getFavoriteItem(id): any {
-		console.log(id);
-		console.log(firebase.auth());
-
 		var uid = firebase.auth().currentUser.uid;
 
-		this.favoriteItem = this.restaurantUserInfo.child(uid).child("favorites").child(id);
+		this.favoriteItem = this.restaurantUserInfo.child(uid).child('favorites').child(id);
 		return this.favoriteItem;
 	}
 
@@ -255,11 +239,7 @@ export class ServiceProvider {
 
 		var uid = firebase.auth().currentUser.uid;
 
-		console.log("service");
-		console.log(uid);
-		console.log(data);
-
-		this.restaurantUserInfo.child(uid).child("favorites").child(id).set({
+		this.restaurantUserInfo.child(uid).child('favorites').child(id).set({
 			product_id: id,
 			image: data.image_firebase_url,
 			name: data.name,
@@ -276,7 +256,6 @@ export class ServiceProvider {
 	}
 
 	removeFavourite(id) {
-		console.log(id);
 		var uid = firebase.auth().currentUser.uid;
 
 		this.restaurantUserInfo.child(uid).child("favorites").child(id).remove();
@@ -295,8 +274,6 @@ export class ServiceProvider {
 	removeFavItem(item) {
 		var uid = firebase.auth().currentUser.uid;
 
-		console.log(item.id);
-
 		this.restaurantUserInfo.child(uid).child("favorites").child(item.id).remove();
 	}
 
@@ -309,19 +286,12 @@ export class ServiceProvider {
 
 
 	getUserChatList(id) {
-		console.log(id);
-
 		this.userChatList = this.chats.child(id).child("chat");
-
-
 		return this.userChatList;
 	}
 
 
 	addRoom(uid, data, userImage, userName) {
-
-
-		console.log(data);
 
 		this.chats.child(data.owner_id).child(data.id).child('chat').child(uid).child('list').child("-0000").set({
 
@@ -383,6 +353,14 @@ export class ServiceProvider {
 	getFilterItems(search): any {
 		return this.af.list('/items', (ref) => {
 			return ref.limitToLast(10).orderByChild('search').startAt(search).endAt(search + '\uf8ff');
+		});
+	}
+
+	
+
+	getCategoryItems(category): any {
+		return this.af.list('/items', (ref) => {
+			return ref.orderByChild('categories').equalTo(category);
 		});
 	}
 

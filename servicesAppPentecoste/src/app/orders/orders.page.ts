@@ -50,13 +50,18 @@ export class OrdersPage implements OnInit {
 			snapshot.forEach(snap => {
 					 let a = snap.payload.val();
 					a['$key'] = snap.key;
-	
+					a['total'] = this.formatMoney(a['total']);
 					this.myOrderList.push(a as OrderInterface);
 				});
 			this.myOrderList = this.myOrderList.reverse();
 			this.loading = false;
 			});
-  	}
+	  }
+	  
+	  
+	formatMoney(n) {
+		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+	}
 
 }
 

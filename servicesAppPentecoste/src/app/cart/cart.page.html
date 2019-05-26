@@ -13,6 +13,7 @@
 
             <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
                 <ion-icon name="cart"></ion-icon>
+                <p style="color:white;margin-bottom:20px;">{{values.qty}}</p>
             </ion-button>
         </ion-buttons>
 
@@ -40,11 +41,11 @@
                     <h4 class="fs-16 mg-0 ellipsis">{{item.name}}</h4>
                     <p>
                         <span>
-							<i>R${{item.price}}</i>
+							<i>R${{formatMoney(item.price)}}</i>
 						</span>
                     </p>
                     <p>
-                        <i>SubTotal: R${{1*item.price*item.quantity}}</i>
+                        <i>SubTotal: R${{formatMoney(item.price*item.quantity)}}</i>
                     </p>
                 </div>
                 <div>
@@ -63,7 +64,7 @@
                 <div *ngFor="let option of item.extra;" class="description pdl-10 pdr-15 ovfl-hidden">
                     <div *ngIf="option.product_id == item.product_id && option.quantity >= 1" style="color:green;">
 
-                        <h3 wrap-text style="padding-left:20%;"><strong>{{option.name}} - {{1*option.value }}$</strong></h3>
+                        <h3 wrap-text style="padding-left:20%;"><strong>{{option.name}} - R${{formatMoney(option.value)}}</strong></h3>
 
 
                         <div style="padding-left:20%;">
@@ -77,7 +78,7 @@
                             </ion-button>
                         </div>
 
-                        <P wrap-text style="padding-left:20%;"> SubTotal: <span>R${{1*option.value*option.quantity}}</span></P>
+                        <P wrap-text style="padding-left:20%;"> SubTotal: <span>R${{formatMoney(option.value*option.quantity)}}</span></P>
 
                     </div>
                 </div>
@@ -89,7 +90,7 @@
                     <ion-label no-margin *ngIf="service.total != 0"><b>Total</b></ion-label>
                 </ion-col>
                 <ion-col width-25 text-right>
-                    <ion-label no-margin *ngIf="service.total != 0"><b>R${{1*service.total}}</b></ion-label>
+                    <ion-label no-margin *ngIf="service.total != 0"><b>R${{formatMoney(service.total)}}</b></ion-label>
                 </ion-col>
             </ion-row>
         </ion-grid>

@@ -15,7 +15,6 @@ export class TranslatePage implements OnInit {
   }
   
   cambiaIdioma(idioma: string) {
-    console.log(`Traduzco a: ${idioma}`);
     this.translate.use(idioma);
   }
 

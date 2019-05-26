@@ -83,13 +83,11 @@ export class LoginPage implements OnInit {
 
 	loginUser(): void {
 		if (!this.loginForm.valid) {
-			console.log(this.loginForm.value);
+			return;
 		} else {
 			this.usersProv.loginUser(this.loginForm.value.email, this.loginForm.value.password).then(authData => {
-
 				this.continueLogin(authData.user);
 			}, error => {
-				console.log('------5' + error + '-------');
 				this.loading.dismiss().then(() => {
 					this.presentAlertErr();
 				});
@@ -134,7 +132,6 @@ export class LoginPage implements OnInit {
 		} else {
 			this.usersProv.webGoogleLogin()
 				.then((authData: any) => {
-					console.log(authData);
 					this.continueLogin(authData.user);
 				}).catch(err => {
 					this.loading.dismiss().then(() => {
@@ -151,11 +148,8 @@ export class LoginPage implements OnInit {
 		this.currentUser = firebase.auth().currentUser;
 
 		this.service.getRestaurantUserProfile(user.uid).on('value', (snapshot) => {
-			console.log(snapshot.val());
-
 			this.userProfiles = snapshot.val();
 			if (this.userProfiles) {
-				this.loading.dismiss().then(() => {
 					let user = {
 						avt: this.userProfiles.facebook,
 						username: this.userProfiles.displayName,
@@ -168,10 +162,13 @@ export class LoginPage implements OnInit {
 					}
 					this.storage.set('user', user);
 					this.events.publish('user: change', user);
-					this.router.navigateByUrl('/home');
-				});
+					this.loading.dismiss().then(() => {
+						this.router.navigateByUrl('/home');
+					});
 			} else {
-				this.usersProv.createUser(user, user.email, user.displayName, '', '', '').then(res => this.continueLogin(user));
+				this.usersProv.createUser(user, user.email, user.displayName, '', '', '').then(res => {
+					this.continueLogin(user);
+				});
 			}
 		});
 	}

@@ -9,8 +9,9 @@
 
         <ion-buttons slot="end">
 
-            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
                 <ion-icon name="cart"></ion-icon>
+                <p style="color:white;margin-bottom:20px;">{{values.qty}}</p>
             </ion-button>
         </ion-buttons>
         <ion-title>Informações do Pedido</ion-title>
@@ -120,17 +121,17 @@
                 <div *ngFor="let item of orderDetails.items" style="margin-top: 15px">
                     <div style="margin-left:20px;">
                         <p><strong>{{item.name}} --- {{item.category}}</strong></p>
-                        <p>Preço: R${{item.price}}</p>
+                        <p>Preço: R${{formatMoney(item.price)}}</p>
                         <p>Quantidade: {{item.quantity}} un.</p>
-                        <h4><strong>SubTotal: R${{1*item.price*item.quantity}}</strong></h4>
+                        <h4><strong>SubTotal: R${{formatMoney(item.price*item.quantity)}}</strong></h4>
                     </div>
                     <div style="margin-left:30%;">
                         <div *ngFor="let itemExtra of item.extra">
                             <div *ngIf="itemExtra.quantity != 0">
                                 <p><strong>Nome de Pedido Extra: {{itemExtra.name}}</strong></p>
-                                <p>Preço: R${{itemExtra.value}}</p>
+                                <p>Preço: R${{formatMoney(itemExtra.value)}}</p>
                                 <p>Quantidade: {{itemExtra.quantity}} un.</p>
-                                <h4><strong>SubTotal: R${{1*itemExtra.value*itemExtra.quantity}}</strong></h4>
+                                <h4><strong>SubTotal: R${{formatMoney(itemExtra.value*itemExtra.quantity)}}</strong></h4>
                             </div>
                         </div>
                     </div>
@@ -169,7 +170,7 @@
                             <ion-label no-margin>Valor Cobrado:</ion-label>
                         </ion-col>
                         <ion-col width-25 text-right>
-                            <ion-label no-margin>{{orderDetails.payments.amount}}</ion-label>
+                            <ion-label no-margin>{{formatMoney(orderDetails.payments.amount)}}</ion-label>
                         </ion-col>
                     </ion-row>
                     <ion-row class="label">
@@ -205,7 +206,7 @@
                         </ion-col>
                         <ion-col width-25 text-right>
                             <h4>
-                                <ion-label no-margin><b>R${{1*orderDetails.total}}</b></ion-label>
+                                <ion-label no-margin><b>R${{formatMoney(orderDetails.total)}}</b></ion-label>
                             </h4>
                         </ion-col>
                     </ion-row>

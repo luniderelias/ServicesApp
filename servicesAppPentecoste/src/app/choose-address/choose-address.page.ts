@@ -26,6 +26,7 @@ export class ChooseAddressPage implements OnInit {
   payment_method: any;
   cod: any;
   paymentChange: any;
+  finalPrice: any;
 
   addressList: any = [];
 
@@ -117,9 +118,7 @@ export class ChooseAddressPage implements OnInit {
 
         });
       });
-    
 
-      console.log(this.addressList);
     });
   }
 
@@ -131,7 +130,6 @@ export class ChooseAddressPage implements OnInit {
   }
 
   checkAddressNotNull(item) {
-    console.log(item);
     if (this.currentUserAddress === '' || this.currentUserAddress === undefined) {
       this.presentAlert('', 'Por favor, selecione um endereço de entrega.');
     } else {
@@ -142,16 +140,17 @@ export class ChooseAddressPage implements OnInit {
   placeOrder(item) {
     if (this.values.isLoggedIn) {
       this.currentUser = firebase.auth().currentUser;
-
-
       if (this.cod === 'cash' || this.cod === 'debit' || this.cod === 'card') {
         if (this.cod === 'cash') {
+          this.finalPrice = this.formatMoney(this.service.total - (0.1 * this.service.total)
+            + this.currentUserAddress.fare);
           this.presentNeedsChange(item);
         } else if (this.cod === 'card') {
-          this.presentConfirmAlert(item, 'Total a pagar com Frete: R$' + (this.service.total + this.currentUserAddress.fare));
+          this.finalPrice = this.formatMoney(this.service.total + this.currentUserAddress.fare);
+          this.presentConfirmAlert(item, 'Total a pagar com Frete: R$' + this.finalPrice);
         } else if (this.cod === 'debit') {
-          this.presentConfirmAlert(item,
-            'Total a pagar com Frete e Desconto: R$' + (this.service.total - (0.1 * this.service.total) + this.currentUserAddress.fare));
+          this.finalPrice = this.formatMoney(this.service.total - (0.1 * this.service.total) + this.currentUserAddress.fare);
+          this.presentConfirmAlert(item, 'Total a pagar com Frete e Desconto: R$' + (this.finalPrice));
         }
     }
     } else {
@@ -159,20 +158,16 @@ export class ChooseAddressPage implements OnInit {
     }
   }
 
-
   checkIfPhone(item) {
     this.service.getUserProfile(this.currentUser.uid).on('value', snapshot => {
       this.userProfiles = snapshot.val();
-      if (this.userProfiles.phone === undefined || this.userProfiles.phone === null || this.userProfiles.phone === '') {
-        this.presentNeedsPhone(item);
-      } else if (this.currentUserAddress !== undefined && this.userProfiles.address !== undefined) {
+      if (this.currentUserAddress !== undefined && this.userProfiles.address !== undefined) {
         this.placeOrder(item);
       } else {
         this.presentAlert('Dados Inválidos!', 'Por favor, efetue novamente seu pedido.');
       }
     });
   }
-
 
   continueSendingOrder(item) {
     this.loading = true;
@@ -235,8 +230,6 @@ export class ChooseAddressPage implements OnInit {
 
 addOrderToRestaurant(id) {
 
-    console.log(id);
-
     this.service.getOrderDetail(id).on('value', (snapshot) => {
       this.newOrderDetails = snapshot.val();
       this.newOrderAddresses = snapshot.val().addresses;
@@ -266,7 +259,7 @@ async presentNeedsChange(item) {
 		const alert = await this.alertCtrl.create({
       header: 'Necessita de Troco para quanto?',
       subHeader: this.getStoreClosedString(),
-      message: 'Total a pagar com Frete e Desconto: R$' + (this.service.total - (0.1 * this.service.total) + this.currentUserAddress.fare),
+      message: 'Total a pagar com Frete e Desconto: R$' + this.finalPrice,
 			inputs: [
 				{
 				  name: 'change',
@@ -277,7 +270,6 @@ async presentNeedsChange(item) {
 			buttons: [{
 				text: 'Sim',
 				handler: (res) => {
-          console.log(res.change);
           this.paymentChange = res.change;
           this.continueSendingOrder(item);
         }
@@ -299,7 +291,6 @@ async presentNeedsPhone(item) {
 			buttons: [{
 				text: 'Sim',
 				handler: (res) => {
-          console.log(res.phone);
           this.userProfiles.phone = res.phone;
           this.placeOrder(item);
         }
@@ -336,4 +327,9 @@ async presentNeedsPhone(item) {
       return date.getHours() >= 18 || date.getHours() <= 7 ? 'Loja Fechada: seu pedido será processado quando a loja abrir' : '';
     }
   }
+
+  
+	formatMoney(n) {
+		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+	}
 }

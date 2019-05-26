@@ -8,8 +8,9 @@
 
         <ion-buttons slot="end">
 
-            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
                 <ion-icon name="cart"></ion-icon>
+                <p style="color:white;margin-bottom:20px;">{{values.qty}}</p>
             </ion-button>
         </ion-buttons>
 
@@ -41,7 +42,7 @@
 
                 </div>
                 <div class="status" style="text-align:right;"><i>{{order.status === 'Pendente' ? 'Aguardando Aprovação' : order.status}}</i></div>
-                <div class="total" style="text-align:right;"><b>Total:R${{1 * order.total}}</b></div>
+                <div class="total" style="text-align:right;"><b>Total:R${{order.total}}</b></div>
             </div>
         </ion-virtual-scroll>
     </div>

@@ -85,7 +85,6 @@ export class FoodSearchPage implements OnInit {
 			});
 
 		}).catch(() => {
-			console.log("Error to get location");
 		});
 		that.platform.ready().then(() => {
 			var options = {
@@ -102,11 +101,6 @@ export class FoodSearchPage implements OnInit {
 		this.chats = [];
 
 		this.service.getAllChooseItems().on('value', snapshot => {
-
-			console.log(snapshot.val());
-			console.log(snapshot.key);
-
-
 
 			var key = snapshot.key;
 
@@ -136,8 +130,6 @@ export class FoodSearchPage implements OnInit {
 				});
 			});
 
-			console.log(this.chats);
-
 			this.chats = this.chats.reverse();
 
 		});
@@ -146,8 +138,6 @@ export class FoodSearchPage implements OnInit {
 
 		this.nearestHotels = [];
 		this.service.getNearestRestaurantItems().on('value', snapshot => {
-			console.log(snapshot.val());
-			console.log(snapshot.key);
 			var key = snapshot.key;
 			var val = snapshot.val();
 			this.nearestHotels = [];
@@ -184,10 +174,7 @@ export class FoodSearchPage implements OnInit {
 						var p1 = new google.maps.LatLng(destination, destination1);
 						var p2 = new google.maps.LatLng(cord.lat, cord.lng);
 
-						console.log("distance is " + google.maps.geometry.spherical.computeDistanceBetween(p1, p2) / 1000);
-
 						var distanceBetween = (google.maps.geometry.spherical.computeDistanceBetween(p1, p2)) / 1000;
-						console.log(distanceBetween);
 
 						if (distanceBetween < 10) {
 							firebase.database().ref('/cordItems').child(uid).child(res_id).update({

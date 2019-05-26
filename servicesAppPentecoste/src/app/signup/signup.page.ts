@@ -17,21 +17,21 @@ export class SignupPage implements OnInit {
 
 	public signupForm;
 	loading: any;
-	
+
 	public currentUser: any;
 	public userProfiles: any;
-	
+
 	constructor(
-		public events: Events, 
-		private storage: Storage, 
-		public loadingCtrl: LoadingController, 
-		public alertCtrl: AlertController, 
-		public usersProv: UsersProvider, 
+		public events: Events,
+		private storage: Storage,
+		public loadingCtrl: LoadingController,
+		public alertCtrl: AlertController,
+		public usersProv: UsersProvider,
 		public serviceProv: ServiceProvider,
 		public formBuilder: FormBuilder,
 		private router: Router
 	) {
-		
+
 		/**
 		this.signupForm = formBuilder.group({
 			email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
@@ -42,8 +42,8 @@ export class SignupPage implements OnInit {
 		});
 		
 		*/
-		
-		
+
+
 		this.signupForm = formBuilder.group({
 			email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
 			firstname: ['', Validators.compose([Validators.required])],
@@ -54,57 +54,46 @@ export class SignupPage implements OnInit {
 		});
 	}
 
-	signupUser(){
+	signupUser() {
 		if (!this.signupForm.valid) {
-			console.log(this.signupForm.value);
+			return;
 		} else {
 			this.presentLoading();
-			
+			this.usersProv.signupUser(this.signupForm.value.email, this.signupForm.value.password,
+				this.signupForm.value.firstname, this.signupForm.value.lastname,
+				this.signupForm.value.phone, this.signupForm.value.address)
+				.then(() => {
+					this.currentUser = firebase.auth().currentUser;
 
-			  this.usersProv.signupUser(this.signupForm.value.email, this.signupForm.value.password, 
-			  this.signupForm.value.firstname, this.signupForm.value.lastname, 
-			  this.signupForm.value.phone, this.signupForm.value.address)
-			  .then(() => {
-
-			  
-			  
-			  this.currentUser = firebase.auth().currentUser;
-		
-				console.log(this.currentUser.uid);
-			
-
-				this.serviceProv.getRestaurantUserProfile(this.currentUser.uid).on('value', (snapshot) =>{
-						console.log(snapshot.val());
-						
+					this.serviceProv.getRestaurantUserProfile(this.currentUser.uid).on('value', (snapshot) => {
 						this.userProfiles = snapshot.val();
-						
-						console.log(this.userProfiles);
-						
-								this.loading.dismiss().then(() => {
-									let user = {
-										avt: this.userProfiles.facebook,
-										username: this.userProfiles.displayName,
-										fullname: this.userProfiles.lastName,
-										email: this.userProfiles.email,
-										address: this.userProfiles.address,
-										phone: this.userProfiles.phone,
-										id: this.currentUser.uid,
 
-									}
-									this.storage.set('user', user);
-									this.events.publish('user: change', user);
-								//	console.log(data);
-									this.router.navigateByUrl('/home');
-								});
-						
+							let user = {
+								avt: this.userProfiles.facebook,
+								username: this.userProfiles.displayName,
+								fullname: this.userProfiles.lastName,
+								email: this.userProfiles.email,
+								address: this.userProfiles.address,
+								phone: this.userProfiles.phone,
+								id: this.currentUser.uid,
+							}
+							this.storage.set('user', user);
+							this.events.publish('user: change', user);
+							
+						this.loading.dismiss().then(() => {
+							this.router.navigateByUrl('/home');
+						});
+					});
+				}, error => {
+					switch (error.code) {
+						case 'auth/email-already-in-use':
+						error.message = 'E-mail já Cadastrado';
+						break;
+					}
+					this.loading.dismiss().then(() => {
+						this.presentAlertErr(error);
+					});
 				});
-
-
-				
-			  });
-				
-
-			
 		}
 	}
 
@@ -120,7 +109,7 @@ export class SignupPage implements OnInit {
 		const alert = await this.alertCtrl.create({
 			message: err.message,
 			buttons: [{
-				text: "Ok",
+				text: 'OK',
 				role: 'cancel'
 			}]
 		});

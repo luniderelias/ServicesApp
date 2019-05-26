@@ -10,10 +10,8 @@
         <ion-buttons slot="end">
             <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
                 <ion-icon name="cart">
-
                 </ion-icon>
-
-                <p style="color:black;margin-bottom:20px;">{{values.qty}}</p>
+                <p style="color:white;margin-bottom:20px;">{{values.qty}}</p>
             </ion-button>
 
         </ion-buttons>
@@ -55,7 +53,7 @@
     <div class="pdl-15 pdr-15">
         <div class="price mgb-10">
             <span class="fw-700 fs-22">
-				R${{params.data?.price}}
+				R${{productPrice}}
             </span>
         </div>
         <hr>
@@ -91,7 +89,7 @@
 
 <ion-footer>
     <ion-toolbar position="bottom">
-        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="presentConfirmAlert( params.data.categories, params.data.category, params.data.stock, params.data.name, params.data.price, params.data.image_firebase_url , params.data.extraOptions )">
+        <ion-button color="primary" shape="round" fill="outline" expand="full" (click)="presentConfirmAlert( params.data.cod, params.data.categories, params.data.category, params.data.stock, params.data.name, params.data.price, params.data.image_firebase_url , params.data.extraOptions )">
             ADICIONAR AO CARRINHO
         </ion-button>
     </ion-toolbar>

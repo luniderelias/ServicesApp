@@ -45,7 +45,6 @@ export class UsersProvider {
         () => {
           uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
             this.downloadURL = downloadURL;
-            console.log('File available at', downloadURL);
             resolve(this.downloadURL);
           });
         }
@@ -63,35 +62,7 @@ export class UsersProvider {
       .then((newUser) => {
         this.createUser(newUser.user, email, firstname, lastname, address, phone);
       });
-
-
-	  /**
-    return new Promise<any>((resolve, reject) => {
-      firebase.auth().createUserWithEmailAndPassword(email, password).then((newUser) => {
-         
-        //console.log(JSON.stringify(newUser));
-        
-        resolve(newUser.user);
-		
-		console.log(newUser.user.uid);
-		
-		this.restaurantUserInfo.child(newUser.user.uid).set({
-        email: email,
-        displayName: fullname,
-        lastName: fullname,
-        address: "",
-        phone: "",
-		facebook: false
-        });
-
 	
-
-      }, error =>{
-        this.presentAlertErr(error);
-      })
-    })
-	
-	*/
   }
 
   createUser(newUser, email, firstname, lastname, address, phone) {
@@ -103,7 +74,7 @@ export class UsersProvider {
         address: address,
         phone: phone,
         facebook: false
-      }).then(res => console.log(res));
+      });
     });
   }
 
@@ -114,24 +85,17 @@ export class UsersProvider {
         offline: true,
         scopes: 'profile email'
       }).then( res => {
-        console.log('-------1' + res + '---------');
         const googleCredential = firebase.auth.GoogleAuthProvider.credential(res.idToken);
-
-        console.log('-------2' + googleCredential + '---------');
         return firebase.auth().signInAndRetrieveDataWithCredential(googleCredential);
       });
-    } catch (err) {
-      console.log('-------------------- ' + err + '-------------------');
-    }
+    } catch (err) {}
   }
 
   async webGoogleLogin(): Promise<void> {
     try {
       const provider = new firebase.auth.GoogleAuthProvider();
       return await this.fireAuth.signInWithPopup(provider);
-    } catch (err) {
-      console.log('-------------------- ' + err + '-------------------');
-    }
+    } catch (err) {}
   }
 
 
@@ -139,23 +103,16 @@ export class UsersProvider {
     try {
       const provider = new firebase.auth.FacebookAuthProvider();
       return await this.fireAuth.signInWithPopup(provider);
-    } catch (err) {
-      console.log('-------------------- ' + err + '-------------------');
-    }
+    } catch (err) {}
   }
 
   async facebookLogin(): Promise<firebase.auth.UserCredential> {
     try {
       return this.facebook.login(['email']).then(response => {
-        console.log('-------1' + response + '---------');
         const facebookCredential = firebase.auth.FacebookAuthProvider.credential(response.authResponse.accessToken);
-
-        console.log('-------2' + facebookCredential + '---------');
         return firebase.auth().signInAndRetrieveDataWithCredential(facebookCredential);
       });
-    } catch (err) {
-      console.log('-------------------- ' + err + '-------------------');
-    }
+    } catch (err) {}
   }
 
   getUser(uid) {

@@ -91,7 +91,6 @@ export class AppComponent {
 
     this.storage.ready().then(() => {
       this.storage.get('user').then((val) => {
-        console.log(val);
         if (val != null) {
           this.user = val;
           this.router.navigateByUrl('home');
@@ -121,9 +120,11 @@ export class AppComponent {
       header: message.title,
       message: message.body,
       position: 'middle',
+      showCloseButton: true,
+      closeButtonText: 'Fechar',
       buttons: [{
-				text: 'Visualizar',
-				handler: () => {
+        text: 'Visualizar',
+        handler: () => {
           if (message.data.order_id) {
             this.router.navigateByUrl('order-details/' + message.data.order_id);
           }
@@ -143,18 +144,20 @@ export class AppComponent {
     });
   }
 
-	
-	private notificationSetup(uid) {
-		this.fcm.getToken(uid);
-		this.fcm.onNotifications().subscribe(
-		  (msg) => {
-			if (this.platform.is('ios')) {
-			  this.presentToast(msg.aps.alert);
-			} else {
-			  this.presentToast(msg);
-			}
-		  });
-	  }
+
+  private notificationSetup(uid) {
+    this.fcm.getToken(uid);
+    this.fcm.onNotifications().subscribe(
+      (msg) => {
+        if (msg.data) {
+          if (this.platform.is('ios')) {
+            this.presentToast(msg.aps.alert);
+          } else {
+            this.presentToast(msg);
+          }
+        }
+      });
+  }
 
 
 }

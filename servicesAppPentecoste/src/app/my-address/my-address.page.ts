@@ -26,14 +26,9 @@ export class MyAddressPage implements OnInit {
 		private storage: Storage,
 		public socialSharing: SocialSharing,
 		public service: ServiceProvider,
-		public values:Values) { 
-		
-		
+		public values:Values) {
 		  this.currentUser = firebase.auth().currentUser;
-	
-			console.log(firebase.auth().currentUser.uid);
-			
-			 if(this.currentUser){
+			 if (this.currentUser) {
 			   this.service.getRestaurantUserProfile(this.currentUser.uid).on('value', snapshot =>{
 				 this.userProfiles = snapshot.val();
 			  });
@@ -59,8 +54,6 @@ export class MyAddressPage implements OnInit {
 						
 						});
 					});
-							
-					console.log(this.addressList);
 		});
 		
 		}

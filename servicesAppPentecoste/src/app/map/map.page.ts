@@ -25,8 +25,8 @@ export class MapPage implements OnInit {
 	userList: any;
 
   constructor(
-  public geo:Geolocation,public platform: Platform, 
-  public service : ServiceProvider) { 
+  public geo:Geolocation, public platform: Platform,
+  public service : ServiceProvider, public values: Values) {
 
 	  let that = this;
 	  let map : any;
@@ -49,12 +49,7 @@ export class MapPage implements OnInit {
 					lat: resp.coords.latitude,
 					lng: resp.coords.longitude,
 				});
-					
-			
-		
 
-		}).catch(() =>{
-			console.log("Error to get location");
 		});
 	  
 	  
@@ -89,13 +84,6 @@ export class MapPage implements OnInit {
   }
 
   ngOnInit() {
-	  
-			
-			
-	  
-			
-	console.log("fine");  
-  
   }
   
   googleMap(){
@@ -113,25 +101,15 @@ export class MapPage implements OnInit {
 	  
 	var uid = firebase.auth().currentUser.uid;
 	  
-				  console.log("service");
-				  console.log(uid);
-	  
-	 
-	  
-	  
 	  this.service.getRestaurantUserProfile(uid).on('value', snapshot =>{
 			this.userList = snapshot.val();
 			
     });
 	  
-	  console.log(this.userList);
-	  
-		
 		map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: this.userList.lat, lng: this.userList.lng},
           zoom: 6
         });
-
 
         image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
           beachMarker = new google.maps.Marker({
@@ -179,30 +157,8 @@ export class MapPage implements OnInit {
 			
 			
 			snapshot.forEach(function(childSnapshot) {
-					// key will be "fred" the first time and "barney" the second time
-				    console.log(childSnapshot.val());
-					console.log(childSnapshot.key);
-					var key = childSnapshot.key;
-					
-					var val = childSnapshot.val();
-					//var val2 = childSnapshot.val();
-					
-					//var arr2 = Object.keys(val);
-					//var key = arr2[0];
-					//console.log(key);
-					
-					///console.log(childSnapshot.key());
-		
 								createMarker(childSnapshot.val());
-
-								
-								console.log(childSnapshot.val().lat);
-								console.log(childSnapshot.val().long);
-								//console.log(childSnapshot.val().title);
-						
 							 distance.push(calcDistance(childSnapshot.val().lat,childSnapshot.val().long,childSnapshot.key) + " kilometers away");
-						
-								
 				});
 			
 			
@@ -224,21 +180,12 @@ export class MapPage implements OnInit {
 
 					var cord = snapshot.val();
 					
-					console.log(cord.lat);
-						console.log(cord.lng);
-						
-						
-						
-						
 						var p1 = new google.maps.LatLng(destination, destination1);
 						
 						
 						var p2 = new google.maps.LatLng(cord.lat, cord.lng);
-					
-						console.log("distance is "+google.maps.geometry.spherical.computeDistanceBetween(p1, p2)/1000);
 
 						var distanceBetween= (google.maps.geometry.spherical.computeDistanceBetween(p1, p2))/1000;
-						console.log(distanceBetween);
 						
 						firebase.database().ref('/cord').child(uid).child(res_id).update({    // set
 						 item_dis : distanceBetween.toFixed(2) + "km distante"
@@ -246,12 +193,8 @@ export class MapPage implements OnInit {
 						
 						return distanceBetween;
 					});	
-			
-		
 					}
 				});
-				
-			
 		  }
 		  
 	

@@ -26,11 +26,6 @@ export class ProductDetailsPage implements OnInit {
 
 	loading = false;
 	quantity: any;
-
-
-	//second
-
-
 	product: any;
 	cartItem: any = {};
 	cartsItem: any = {};
@@ -41,12 +36,10 @@ export class ProductDetailsPage implements OnInit {
 	extraOptionsPrice: any;
 	extraPrice: any;
 	currentExtraItemQuantity: any;
+	productPrice: any;
 
 	restaurantId: any;
-	restaurantName: any;
 	favorite = false;
-
-
 
 	constructor(
 		public loadingCtrl: LoadingController,
@@ -64,7 +57,6 @@ export class ProductDetailsPage implements OnInit {
 		this.quantity = '1';
 
 		this.route.params.subscribe(params => {
-			console.log(params);
 			this.id = params.id;
 			this.name = params.name;
 			this.ownerId = params.owner_id;
@@ -92,7 +84,7 @@ export class ProductDetailsPage implements OnInit {
 						this.extraOptions.push({
 							id: snap.key,
 							name: snap.val().name,
-							value: snap.val().value,
+							value: this.formatMoney(snap.val().value),
 							product_id: this.id,
 							quantity: this.currentExtraItemQuantity
 						});
@@ -109,8 +101,10 @@ export class ProductDetailsPage implements OnInit {
 				this.params.data.name = snapshot.val().name;
 				this.params.data.percent = snapshot.val().percent;
 				this.params.data.price = snapshot.val().price;
-				this.params.data.real_price = snapshot.val().price;
+				this.params.data.real_price =  snapshot.val().price;
+				this.productPrice = this.formatMoney(snapshot.val().price);
 				this.params.data.stock = snapshot.val().stock;
+				this.params.data.cod = snapshot.val().product_id;
 				this.params.data.extraOptions = this.extraOptions;
 				this.params.data.restaurantId = this.ownerId;
 				this.params.data.restaurantName = this.restaurantName;
@@ -122,7 +116,7 @@ export class ProductDetailsPage implements OnInit {
 		});
 	}
 
-	addToCart(categories, category, stock, name, price, image, extra) {
+	addToCart(cod, categories, category, stock, name, price, image, extra) {
 		let itemAdded = false;
 		
 		for (const item in this.service.cart.line_items) {
@@ -144,6 +138,7 @@ export class ProductDetailsPage implements OnInit {
 				this.cartsItem.price = price;
 				this.cartsItem.stock = stock;
 				this.cartsItem.product_id = this.id;
+				this.cartsItem.cod = cod;
 				this.cartsItem.restaurantId = this.ownerId;
 				this.cartsItem.restaurantName = this.restaurantName;
 				this.cartsItem.owner_id = this.ownerId;
@@ -162,6 +157,7 @@ export class ProductDetailsPage implements OnInit {
 				this.service.cart.line_items[item].name = this.cartsItem.name;
 				this.service.cart.line_items[item].stock = this.cartsItem.stock;
 				this.service.cart.line_items[item].product_id = this.cartsItem.product_id;
+				this.service.cart.line_items[item].cod = this.cartsItem.cod;
 				this.service.cart.line_items[item].price = this.cartsItem.price;
 				this.service.cart.line_items[item].quantity = this.cartsItem.quantity;
 				this.service.cart.line_items[item].category = this.cartsItem.category;
@@ -198,7 +194,6 @@ export class ProductDetailsPage implements OnInit {
 				itemAdded = true;
 			}
 		}
-
 		if (!itemAdded) {
 			this.extraPrice = 0;
 
@@ -213,6 +208,7 @@ export class ProductDetailsPage implements OnInit {
 			this.cartItem.image = image;
 			this.cartItem.price = price;
 			this.cartItem.stock = stock;
+			this.cartItem.cod = cod;
 
 			this.cartItem.restaurantId = this.id;
 			this.cartItem.restaurantName = this.restaurantName;
@@ -305,6 +301,24 @@ export class ProductDetailsPage implements OnInit {
 			}
 		}
 	}
+	
+
+	async presentConfirmAlert(cod, categories, category, stock, name, price, image, extra) {
+		if (stock <= 0) {
+			this.presentAlert('Ops!', 'Não temos esse produto em estoque.');
+		} else {
+			const alert = await this.alertCtrl.create({
+				message: 'Deseja Adicionar esse Produto ao Carrinho?',
+				buttons: [{
+					text: 'Sim',
+					handler: () => {
+						this.addToCart(cod, categories, category, stock, name, price, image, extra);
+					}
+				}]
+			});
+			await alert.present();
+		}
+	}
 
 	async presentAlert(title, msg) {
 		const alert = await this.alertCtrl.create({
@@ -314,18 +328,8 @@ export class ProductDetailsPage implements OnInit {
 		});
 		await alert.present();
 	}
-	
 
-	async presentConfirmAlert(categories, category, stock, name, price, image, extra) {
-		const alert = await this.alertCtrl.create({
-			message: 'Deseja Adicionar esse Produto ao Carrinho?',
-			buttons: [{
-				text: 'Sim',
-				handler: () => {
-					this.addToCart(categories, category, stock, name, price, image, extra);
-				}
-			}]
-		});
-		await alert.present();
+	formatMoney(n) {
+		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
 	}
 }

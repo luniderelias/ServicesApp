@@ -36,7 +36,7 @@ export class ForgotPage implements OnInit {
 
 	resetPassword() {
 		if (!this.resetPasswordForm.valid) {
-			console.log(this.resetPasswordForm.value);
+			return;
 		} else {
 			this.loading = true;
 			this.usersProv.resetPassword(this.resetPasswordForm.value.email).then((user) => {
@@ -67,7 +67,6 @@ export class ForgotPage implements OnInit {
 	ionViewWillEnter() {
 		this.storage.ready().then(() => {
 			this.storage.get('user').then((val) => {
-				console.log(val);
 				this.user = val;
 				this.addressForm = this.formBuilder.group({
 					username: [val.username],

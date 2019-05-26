@@ -44,7 +44,6 @@ export class ProfilePage implements OnInit {
 		this.menuCtrl.close();
 		this.storage.ready().then(() => {
 			this.storage.get('user').then((val) => {
-				console.log(val);
 				this.user = val;
 				this.userForm = this.formBuilder.group({
 					username: [val.username, Validators.compose([Validators.required])],

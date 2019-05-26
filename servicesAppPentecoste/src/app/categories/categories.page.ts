@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ServiceProvider } from '../../providers/service';
+import { Values } from '../../providers/values';
 
 @Component({
 	selector: 'app-categories',
@@ -23,7 +24,7 @@ export class CategoriesPage implements OnInit {
 	loading = false;
 
 	constructor(
-
+		public values: Values,
 		public loadingCtrl: LoadingController,
 		private route: ActivatedRoute,
 		public events: Events,

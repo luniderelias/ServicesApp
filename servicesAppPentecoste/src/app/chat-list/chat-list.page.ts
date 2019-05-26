@@ -38,38 +38,6 @@ export class ChatListPage implements OnInit {
 	   this.service.getRestaurantUserProfile(this.currentUser.uid).on('value', snapshot =>{
          this.userProfiles = snapshot.val();
       });
-	  
-	  console.log(this.currentUser);
-	  console.log(this.userProfiles);
-	  
-	  /**
-	  this.service.getUserChatList(this.currentUser.uid)
-	  .on('value', snapshot =>{
-    		this.userChatList = [];
-			
-			
-		 snapshot.forEach( snap => {
-      	 	 this.userChatList.push({
-  		    	  id: snap.key,
-				  list: snap.val().list,
-				  restaurantImage: snap.val().restaurantImage,
-				  restaurantName: snap.val().restaurantTitle,
-				  lastMessage: snap.val().lastMessage,
-				  restaurantOwnerId: snap.val().restaurantOwnerId,
-				  timeStamp: snap.val().timeStamp,
-				});
-		
-				  
-				  
-			});
-			
-			console.log(this.userChatList);
-	  
-	  });
-	  
-	  */
-		
-		
 		}
 
   ngOnInit() {
@@ -88,29 +56,16 @@ export class ChatListPage implements OnInit {
 	   
 	  
 
-      });
-     
-	 
-	 console.log(this.userProfiles);
-	 
-	  if(this.userProfiles.photoURL ){
-			//this.service.addRoom(this.currentUser.uid,data,this.userProfiles.displayName,this.userProfiles.photoURL);
+			});
 			
-			//console.log(data);
-                         
+	  if (this.userProfiles.photoURL) {
+
 			this.values.userChatUserId = this.currentUser.uid;
 			this.values.userChatData = data;
-						 
-			
 
-			this.router.navigateByUrl('chat-user');			
-		}
-		
-		else{
-			//this.service.addRoom(this.currentUser.uid,data,this.userProfiles.displayName,"assets/imgs/no-avt.png");
-			
-			//console.log(data);
-			
+
+			this.router.navigateByUrl('chat-user');
+		} else {
 			this.values.userChatUserId = this.currentUser.uid;
 			this.values.userChatData = data;
 						 
@@ -135,9 +90,6 @@ export class ChatListPage implements OnInit {
          this.userProfiles = snapshot.val();
       });
 	  
-	  console.log(this.currentUser);
-	  console.log(this.userProfiles);
-	  
 	  this.service.getUserChatList(this.currentUser.uid)
 	  .on('value', snapshot =>{
     		this.userChatList = [];
@@ -158,7 +110,6 @@ export class ChatListPage implements OnInit {
 				  
 			});
 			
-			console.log(this.userChatList);
 	  
 	  });
 				

@@ -8,8 +8,9 @@
         </ion-buttons>
         <ion-buttons slot="end">
 
-            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/mycart'" routerDirection="forward">
+            <ion-button fill="clear" class="shadow-0 txt1" [routerLink]="'/cart'" routerDirection="forward">
                 <ion-icon name="cart"></ion-icon>
+                <p style="color:white;margin-bottom:20px;">{{values.qty}}</p>
             </ion-button>
         </ion-buttons>
 
@@ -21,21 +22,19 @@
 
 
     <div class="movies" *ngIf="productsList">
-
         <div style="text-align: center;" *ngIf="loading">
             <ion-spinner name="dots"></ion-spinner>
         </div>
 
         <ion-virtual-scroll [items]="productsList">
-            <div class="movie" *virtualItem="let cats" [routerLink]="['/product-details', {id: id, title: title , owner_id: owner_id , cat_id: cats.id}]">
-
-                <div class="poster">
-                    <img class="poster-effect" [src]="cats.image">
+            <div class="movie" *virtualItem="let item">
+                <div class="poster" [routerLink]="['/product-details',{id: item.$key, title: item.name, owner_id: item.res_id, cat_id: item.categories, res_name: item.restaurant_name}]">
+                    <img class="poster-effect" [src]="item.image">
                 </div>
-                <div class="data">
-                    <div class="title max-lines">{{cats.title }}</div>
-                    <div class="price vertical-center">R$ {{cats.price}}</div>
-                    <div class="stock vertical-bottom" *ngIf="cats.stock <= 5">Restam apenas {{cats.stock}}</div>
+                <div class="data" [routerLink]="['/product-details',{id: item.$key, title: item.name, owner_id: item.res_id, cat_id: item.categories, res_name: item.restaurant_name}]">
+                    <div class="title max-lines">{{item.name}}</div>
+                    <div class="price vertical-center">R${{formatMoney(item.price)}}</div>
+                    <div class="stock vertical-bottom" *ngIf="item.stock <= 5">Restam apenas {{item.stock}} un.</div>
                 </div>
             </div>
         </ion-virtual-scroll>

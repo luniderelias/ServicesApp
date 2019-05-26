@@ -51,9 +51,6 @@ export class NewAddressPage implements OnInit {
 		public formBuilder: FormBuilder) {
 			this.loading = true;
 			this.route.params.subscribe(params => {
-
-				console.log(params);
-		  
 				this.redirectLink = params.redirectLink;
 				this.cod = params.cod;
 				this.loading = false;

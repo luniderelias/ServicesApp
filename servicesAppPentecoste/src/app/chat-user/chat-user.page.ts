@@ -81,15 +81,8 @@ export class ChatUserPage implements OnInit {
          this.userProfiles = snapshot.val();
       });
 	  
-	  console.log(this.userProfiles);
-	  
-	console.log(this.currentUser.uid);
 	this.nickname = this.currentUser.uid;
 	
-	console.log(this.nickname);
-	
-	
-    //this.nickname = this.navParams.get("nickname") as string;
     this.data.type = 'message';
     this.data.nickname = this.nickname;
 	this.data.restaurantOwnerId = this.roomKey;
@@ -103,11 +96,7 @@ export class ChatUserPage implements OnInit {
 		
       this.chats = [];
 	  
-	  
-	  
       this.chats = snapshotToArray(resp);
-	  
-	  console.log(this.chats);
 	  
       setTimeout(() => {
         if(this.offStatus === false) {
@@ -120,18 +109,7 @@ export class ChatUserPage implements OnInit {
 		
 		
 		sendMessage() {
-	  
-	  
-	  
-    //let newData = firebase.database().ref('restaurants/'+this.roomkey+'/chat/'+this.nickname).push();
-	
-	//console.log(this.nickname);
-
-	//console.log(this.restaurantOwnerId);
-	
-	console.log(this.userId);
-	console.log(this.roomKey);
-	
+	 
 	let newData = firebase.database().ref('chats/'+this.userId+ '/chat/'+this.roomKey + '/list').push();
     newData.set({
       type:this.data.type,

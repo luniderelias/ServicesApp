@@ -31,9 +31,7 @@ export class OrderDetailsPage implements OnInit {
 		private router: Router, private route: ActivatedRoute) {
 		this.loading = true;
 		this.route.params.subscribe(params => {
-			console.log(params);
 			this.id = params.id;
-
 			this.service.getOrderDetail(this.id).on('value', (snapshot) => {
 				this.orderDetails = snapshot.val();
 				this.addresses = snapshot.val().addresses;
@@ -55,6 +53,11 @@ export class OrderDetailsPage implements OnInit {
 	}
 
 	ngOnInit() {
+	}
+
+	
+	formatMoney(n) {
+		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
 	}
 
 }

@@ -84,8 +84,6 @@ export class HomePage {
 					 let a = snap.payload.toJSON();
 					a['$key'] = snap.key;
 	
-					console.log(a);
-	
 					this.items.push(a as ItemInterface);
 				});
 				
@@ -153,8 +151,7 @@ export class HomePage {
 				snapshot.forEach(snap => {
 					 let a = snap.payload.toJSON();
 					a['$key'] = snap.key;
-	
-					console.log(a as ItemInterface);
+					a['price'] = this.formatMoney(a['price']);
 					this.items.push(a as ItemInterface);
 				});
 				
@@ -164,7 +161,6 @@ export class HomePage {
 	}
 
 	call(data) {
-		console.log(data);
 		this.callNumber.callNumber(data.phonenumber, true)
 			.then(() => { })
 			.catch(() => { });
@@ -178,18 +174,20 @@ export class HomePage {
 
 		if (this.userProfiles.photoURL) {
 			this.service.addRoom(this.currentUser.uid, data, this.userProfiles.displayName, this.userProfiles.photoURL);
-			console.log(data);
 			this.values.userChatUserId = this.currentUser.uid;
 			this.values.userChatData = data;
 			this.router.navigateByUrl('chat');
 		} else {
 			this.service.addRoom(this.currentUser.uid, data, this.userProfiles.displayName, "assets/imgs/no-avt.png");
-			console.log(data);
 			this.values.userChatUserId = this.currentUser.uid;
 			this.values.userChatData = data;
 			this.router.navigateByUrl('chat');
 		}
 
+	}
+
+	formatMoney(n) {
+		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
 	}
 }
 export interface ItemInterface {

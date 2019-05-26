@@ -1,9 +1,11 @@
+import { ItemInterface } from './../home/home.page';
 import { Component, OnInit } from '@angular/core';
 import { Events, ToastController, LoadingController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { Storage } from '@ionic/storage';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { ServiceProvider } from '../../providers/service';
+import { Values } from '../../providers/values';
 
 @Component({
 	selector: 'app-products',
@@ -25,6 +27,7 @@ export class ProductsPage implements OnInit {
 	title: any;
 
 	constructor(
+		public values: Values,
 		public loadingCtrl: LoadingController,
 		private route: ActivatedRoute,
 		public events: Events,
@@ -40,18 +43,14 @@ export class ProductsPage implements OnInit {
 			this.owner_id = params.owner_id;
 			this.cat_id = params.cat_id;
 
-			this.service.getItemLists(this.cat_id).on('value', snapshot => {
+			this.service.getCategoryItems(this.cat_id).snapshotChanges().subscribe(snapshot => {
 				this.productsList = [];
 
 				snapshot.forEach(snap => {
-					this.productsList.push({
-						id: snap.key,
-						price: snap.val().price,
-						favorite: false,
-						title: snap.val().name,
-						image: snap.val().image_firebase_url,
-						stock: snap.val().stock
-					});
+					let a = snap.payload.toJSON();
+					a['$key'] = snap.key;
+
+					this.productsList.push(a as ItemInterface);
 				});
 				this.loading = false;
 			});
@@ -59,5 +58,9 @@ export class ProductsPage implements OnInit {
 	}
 
 	ngOnInit() {
+	}
+
+	formatMoney(n) {
+		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
 	}
 }

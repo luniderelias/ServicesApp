@@ -26,7 +26,6 @@ export class FcmService {
       token = await this.fbase.getToken();
     }
 
-
     if (this.platform.is('ios')) {
       token = await this.fbase.getToken();
       await this.fbase.grantPermission();

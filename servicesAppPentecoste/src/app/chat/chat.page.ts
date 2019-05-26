@@ -56,12 +56,6 @@ export class ChatPage implements OnInit {
 			this.userIds = this.values.userChatUserId;
 			
 			this.userImage = "assets/imgs/no-avt.png";
-		
-		
-				console.log(this.values.userChatData);
-				console.log(this.values.userChatUserId);
-				
-				console.log(this.roomkey);
 	
 	this.currentUser = firebase.auth().currentUser;
 	
@@ -70,17 +64,8 @@ export class ChatPage implements OnInit {
          this.userProfiles = snapshot.val();
       });
 	  
-	  console.log(this.userProfiles);
-	  
-	
-	  
-	console.log(this.userIds);
 	this.nickname = this.userIds;
 	
-	console.log(this.nickname);
-	
-	
-    
     this.data.type = 'message';
     this.data.nickname = this.nickname;
 	this.data.restaurantOwnerId = this.restaurantOwnerId;
@@ -98,8 +83,6 @@ export class ChatPage implements OnInit {
 	  
       this.chats = snapshotToArray(resp);
 	  
-	  console.log(this.chats);
-	  
       setTimeout(() => {
         if(this.offStatus === false) {
          // this.content.scrollToBottom(300);
@@ -111,14 +94,6 @@ export class ChatPage implements OnInit {
 		}
 		
 		 sendMessage() {
-	  
-	  
-	  
-    //let newData = firebase.database().ref('restaurants/'+this.roomkey+'/chat/'+this.nickname).push();
-	
-	console.log(this.nickname);
-
-	console.log(this.restaurantOwnerId);
 	
 	if(this.data.message == "" || this.data.message == undefined){
 		alert("Por favor, escreva sua mensagem.");
