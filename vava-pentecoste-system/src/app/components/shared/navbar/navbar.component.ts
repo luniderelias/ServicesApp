@@ -47,10 +47,8 @@ export class NavbarComponent {
         this.authService.isAuth().subscribe(auth => {
             localStorage.setItem('current_user', JSON.stringify(auth));
             if (auth) {
-                console.log('user logged');
                 this.isLogged = true;
             } else {
-                console.log('NOT user logged');
                 this.isLogged = false;
                 this.router.navigate(['/user/login']);
             }
@@ -58,6 +56,7 @@ export class NavbarComponent {
     }
 
     onLogout() {
+        localStorage.clear();
         this.afsAuth.auth.signOut();
     }
 
@@ -93,12 +92,17 @@ export class NavbarComponent {
         this.reloadChildView();
     }
 
-    removeNotification(notification, route) {
-        if (route) {
-            this.router.navigate([route]);
-        }
+    removeNotification(notification) {
         this.firebaseService.deleteNotification(notification.$key);
         this.getNotifications();
+        if (notification.data.order_id) {
+            this.router.navigateByUrl('/pedidos/detalhes/' + notification.data.order_id);
+            return;
+        }
+        if (notification.data.product_id) {
+            this.router.navigateByUrl('/produtos/detalhes/' + notification.data.product_id);
+            return;
+        }
     }
 
     removeAllNotifications() {

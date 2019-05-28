@@ -7,6 +7,8 @@ import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 
 import { CategoryInterface } from '../../models/category';
+import { ImageResult, ResizeOptions } from 'ng2-imageupload';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
 	selector: 'app-add-item',
@@ -31,7 +33,7 @@ export class AddItemComponent implements OnInit {
 	category_details: any;
 
 	categoryList: any;
-
+	
 	showQuestion() {
 		alertFunctions.showQuestion('', 'Deseja Confirmar essa Ação?').then(res => {
 			if (res.dismiss) { return; }
@@ -40,18 +42,34 @@ export class AddItemComponent implements OnInit {
 		});
 	}
 
+
+
 	private CategoryInterface: CategoryInterface[];
 	public isAdmin: any = null;
 
 	constructor(private dataApi: DataApiService,
 		private firebaseService: FirebaseService,
-		private router: Router) {
+		private router: Router,
+		private ng2ImgMax: Ng2ImgMaxService) {
 
 		this.isAdmin = localStorage.getItem('current_user_role') === 'admin' ||
 			localStorage.getItem('current_user_role') === 'super_admin';
 	}
 	@ViewChild('btnClose') btnClose: ElementRef;
 	@Input() userUid: string;
+
+	onImageChange(event) {
+		const image = event.target.files[0];
+	  
+		this.ng2ImgMax.resizeImage(image, 300, 300).subscribe(
+		  result => {
+			this.image = new File([result], result.name);
+		  },
+		  error => {
+			console.log('😢 Oh no!', error);
+		  }
+		);
+	  }
 
 	onSaveBook(bookForm: NgForm): void {
 		if (bookForm.value.id == null) {
@@ -68,24 +86,13 @@ export class AddItemComponent implements OnInit {
 
 
 	ngOnInit() {
-
 		this.firebaseService.getCategories().snapshotChanges().subscribe(categories => { // Using snapshotChanges() method to retrieve list of data along with metadata($key)
 			this.categoryList = [];
 			categories.forEach(item => {
-
-				console.log(item);
-
-
-				let a = item.payload.toJSON();
+				const a = item.payload.toJSON();
 				a['$key'] = item.key;
-
-				console.log(a);
-
 				this.categoryList.push(a as CategoryInterface);
-
-
-
-			})
+			});
 		});
 
 	}
@@ -105,13 +112,13 @@ export class AddItemComponent implements OnInit {
 				return element.$key === categories;
 			  });
 
-			console.log(found)
 			const item = {
 				available: this.available,
 				category: found.cat_name,
 				description: this.description,
 				product_id: this.product_id,
 				name: this.name,
+				search: this.name.toLowerCase(),
 				popularity: this.popularity,
 				price: this.price,
 				stock: this.stock,
@@ -124,6 +131,7 @@ export class AddItemComponent implements OnInit {
 				res_id: this.category_details.res_id,
 				user_id: this.category_details.user_id,
 				real_price: this.price,
+				image: this.image
 			}
 
 			this.firebaseService.addItem(item).then(res => {

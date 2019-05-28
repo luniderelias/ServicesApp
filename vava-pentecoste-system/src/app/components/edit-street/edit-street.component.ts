@@ -45,56 +45,22 @@ export class EditStreetComponent implements OnInit {
   }
 
   ngOnInit() {
-	  
-	  console.log("Here is Edit Restaurant Page");
-	   
-	   
 	   	this.id = this.route.snapshot.params['id'];
-		
-	
-	  
 		  this.firebaseService.getStreetDetails(this.id).snapshotChanges().subscribe(restaurant => {
 					this.restaurant = [];
-					//  restaurant.forEach(item => {
-						  
-						//  console.log(item);
-						
-						
-						  
-					
 						 let res = restaurant.payload.toJSON(); 
 						 res['$key'] = restaurant.key;
-						
-						//console.log(restaurant);
-						
 						this.restaurant = res as CityInterface;
-						//this.restaurant.push(res as RestaurantInterface);
-						
-						console.log(this.restaurant);
-						
 						  this.streetName = this.restaurant.name;
-						
-						  
-						  
-						  console.log(this.id);
-						  
-						  console.log(this.streetName);
-						
-						
-						
-				//	  });
 		});
-	  
   }
   
   
    onStreetEditSubmit(){
-	  
 	   let street = {
 		  name : this.streetName,
 		  
 	  }
-	  
 	  this.firebaseService.updateStreet(this.id,street);
 	  
 	  this.router.navigate(['/add']);

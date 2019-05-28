@@ -18,6 +18,7 @@ import { AuthService } from '../../services/auth.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
 	selector: 'app-edit-item',
@@ -52,7 +53,8 @@ export class EditItemComponent implements OnInit {
 	constructor(private dataApi: DataApiService,
 		private firebaseService: FirebaseService,
 		private router: Router, private route: ActivatedRoute,
-		private authService: AuthService, private storage: AngularFireStorage) {
+		private authService: AuthService, private storage: AngularFireStorage,
+		private ng2ImgMax: Ng2ImgMaxService) {
 
 
 			this.isAdmin = localStorage.getItem('current_user_role') === 'admin' || localStorage.getItem('current_user_role') === 'super_admin';
@@ -99,15 +101,10 @@ export class EditItemComponent implements OnInit {
 	getItemDetails() {
 		this.firebaseService.getItemDetails(this.id).snapshotChanges().subscribe(item => {
 			this.item = [];
-
 			let res = item.payload.toJSON();
 			res['$key'] = item.key;
 
-
 			this.item = res as ItemInterface;
-
-			console.log(this.item);
-
 			this.name = this.item.name;
 			this.categories = this.item.categories;
 			this.description = this.item.description;
@@ -117,7 +114,6 @@ export class EditItemComponent implements OnInit {
 			this.price = this.item.price;
 			this.stock = this.item.stock;
 			this.image_firebase_url = this.item.image_firebase_url;
-
 		});
 	}
 
@@ -126,15 +122,8 @@ export class EditItemComponent implements OnInit {
 		this.firebaseService.getCategories().snapshotChanges().subscribe(categories => {
 			this.categoryList = [];
 			categories.forEach(item => {
-
-				console.log(item);
-
-
 				let a = item.payload.toJSON();
 				a['$key'] = item.key;
-
-				console.log(a);
-
 				this.categoryList.push(a as CategoryInterface);
 			})
 		});
@@ -145,11 +134,10 @@ export class EditItemComponent implements OnInit {
 
 
 	onItemEditSubmit() {
-
 		if (!this.inputImageUser.nativeElement.value || this.inputImageUser.nativeElement.value === undefined) {
-
 			const item = {
 				name: this.name,
+				search: this.name.toLowerCase(),
 				categories: this.categories,
 				description: this.description,
 				available: this.available,
@@ -159,7 +147,6 @@ export class EditItemComponent implements OnInit {
 				stock: this.stock,
 				image: this.image_firebase_url,
 				image_firebase_url: this.image_firebase_url,
-
 			}
 
 			this.firebaseService.updateItem(this.id, item).then(res => {
@@ -172,11 +159,9 @@ export class EditItemComponent implements OnInit {
 			});
 		}
 		if (this.inputImageUser.nativeElement.value) {
-
-			console.log("white");
-
 			const item = {
 				name: this.name,
+				search: this.name.toLowerCase(),
 				categories: this.categories,
 				description: this.description,
 				available: this.available,
@@ -201,20 +186,28 @@ export class EditItemComponent implements OnInit {
 	}
 
 	onChange($event) {
-		console.log($event);
 		this.image = $event;
 	}
 
 	onUpload (e) {
-		const id = Math.random().toString(36).substring(2);
-		const file = e.target.files[0];
-		const filePath = `/${this.itemFolder}/${file.name}`;
+		const image = e.target.files[0];
+	  
+		this.ng2ImgMax.resizeImage(image, 300, 300).subscribe(
+		  result => {
+			this.image = new File([result], result.name);
 
-		const ref = this.storage.ref(filePath);
-		const task = this.storage.upload(filePath, file);
-		this.uploadPercent = task.percentageChanges();
-		task.snapshotChanges().pipe(finalize(() => this.urlImage = ref.getDownloadURL())).subscribe();
-
+			const filePath = `/${this.itemFolder}/${image.name}`;
+	
+			const ref = this.storage.ref(filePath);
+			const task = this.storage.upload(filePath, this.image);
+			this.uploadPercent = task.percentageChanges();
+			task.snapshotChanges().pipe(finalize(() => this.urlImage = ref.getDownloadURL())).subscribe();
+	
+		  },
+		  error => {
+			console.log('😢 Oh no!', error);
+		  }
+		);
 	}
 
 }

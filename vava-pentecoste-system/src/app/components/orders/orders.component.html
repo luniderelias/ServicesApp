@@ -18,8 +18,8 @@
                                 </ng-template>
                             </ngx-datatable-column>
 
-                            <ngx-datatable-column prop="customerDetails.phone">
-                                <ng-template let-column="customerDetails.phone" ngx-datatable-header-template>
+                            <ngx-datatable-column prop="addresses.phone">
+                                <ng-template let-column="addresses.phone" ngx-datatable-header-template>
                                     <small><b>TELEFONE</b></small>
                                 </ng-template>
                             </ngx-datatable-column>
@@ -30,7 +30,7 @@
                                 </ng-template>
 
                                 <ng-template let-row="row" ngx-datatable-cell-template>
-                                    R${{row.total}}
+                                    R${{formatMoney(row.total)}}
                                 </ng-template>
                             </ngx-datatable-column>
 
@@ -48,7 +48,7 @@
                                     <small><b>DATA</b></small>
                                 </ng-template>
                                 <ng-template let-value="value" ngx-datatable-cell-template>
-                                    {{value | date:'dd/MM/yyyy hh:mm'}}
+                                    {{value | date:'dd/MM/yyyy HH:mm'}}
                                 </ng-template>
                             </ngx-datatable-column>
 

@@ -9,9 +9,11 @@ import { MessagingService } from './services/messaging.service';
 })
 export class AppComponent {
 
-  message;
-  constructor(private messagingService: MessagingService) { }
-  title = 'bookStore';
+  message: any;
+  constructor(private messagingService: MessagingService) {
+  }
+  title = 'vava-pentecoste-system';
+
 
   ngOnInit() {
     let userId = 'user001';

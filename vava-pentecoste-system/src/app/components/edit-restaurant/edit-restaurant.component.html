@@ -88,7 +88,7 @@
             <input type="file" accept=".png, .jpg" (change)="onUpload($event)">
         </div>
         <div class="progress">
-            <div [style.visibility]="(uploadPercent == 0) ? 'hidden' : 'visible'" class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width]="(uploadPercent | async) +'%'">
+            <div [style.visibility]="(percent == 0) ? 'hidden' : 'visible'" class="progress-bar progress-bar-striped bg-success" role="progressbar" [style.width]="(uploadPercent | async) +'%'">
 
             </div>
         </div>

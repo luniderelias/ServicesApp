@@ -9,13 +9,9 @@
         <input class="form-control" type="text" [(ngModel)]="cat_name" name="cat_name" required>
     </div>
 
-    <select class="form-control" type="text" [(ngModel)]="res_name" name="res_name" required>
-
-     
+    <select class="form-control" type="text" [(ngModel)]="res_id" name="res_id" required>
             <option *ngFor="let restaurant of restaurants" [value]="restaurant.$key">{{restaurant.title}}</option>
-      
-          </select>
-
+    </select>
 
     <div class="form-group" *ngIf="!this.inputImageUser?.nativeElement.value" style="margin-top: 20px">
 

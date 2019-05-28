@@ -47,60 +47,24 @@ export class EditBuildingComponent implements OnInit {
   }
 
   ngOnInit() {
-	  
-	  
-	  console.log("Here is Edit Restaurant Page");
-	   
-	   
 	   	this.id = this.route.snapshot.params['id'];
-		
-	
-	  
 		  this.firebaseService.getBuildingDetails(this.id).snapshotChanges().subscribe(restaurant => {
 					this.restaurant = [];
-					//  restaurant.forEach(item => {
-						  
-						//  console.log(item);
-						
-						
-						  
-					
 						 let res = restaurant.payload.toJSON(); 
 						 res['$key'] = restaurant.key;
-						
-						//console.log(restaurant);
-						
 						this.restaurant = res as CityInterface;
-						//this.restaurant.push(res as RestaurantInterface);
-						
-						console.log(this.restaurant);
-						
 						  this.buildingName = this.restaurant.name;
-						
-						  
-						  
-						  console.log(this.id);
-						  
-						  console.log(this.buildingName);
-						
-						
-						
-				//	  });
 		});
 	  
   }
   
-  onBuildingEditSubmit(){
-	  
+  onBuildingEditSubmit() {
 	   let building = {
 		  name : this.buildingName,
 		  
 	  }
-	  
-	  this.firebaseService.updateBuilding(this.id,building);
-	  
+	  this.firebaseService.updateBuilding(this.id, building);
 	  this.router.navigate(['/add-building']);
-	  
   }
 
 }

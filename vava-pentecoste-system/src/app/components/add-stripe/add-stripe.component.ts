@@ -49,22 +49,11 @@ export class AddStripeComponent implements OnInit {
   }
   
    onStripeConfiguration(){
-	  //console.log(this.production);
-	  
-
 		 let stripe= {
 			  publishable: this.publishable,
 			  secret: this.secret
 		  }
-
-
            this.firebaseService.addStripeConfiguration(stripe);
           this.router.navigate(['settings']);		  
-	 
-	 
-  
-  
-  
   } 
-
 }

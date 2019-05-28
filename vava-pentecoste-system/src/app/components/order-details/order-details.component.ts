@@ -42,9 +42,11 @@ export class OrderDetailsComponent implements OnInit {
 	order_details: any;
 	user_details: any;
 	itensPrice = 0;
+	previousStatus: any;
 
 	constructor(private firebaseService: FirebaseService, private authService: AuthService,
-		private router: Router, private route: ActivatedRoute) { }
+		private router: Router, private route: ActivatedRoute) {
+		 }
 
 	ngOnInit() {
 
@@ -52,12 +54,11 @@ export class OrderDetailsComponent implements OnInit {
 
 		this.firebaseService.getOrderDetail(this.id).on('value', (snapshot) => {
 			this.order_details = snapshot.val();
-
-
-			this.order_details.items.forEach(item => {
-				this.itensPrice += item.price * item.quantity;
-			});
-
+			if (this.previousStatus === undefined) {
+				this.order_details.items.forEach(item => {
+					this.itensPrice += item.price * item.quantity;
+				});
+			}
 			switch (this.order_details.payments.PaymentType) {
 				case 'card':
 				this.paymentType = 'Cartão de Crédito';
@@ -70,6 +71,7 @@ export class OrderDetailsComponent implements OnInit {
 				break;
 			}
 
+			this.previousStatus = this.order_details.status;
 			if (this.order_details.status === 'Pendente') {
 				this.onStatusOrderSubmit('Em Andamento');
 			}
@@ -127,6 +129,15 @@ export class OrderDetailsComponent implements OnInit {
 			alertFunctions.showError('Erro!', 'Falha ao Alterar Status do Pedido');
 		});
 
+	}
+
+	
+	formatMoney(n) {
+		if (n) {
+		    return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+        } else {
+            return '';
+        }
 	}
 
 }

@@ -20,7 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 export class CityConfigurationComponent implements OnInit {
 
 	cities: any;
-
+	userUid: any;
 	restaurants: any;
 	restaurant2: any;
 
@@ -68,22 +68,11 @@ export class CityConfigurationComponent implements OnInit {
 			this.cities = [];
 
 			cities.forEach(item => {
-
-				console.log(item);
-
-
 				let a = item.payload.toJSON();
 				a['$key'] = item.key;
-
-				console.log(a);
-
 				this.cities.push(a as CityInterface);
-
-
-
 			})
 		});
-
 	}
 
 	deleteCity(citykey) {

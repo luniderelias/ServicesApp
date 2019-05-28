@@ -8,7 +8,7 @@
             </div>
             <div class="form-group">
                 <label>Preço</label>
-                <input class="form-control" type="number" [(ngModel)]="order_details.value" name="value" required>
+                <input class="form-control" type="number" step="0.01" [(ngModel)]="order_details.value" name="value" required>
             </div>
             <div class="col">
                 <button class="btn btn-raised mr-1 btn-round shadow-z-2 btn-secondary" [routerLink]="['/produtos/adicional/listar/'+product_id]">Voltar</button>

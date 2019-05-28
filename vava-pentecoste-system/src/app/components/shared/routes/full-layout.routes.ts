@@ -54,7 +54,6 @@ export const Full_ROUTES: Routes = [
   { path: 'offers', component: OffersComponent, canActivate: [AuthGuard]},
     { path: 'book/:id', component: DetailsBookComponent , canActivate: [AuthGuard]},
     { path: 'admin/list-books', component: ListBooksComponent, canActivate: [AuthGuard]},
-    { path: 'user/login', component: LoginComponent },
     { path: 'user/register', component: RegisterComponent },
     { path: 'user/profile', component: ProfileComponent, canActivate: [AuthGuard]},
     { path: 'lojas/listar', component: RestaurantsComponent, canActivate: [AuthGuard]},

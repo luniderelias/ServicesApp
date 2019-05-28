@@ -64,35 +64,27 @@ export class TagsInputComponent {
     };
 
     public onAdd(item) {
-        console.log('tag added: value is ' + item);
     }
 
     public onRemove(item) {
-        console.log('tag removed: value is ' + item);
     }
 
     public onSelect(item) {
-        console.log('tag selected: value is ' + item);
     }
 
     public onFocus(item) {
-        console.log('input focused: current value is ' + item);
     }
 
     public onTextChange(text) {
-        console.log('text changed: value is ' + text);
     }
 
     public onBlur(item) {
-        console.log('input blurred: current value is ' + item);
     }
 
     public onTagEdited(item) {
-        console.log('tag edited: current value is ' + item);
     }
 
     public onValidationError(item) {
-        console.log('invalid tag ' + item);
     }
 
 

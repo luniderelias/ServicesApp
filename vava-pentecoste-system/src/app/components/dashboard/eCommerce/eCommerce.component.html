@@ -7,7 +7,7 @@
                     <div class="card-block pt-2 pb-0">
                         <div class="media">
                             <div class="media-body text-left">
-                                <h4 class="font-medium-5 card-title mb-0">R$ {{dashboard?.totalSales}}</h4>
+                                <h4 class="font-medium-5 card-title mb-0">R${{formatMoney(dashboard?.totalSales)}}</h4>
                                 <span>Valor em Vendas</span>
                             </div>
                             <div class="media-right text-right">
@@ -65,74 +65,6 @@
             </div>
         </div>
     </div>
-    <!-- 
-    <div class="col-xl-4 col-lg-12 col-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title-wrap bar-danger">
-                    <h4 class="card-title">Today's Activity</h4>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="col-12 timeline-left" id="activity">
-                    <div class="timeline">
-                        <ul class="list-unstyled base-timeline activity-timeline">
-                            <li class="">
-                                <div class="timeline-icon bg-danger">
-                                    <i class="fa fa-tasks"></i>
-                                </div>
-                                <div class="act-time">Today</div>
-                                <div class="base-timeline-info">
-                                    <a href="#" class="text-uppercase text-danger">Task Added</a>
-                                </div>
-                                <small class="text-muted">
-                                    25 mins ago
-                                </small>
-                            </li>
-                            <li class="">
-                                <div class="timeline-icon bg-primary">
-                                    <i class="fa fa-handshake-o"></i>
-                                </div>
-                                <div class="act-time">Yesterday</div>
-                                <div class="base-timeline-info">
-                                    <a href="#" class="text-uppercase text-primary">Deal Added</a>
-                                </div>
-                                <small class="text-muted">
-                                    23 hours ago
-                                </small>
-                            </li>
-                            <li class="">
-                                <div class="timeline-icon bg-dark">
-                                    <i class="fa fa-tasks"></i>
-                                </div>
-                                <div class="act-time">09 March</div>
-                                <div class="base-timeline-info">
-                                    <a href="#" class="text-uppercase text-dark">Task Updated</a>
-                                </div>
-                                <small class="text-muted">
-                                    15 days ago
-                                </small>
-                            </li>
-                            <li class="">
-                                <div class="timeline-icon bg-warning">
-                                    <i class="fa fa-handshake-o"></i>
-                                </div>
-                                <div class="act-time">04 March</div>
-                                <div class="base-timeline-info">
-                                    <a href="#" class="text-uppercase text-warning">Started Task</a>
-                                </div>
-                                <small class="text-muted">
-                                    20 days ago
-                                </small>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-    <!--Line with Area Chart 1 Ends-->
     <div class="row">
         <div class="col-12" id="recent-sales">
             <div class="card">
@@ -159,10 +91,10 @@
                             <tbody>
                                 <tr *ngFor="let order of orders; let i = index">
                                     <td class="text-truncate">{{order?.$key}}</td>
-                                    <td class="text-truncate">{{order?.timeStamp | date:'dd/MM/yyyy hh:mm'}}</td>
+                                    <td class="text-truncate">{{order?.timeStamp | date:'dd/MM/yyyy HH:mm'}}</td>
                                     <td class="text-truncate">{{order?.status}}</td>
                                     <td class="text-truncate">{{order?.customerDetails?.displayName}}</td>
-                                    <td class="text-truncate">R${{order?.total}}</td>
+                                    <td class="text-truncate">R${{formatMoney(order?.total)}}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import * as Chartist from 'chartist';
 import { ChartType, ChartEvent } from 'ng-chartist';
 import { OrderInterface } from 'src/app/models/order';
+import { DatePipe } from '@angular/common';
 
 declare var require: any;
 
@@ -40,11 +41,10 @@ export class EcommerceComponent {
     getDashboardOrders() {
         this.firebaseService.getDashboardOrders().snapshotChanges().subscribe(orders => {
             orders.forEach(item => {
-
                 let a = item.payload.toJSON();
                 a['$key'] = item.key;
                 this.orders.push(a as OrderInterface);
-        });
+            });
         });
     }
 
@@ -59,9 +59,13 @@ export class EcommerceComponent {
             this.dashboard = res as DashboardInterface;
             this.dashboard.dailyRevenue.series = [this.dashboard.dailyRevenue.series];
             this.dashboard.dailyOrders.series = [this.dashboard.dailyOrders.series];
+            this.dashboard.dailyRevenue.labels.forEach((value, index) => {
+                if (index > 0) {
+                    this.dashboard.dailyRevenue.labels[index] = new DatePipe('en-US').transform(value, 'dd/MM');
+                }
+            });
             this.WidgetAreaChart2.data = this.dashboard.dailyRevenue;
             this.lineChart.data = this.dashboard.dailyRevenue;
-            console.log(this.dashboard.dailyRevenue);
             this.WidgetAreaChart3.data = this.dashboard.dailyOrders;
         });
     }
@@ -171,22 +175,10 @@ export class EcommerceComponent {
                     offset: 1,
                     'stop-color': 'rgba(250,91,76, 1)'
                 });
-
-                // const targetLineX = data.chartRect.x1 + (data.chartRect.width() - (data.chartRect.width() / data.bounds.step))
-
-                // data.svg.elem('line', {
-                //     x1: targetLineX,
-                //     x2: targetLineX,
-                //     y1: data.chartRect.y1,
-                //     y2: data.chartRect.y2
-                // }, data.options.targetLine.class);
-
             },
         },
     };
-    // Widget Area chart 2 configuration Ends
 
-    // Widget Area chart 3 configuration Starts
     WidgetAreaChart3: Chart = {
         type: 'Line', data: data['WidgetAreaChart'],
 
@@ -235,7 +227,13 @@ export class EcommerceComponent {
             },
         },
     };
-    // Widget Area chart 3 configuration Ends
 
+	formatMoney(n) {
+        if (n) {
+		    return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+        } else {
+            return '';
+        }
+    }
 
 }

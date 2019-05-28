@@ -52,14 +52,8 @@ export class EditOrderComponent implements OnInit {
   ngOnInit() {
 	  
 	  	this.id = this.route.snapshot.params['id'];
-			
-			console.log(this.id);
-		
-			
 			this.firebaseService.getOrderDetail(this.id).on('value', (snapshot) => {
 		  this.order_details = snapshot.val();
-		  
-		  console.log(this.order_details);
 		});
 	  
   }

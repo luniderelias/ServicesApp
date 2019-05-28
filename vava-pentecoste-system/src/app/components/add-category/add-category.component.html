@@ -24,7 +24,9 @@
 	</select>
             </div>
             <div class="form-group">
-                <input id="image" name="image" [(ngModel)]="image" type="file" required>
+                <img src="image" hidden="!image">
+                <input type="file" (change)="onImageChange($event)" accept="image/*" required>
+                <!-- <input id="image" name="image" [(ngModel)]="image" type="file" accept=".png, .jpg" required> -->
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-raised mr-1 btn-round shadow-z-2 btn-primary">Salvar</button>

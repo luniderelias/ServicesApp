@@ -57,32 +57,13 @@ export class CategoryDetailsComponent implements OnInit {
 
 		this.firebaseService.getCategoryDetails(this.id).snapshotChanges().subscribe(category => {
 			this.category_details = [];
-			//  restaurant.forEach(item => {
-
-			//  console.log(item);
-
-
 			let res = category.payload.toJSON();
 
 			if (category.key != null || category.key !== 'null') {
 				res['$key'] = category.key;
 			}
-
-			console.log(category);
-
 			this.category_details = res as CategoryInterface;
-			//this.restaurant.push(res as RestaurantInterface);
-
-			console.log(this.category_details);
-
-
-
-			//	  });
 		});
-
-
-
-
 	}
 
 	onCategoryDelete() {

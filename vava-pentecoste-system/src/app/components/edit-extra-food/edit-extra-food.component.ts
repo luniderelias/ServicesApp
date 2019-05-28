@@ -53,42 +53,18 @@ export class EditExtraFoodComponent implements OnInit {
 	}
 
 	ngOnInit() {
-
 		this.id = this.route.snapshot.params['id'];
 		this.product_id = this.route.snapshot.params['product_id'];
 
-
 		this.firebaseService.getItemEditExtraDetail(this.id).snapshotChanges().subscribe(item => {
 			this.order_details = [];
-			//  restaurant.forEach(item => {
-
-			console.log(item);
-
-
 			let res = item.payload.toJSON();
 			res['$key'] = item.key;
-			//res['$key'] = this.id;
-			console.log(item);
-
 			this.order_details = res as ExtraInterface;
-			//this.restaurant.push(res as RestaurantInterface);
-
-			console.log(this.order_details);
-
-
-
-			//	  });
 		});
-
-
-
-
-		console.log(this.order_details);
-
 	}
 
 	save() {
-
 		const extraItem = {
 			name: this.order_details.name,
 			selected: this.order_details.selected,

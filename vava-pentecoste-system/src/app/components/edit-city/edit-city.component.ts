@@ -26,6 +26,7 @@ export class EditCityComponent implements OnInit {
 	stock: any;
 	image: any;
 	cityName: any;
+	fare: any;
 	restaurant: any;
 	isAdmin: boolean;
 
@@ -63,6 +64,7 @@ export class EditCityComponent implements OnInit {
 			this.restaurant = res as CityInterface;
 
 			this.cityName = this.restaurant.name;
+			this.fare = this.restaurant.fare;
 
 		});
 
@@ -71,6 +73,7 @@ export class EditCityComponent implements OnInit {
 	onCityEditSubmit() {
 		const city = {
 			name: this.cityName,
+			fare: this.fare
 		}
 
 		this.firebaseService.updateCity(this.id, city).then(res => {

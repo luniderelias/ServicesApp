@@ -60,6 +60,7 @@ import { EditExtraFoodComponent } from './components/edit-extra-food/edit-extra-
 import { AddNewRestaurantComponent } from './components/add-new-restaurant/add-new-restaurant.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from './components/shared/shared.module';
 import { AgmCoreModule } from '@agm/core';
@@ -80,6 +81,7 @@ import { FullLayoutComponent } from './components/layouts/full/full-layout.compo
 
 import { DragulaService } from 'ng2-dragula';
 
+import { ImageUploadModule } from 'ng2-imageupload';
 import * as $ from 'jquery';
 
 
@@ -139,6 +141,8 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
+    ImageUploadModule,
+    Ng2ImgMaxModule,
     AppRoutingModule,
     FormsModule,
     NgxDatatableModule,

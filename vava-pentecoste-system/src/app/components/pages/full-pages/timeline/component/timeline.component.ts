@@ -282,15 +282,11 @@ export class TimelineComponent implements AfterViewInit {
   }
 
   translateTimeline(value: number, totWidth: number | null) {
-    // only negative translate value
     value = (value > 0) ? 0 : value;
-    // do not translate more than timeline width
     value = ( !(totWidth === null) && value < totWidth ) ? totWidth : value;
     TimelineComponent.setTransformValue(this.eventsWrapper.nativeElement, 'translateX', value + 'px');
-    // update navigation arrows visibility
     this.prevLinkInactive = value === 0;
     this.nextLinkInactive = value === totWidth;
-    console.log(value + '   '+ totWidth);
   }
 
   setTimelineWidth(elements: TimelineElement[], width: number, eventsMinLapse: number) {

@@ -65,29 +65,10 @@ export class AddExtraFoodComponent implements OnInit {
 
 		this.firebaseService.getItemDetails(this.id).snapshotChanges().subscribe(item => {
 			this.item = [];
-			//  restaurant.forEach(item => {
-
-			//  console.log(item);
-
-
 			let res = item.payload.toJSON();
 			res['$key'] = item.key;
-
-			console.log(item);
-
 			this.item = res as ItemInterface;
-			//this.restaurant.push(res as RestaurantInterface);
-
-			console.log(this.item);
-
-
-
-			//	  });
 		});
-
-
-
-
 	}
 
 

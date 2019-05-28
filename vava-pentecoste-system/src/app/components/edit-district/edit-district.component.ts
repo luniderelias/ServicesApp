@@ -38,65 +38,29 @@ export class EditDistrictComponent implements OnInit {
 	restaurant: any;
 
    constructor(private dataApi: DataApiService,
-  private firebaseService:FirebaseService,
-  private router:Router, private route: ActivatedRoute,
-  private authService: AuthService) { 
+  private firebaseService: FirebaseService,
+  private router: Router, private route: ActivatedRoute,
+  private authService: AuthService) {
   }
 
   ngOnInit() {
-	  
-	  console.log("Here is Edit Restaurant Page");
-	   
-	   
 	   	this.id = this.route.snapshot.params['id'];
-		
-	
-	  
 		  this.firebaseService.getDistrictDetails(this.id).snapshotChanges().subscribe(restaurant => {
 					this.restaurant = [];
-					//  restaurant.forEach(item => {
-						  
-						//  console.log(item);
-						
-						
-						  
-					
 						 let res = restaurant.payload.toJSON(); 
 						 res['$key'] = restaurant.key;
-						
-						//console.log(restaurant);
-						
 						this.restaurant = res as CityInterface;
-						//this.restaurant.push(res as RestaurantInterface);
-						
-						console.log(this.restaurant);
-						
 						  this.districtName = this.restaurant.name;
-						
-						  
-						  
-						  console.log(this.id);
-						  
-						  console.log(this.districtName);
-						
-						
-						
-				//	  });
 		});
 	  
   }
   
-   onDistrictEditSubmit(){
-	  
+   onDistrictEditSubmit() {
 	   let city = {
 		  name : this.districtName,
 		  
 	  }
-	  
 	  this.firebaseService.updateDistrict(this.id,city);
-	  
 	  this.router.navigate(['/add-district']);
-	  
   }
-
 }

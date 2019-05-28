@@ -32,37 +32,19 @@ export class CategoriesComponent implements OnInit {
 	 this.firebaseService.getCategories().snapshotChanges().subscribe(category => { // Using snapshotChanges() method to retrieve list of data along with metadata($key)
       this.categories = [];
       category.forEach(item => {
-		  
-		  console.log(item);
-		  
-	
-		 let a = item.payload.toJSON(); 
+		 let a = item.payload.toJSON();
         a['$key'] = item.key;
-		
-		console.log(a);
-		
         this.categories.push(a as RestaurantInterface);
-		
-		
-        
       })
     })
-	
-	  
   }
-
  
- 
-  onRestaurantDelete(id){
-	  
+  onRestaurantDelete(id) {
 	  this.firebaseService.deleteRestaurant(id);
-		
 	  this.router.navigate(['/restaurants']);
   }
-  
+
   goToRestaurantDetails(restaurant) {
-	  console.log(restaurant);
-	  
 	  this.router.navigate(['/restaurants']);
   }
 

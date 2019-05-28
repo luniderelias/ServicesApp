@@ -26,37 +26,31 @@ export class AuthService {
 
     this.firebaseAuth.authState.subscribe((user) => {
       if (user) {
-
         this.isLoggedIn.next(true);
-
-        this.getCurrentUserDetails(user.email.split('@')[0]);
-
+        this.getCurrentUserDetails(firebaseAuth.auth.currentUser);
         // NOW, when the callback from firebase came, and user is logged in,
         // we can navigate to the attempted URL (if exists)
-        if (this.redirectUrl ) {
-          this.router.navigate([this.redirectUrl]);
-        }
       } else {
         this.isLoggedIn.next(false);
       }
    });
   }
 
-
   getCurrentUserDetails(id) {
     this.firebaseService.getUserDetails(id).snapshotChanges().subscribe(user => {
-
-			const res = user.payload.val();
-
-      const currentUser = res as UserInterface;
-
-      console.log(res);
-      
-      localStorage.setItem('current_user_role', currentUser.role);
-		});
+      this.continueLogin(user.payload.val() as UserInterface);
+    });
   }
 
+  continueLogin(user) {
+    localStorage.setItem('current_user_role', user.role);
 
+    if (this.redirectUrl ) {
+      this.router.navigate([this.redirectUrl]);
+    } else {
+      this.router.navigate(['dashboard/eCommerce']);
+    }
+  }
 
   loginFacebookUser() {
     return this.afsAuth.auth.signInWithPopup(new auth.FacebookAuthProvider())
@@ -66,7 +60,6 @@ export class AuthService {
   loginGoogleUser() {
     return this.afsAuth.auth.signInWithPopup(new auth.GoogleAuthProvider())
       .then(credential => {
-        console.log(credential.user);
         this.updateUserData(credential.user);
       });
   }
@@ -93,14 +86,20 @@ export class AuthService {
   }
 
   private updateUserData(user) {
-    const data: UserInterface = {
-      id: user.uid,
-      email: user.email,
-      displayName: user.displayName
-    };
+    this.firebaseService.getUserDetails(user).snapshotChanges().subscribe(res => {
+      if (res.key) {
+        this.continueLogin(res.payload.val() as UserInterface);
+      } else {
+        const data: UserInterface = {
+          id: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          role: 'new-user'
+        };
 
-    this.firebaseService.addNewUser(data).then(res => {
-      this.getCurrentUserDetails(user.email.split('@')[0]);
+        this.firebaseService.addNewUser(data);
+        this.continueLogin(data);
+      }
     });
   }
 

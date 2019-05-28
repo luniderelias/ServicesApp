@@ -20,10 +20,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'bookStore'`, () => {
+  it(`should have as title 'vava-pentecoste-system'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('bookStore');
+    expect(app.title).toEqual('vava-pentecoste-system');
   });
 
   it('should render title in a h1 tag', () => {

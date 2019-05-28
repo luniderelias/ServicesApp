@@ -10,7 +10,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class NavbarComponent implements OnInit {
 
   constructor(private authService: AuthService, private afsAuth: AngularFireAuth) { }
-  public app_name: string = 'BookStore';
+  public app_name: string = 'vava-pentecoste-system';
   public isLogged: boolean = false;
   ngOnInit() {
     this.getCurrentUser();
@@ -19,10 +19,8 @@ export class NavbarComponent implements OnInit {
   getCurrentUser() {
     this.authService.isAuth().subscribe(auth => {
       if (auth) {
-        console.log('user logged');
         this.isLogged = true;
       } else {
-        console.log('NOT user logged');
         this.isLogged = false;
       }
     });

@@ -23,6 +23,7 @@ export class AddNewCityComponent implements OnInit {
 	sandbox: any;
 	production: any;
 	cityName: any;
+	fare: any;
 
 	isAdmin: boolean;
 
@@ -50,7 +51,8 @@ export class AddNewCityComponent implements OnInit {
 
 	addCityName() {
 		const cityName = {
-			name: this.cityName
+			name: this.cityName,
+			fare: this.fare
 		}
 
 		this.firebaseService.addNewCity(cityName).then(res => {

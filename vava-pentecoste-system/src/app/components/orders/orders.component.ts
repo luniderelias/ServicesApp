@@ -17,6 +17,8 @@ import { OrderInterface } from '../../models/order';
 export class OrdersComponent implements OnInit {
   temp: any;
   orders: any;
+  loading = false;
+  userUid: any;
   @ViewChild(DatatableComponent) table: DatatableComponent;
 
   constructor(private firebaseService: FirebaseService, private authService: AuthService, private router: Router) { }
@@ -39,27 +41,18 @@ export class OrdersComponent implements OnInit {
       this.temp = [];
 
       orders.forEach(item => {
-
-        console.log(item);
-
-
         const a = item.payload.toJSON();
         a['$key'] = item.key;
-
-
+        
         this.orders.push(a as OrderInterface);
         this.temp.push(a as OrderInterface);
-
-
       });
-      console.log(this.orders);
     });
   }
 
 
   updateFilter(event, prop) {
     const val = event.target.value.toLowerCase();
-
     const temp = this.temp.filter(function (d) {
       if (prop === 'name')
         return d.customerDetails.displayName.toLowerCase().indexOf(val) !== -1 || !val;
@@ -72,11 +65,18 @@ export class OrdersComponent implements OnInit {
   }
 
   customComparator(propA, propB) {
-    console.log('Sorting Comparator', propA, propB);
-
-    // Just a simple sort function comparisoins
     if (propA < propB) { return -1; }
     if (propA > propB) { return 1; }
   }
+
+  
+	
+	formatMoney(n) {
+		if (n) {
+      return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+      } else {
+          return '';
+      }
+    }
 
 }

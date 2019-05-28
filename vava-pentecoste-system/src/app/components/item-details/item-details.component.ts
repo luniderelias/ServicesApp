@@ -51,39 +51,16 @@ export class ItemDetailsComponent implements OnInit {
 		}
 
 	ngOnInit() {
-
 		this.id = this.route.snapshot.params['id'];
-
-
 		this.firebaseService.getItemDetails(this.id).snapshotChanges().subscribe(item => {
 			this.item = [];
-			//  restaurant.forEach(item => {
-
-			//  console.log(item);
-
-
 			let res = item.payload.toJSON();
 			res['$key'] = item.key;
-
-			console.log(item);
-
 			this.item = res as ItemInterface;
-			//this.restaurant.push(res as RestaurantInterface);
-
-			console.log(this.item);
-
-
-
-			//	  });
 		});
-
-
-
-
 	}
 
 	onItemDelete() {
-
 		this.firebaseService.deleteItem(this.id).then(res => {
 			alertFunctions.showSuccess('Sucesso!', 'Produto Removido');
 			this.loading = false;
@@ -92,6 +69,15 @@ export class ItemDetailsComponent implements OnInit {
 			this.loading = false;
 			alertFunctions.showError('Erro!', 'Falha ao Remover Produto!');
 		});
+	}
+
+	
+	formatMoney(n) {
+        if (n) {
+		    return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+        } else {
+            return '';
+		}
 	}
 
 }

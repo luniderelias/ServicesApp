@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "bookStore": {
+        "vava-pentecoste-system": {
             "root": "",
             "sourceRoot": "src",
             "projectType": "application",
@@ -13,7 +13,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/bookStore",
+                        "outputPath": "dist/vava-pentecoste-system",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -48,7 +48,8 @@
                             "./node_modules/popper.js/dist/umd/popper.js",
                             "./node_modules/bootstrap/dist/js/bootstrap.js",
                             "src/assets/vendor/pace/pace.min.js",
-                            "src/assets/js/perfect-scrollbar.jquery.min.js"
+                            "src/assets/js/perfect-scrollbar.jquery.min.js",
+                            "./node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"
                         ]
                     },
                     "configurations": {
@@ -68,7 +69,7 @@
                             "buildOptimizer": true,
                             "budgets": [{
                                 "type": "initial",
-                                "maximumWarning": "2mb",
+                                "maximumWarning": "4mb",
                                 "maximumError": "5mb"
                             }]
                         }
@@ -77,18 +78,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "bookStore:build"
+                        "browserTarget": "vava-pentecoste-system:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "bookStore:build:production"
+                            "browserTarget": "vava-pentecoste-system:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "bookStore:build"
+                        "browserTarget": "vava-pentecoste-system:build"
                     }
                 },
                 "test": {
@@ -128,7 +129,7 @@
                 }
             }
         },
-        "bookStore-e2e": {
+        "vava-pentecoste-system-e2e": {
             "root": "e2e/",
             "projectType": "application",
             "prefix": "",
@@ -137,11 +138,11 @@
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
                         "protractorConfig": "./protractor.conf.js",
-                        "devServerTarget": "bookStore:serve"
+                        "devServerTarget": "vava-pentecoste-system:serve"
                     },
                     "configurations": {
                         "production": {
-                            "devServerTarget": "bookStore:serve:production"
+                            "devServerTarget": "vava-pentecoste-system:serve:production"
                         }
                     }
                 },
@@ -157,7 +158,7 @@
             }
         }
     },
-    "defaultProject": "bookStore",
+    "defaultProject": "vava-pentecoste-system",
     "schematics": {
         "@schematics/angular:component": {
             "prefix": "app",

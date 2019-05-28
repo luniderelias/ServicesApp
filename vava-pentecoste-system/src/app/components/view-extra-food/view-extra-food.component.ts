@@ -19,7 +19,7 @@ export class ViewExtraFoodComponent implements OnInit {
 	order_id: any;
 	order_details: any;
 	user_details: any;
-
+	userUid: any;
 	item: any;
 
 	id: any;
@@ -45,39 +45,15 @@ export class ViewExtraFoodComponent implements OnInit {
 		}
 
 	ngOnInit() {
-
 		this.id = this.route.snapshot.params['id'];
-
-		console.log(this.id);
-
 		this.firebaseService.getItemExtraDetail(this.id).snapshotChanges().subscribe(restaurant => {
 			this.order_details = [];
 			restaurant.forEach(item => {
-
-				//  console.log(item);
-
-
-				console.log(item);
-
 				let res = item.payload.toJSON();
 				res['$key'] = item.key;
-				console.log(res);
-
-				//		console.log(item);
-
-				//this.order_details = res as ExtraInterface;
 				this.order_details.push(res as ExtraInterface);
-
-				console.log(this.order_details);
-
-
-
 			});
 		});
-
-
-
-
 	}
 
 
@@ -98,4 +74,13 @@ export class ViewExtraFoodComponent implements OnInit {
 		this.router.navigate(['/produtos/adicional/editar/' + id + '/' + this.id]);
 	}
 
+
+	
+	formatMoney(n) {
+		if (n) {
+		    return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+        } else {
+            return '';
+		}
+	}
 }

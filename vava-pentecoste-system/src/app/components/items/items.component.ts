@@ -38,56 +38,41 @@ export class ItemsComponent implements OnInit {
       this.items = [];
       this.temp = [];
       items.forEach(item => {
-
-        console.log(item);
-
-
         let a = item.payload.toJSON();
         a['$key'] = item.key;
-
-        console.log(a);
-        
-
         this.items.push(a as ItemInterface);
         this.temp.push(a as ItemInterface);
-
-
-
       });
     });
    }
 
   ngOnInit() {}
 
-
-
   onRestaurantDelete(id) {
-
     this.firebaseService.deleteRestaurant(id);
-
     this.router.navigate(['/restaurants']);
   }
 
   goToRestaurantDetails(restaurant) {
-    console.log(restaurant);
-
     this.router.navigate(['/restaurants']);
   }
 
-  
+
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
-
-    // filter our data
     const temp = this.temp.filter(function (d) {
-      console.log(d)
       return d.product_id.toLowerCase().indexOf(val) !== -1 || !val;
     });
-
-    // update the rows
     this.items = temp;
-    // Whenever the filter changes, always go back to the first page
     this.table.offset = 0;
   }
+  
+	formatMoney(n) {
+    if (n) {
+      return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+      } else {
+          return '';
+      }
+    }
 
 }

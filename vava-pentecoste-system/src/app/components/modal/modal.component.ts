@@ -25,7 +25,7 @@ export class ModalComponent implements OnInit {
   phonenumber?: string;
   title?: string;
 
-  constructor(private dataApi: DataApiService,
+  constructor(public dataApi: DataApiService,
     private firebaseService: FirebaseService,
     private router: Router) { }
   @ViewChild('btnClose') btnClose: ElementRef;

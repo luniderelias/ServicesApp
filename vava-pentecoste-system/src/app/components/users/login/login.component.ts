@@ -18,26 +18,24 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(): void {
-   
   }
 
   onLoginGoogle(): void {
     this.authService.loginGoogleUser()
       .then((res) => {
         this.onLoginRedirect();
-      }).catch(err => console.log('err', err.message));
+      });
   }
   onLoginFacebook(): void {
     this.authService.loginFacebookUser()
       .then((res) => {
         this.onLoginRedirect();
-      }).catch(err => console.log('err', err.message));
+      });
   }
 
   onLogout() {
     this.authService.logoutUser();
   }
   onLoginRedirect(): void {
-    this.router.navigate(['dashboard/eCommerce']);
   }
 }

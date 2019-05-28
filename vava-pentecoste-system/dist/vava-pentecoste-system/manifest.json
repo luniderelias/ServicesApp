@@ -1,0 +1,12 @@
+{
+    "manifest_version": 2,
+    "name": "extension",
+    "version": "1.0",
+    "description": "Por favor, habilite as notificações para receber os pedidos.",
+    "browser_action": {
+        "default_icon": "icon.jpg",
+        "default_popup": "popup.html"
+    },
+
+    "gcm_sender_id": "103953800507"
+}

@@ -48,57 +48,23 @@ export class RestaurantDetailsComponent implements OnInit {
 		});
 	}
 	ngOnInit() {
-
 		this.id = this.route.snapshot.params['id'];
-
 		this.firebaseService.getRestaurantCategories(this.id).snapshotChanges().subscribe(categories => {
-			console.log(categories);
-			//this.categories = categories;
-
 			this.categories = [];
 			categories.forEach(item => {
-
-				console.log(item);
-
-
 				let cat = item.payload.toJSON();
 				cat['$key'] = item.key;
-
-				console.log(cat);
-
 				this.categories.push(cat as CategoryInterface);
-
-
-
 			});
 
 		});
 
 		this.firebaseService.getRestaurantDetails(this.id).snapshotChanges().subscribe(restaurant => {
 			this.restaurant = [];
-			//  restaurant.forEach(item => {
-
-			//  console.log(item);
-
-
 			let res = restaurant.payload.toJSON();
 			res['$key'] = restaurant.key;
-
-			console.log(restaurant);
-
 			this.restaurant = res as RestaurantInterface;
-			//this.restaurant.push(res as RestaurantInterface);
-
-			console.log(this.restaurant);
-
-
-
-			//	  });
 		});
-
-
-
-
 	}
 
 

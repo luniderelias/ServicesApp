@@ -9,6 +9,7 @@ import { FirebaseService } from '../../services/firebase.service';
 import { Router } from '@angular/router';
 
 import { RestaurantInterface } from '../../models/restaurant';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
 	selector: 'app-add-category',
@@ -35,7 +36,8 @@ export class AddCategoryComponent implements OnInit {
 
 	constructor(private dataApi: DataApiService,
 		private firebaseService: FirebaseService,
-		private router: Router) {
+		private router: Router,
+		private ng2ImgMax: Ng2ImgMaxService) {
 		this.isAdmin = localStorage.getItem('current_user_role') === 'admin' ||
 			localStorage.getItem('current_user_role') === 'super_admin';
 	}
@@ -65,15 +67,8 @@ export class AddCategoryComponent implements OnInit {
 		this.firebaseService.getRestaurants().snapshotChanges().subscribe(restaurants => { // Using snapshotChanges() method to retrieve list of data along with metadata($key)
 			this.restaurants = [];
 			restaurants.forEach(item => {
-
-				console.log(item);
-
-
 				let a = item.payload.toJSON();
 				a['$key'] = item.key;
-
-				console.log(a);
-
 				this.restaurants.push(a as RestaurantInterface);
 			})
 		});
@@ -88,19 +83,12 @@ export class AddCategoryComponent implements OnInit {
 	}
 
 	onCategoryAddSubmit() {
-
 		return this.firebaseService.getRestaurantDetails(this.res_name).snapshotChanges().subscribe(restaurant => {
 			this.restaurant = [];
 
 			let res = restaurant.payload.toJSON();
 			res['$key'] = restaurant.key;
-
-			console.log(restaurant);
-
 			this.restaurant = res as RestaurantInterface;
-
-			console.log(this.restaurant);
-
 
 			const category = {
 				cat_id: this.cat_id,
@@ -113,7 +101,7 @@ export class AddCategoryComponent implements OnInit {
 				restaurant_long: this.restaurant.long,
 				res_id: this.restaurant.$key,
 				user_id: this.restaurant.user_id,
-
+				
 			}
 
 			this.firebaseService.addCategory(category).then(() => {
@@ -128,10 +116,19 @@ export class AddCategoryComponent implements OnInit {
 			this.loading = false;
 			alertFunctions.showError('Erro', 'Falha ao Cadastrar Categoria');
 		});
-
-
-
-
 	}
 
+
+	onImageChange(event) {
+		const image = event.target.files[0];
+	  
+		this.ng2ImgMax.resizeImage(image, 300, 300).subscribe(
+		  result => {
+			this.image = new File([result], result.name);
+		  },
+		  error => {
+			console.log('😢 Oh no!', error);
+		  }
+		);
+	  }
 }

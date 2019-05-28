@@ -71,19 +71,9 @@ export class AddComponent implements OnInit {
       this.streets = [];
       
 	  streets.forEach(item => {
-		  
-		  console.log(item);
-		  
-	
 		 let a = item.payload.toJSON(); 
         a['$key'] = item.key;
-		
-		console.log(a);
-		
         this.streets.push(a as StreetInterface);
-		
-		
-        
       })
     });
 	  

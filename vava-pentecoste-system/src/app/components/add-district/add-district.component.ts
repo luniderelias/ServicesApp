@@ -66,19 +66,9 @@ export class AddDistrictComponent implements OnInit {
       this.districts = [];
       
 	  districts.forEach(item => {
-		  
-		  console.log(item);
-		  
-	
-		 let a = item.payload.toJSON(); 
+		 let a = item.payload.toJSON();
         a['$key'] = item.key;
-		
-		console.log(a);
-		
         this.districts.push(a as DistrictInterface);
-		
-		
-        
       })
     });
 	  

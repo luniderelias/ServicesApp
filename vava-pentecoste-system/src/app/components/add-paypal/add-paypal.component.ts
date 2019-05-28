@@ -47,15 +47,11 @@ export class AddPaypalComponent implements OnInit {
   }
   
   onPaypalConfiguration(){
-	  console.log(this.production);
-	  
 	  if(this.production == "undefined" || this.production == undefined || this.production == ""){
 		  let paypal= {
 			  sandbox: this.sandbox,
 			  production: ""
 		  }
-		  
-		  
 		    this.firebaseService.addPaypalConfiguration(paypal);
 			this.router.navigate(['settings']);
 	  }

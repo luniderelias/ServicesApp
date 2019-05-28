@@ -50,7 +50,7 @@ export class EditRestaurantComponent implements OnInit {
 	categories: any;
 	firebase_url: any;
 	restaurantFolder: any;
-
+	percent: number;
 
 
 	constructor(private dataApi: DataApiService,
@@ -85,44 +85,24 @@ export class EditRestaurantComponent implements OnInit {
 			bookForm.value.userUid = this.userUid;
 			this.dataApi.addBook(bookForm.value);
 		} else {
-			// Update
 			this.dataApi.updateBook(bookForm.value);
 		}
 		bookForm.resetForm();
-		//this.btnClose.nativeElement.click();
 	}
 
 
 	ngOnInit() {
-
-		console.log("Here is Edit Restaurant Page");
-
-
 		this.id = this.route.snapshot.params['id'];
-
-
-
 		this.firebaseService.getRestaurantDetails(this.id).snapshotChanges().subscribe(restaurant => {
 			this.restaurant = [];
-			//  restaurant.forEach(item => {
-
-			//  console.log(item);
-
-
 			let res = restaurant.payload.toJSON();
 			res['$key'] = restaurant.key;
-
-			console.log(restaurant);
-
 			this.restaurant = res as RestaurantInterface;
-			//this.restaurant.push(res as RestaurantInterface);
 
-			console.log(this.restaurant);
 
 			this.title = this.restaurant.title;
 			this.address = this.restaurant.address;
 			this.description = this.restaurant.description;
-			//this.image = this.restaurant.image;
 			this.info = this.restaurant.info;
 			this.lat = this.restaurant.lat;
 			this.long = this.restaurant.long;
@@ -131,21 +111,11 @@ export class EditRestaurantComponent implements OnInit {
 			this.outlet = this.restaurant.outlet;
 			this.phonenumber = this.restaurant.phonenumber;
 			this.firebase_url = this.restaurant.firebase_url;
-			//this.image = this.restaurant.firebase_url;
-
-			console.log(this.id);
-
-
-
-			//	  });
 		});
-
 	}
 
 	onAddRestaurant() {
-
 		const restaurant = {
-
 			address: this.address,
 			description: this.description,
 			image: this.image,
@@ -163,9 +133,7 @@ export class EditRestaurantComponent implements OnInit {
 
 
 	onEditRestaurant() {
-
 		if (!this.inputImageUser.nativeElement.value || this.inputImageUser.nativeElement.value === undefined) {
-
 			const restaurant = {
 				address: this.address,
 				description: this.description,
@@ -179,7 +147,6 @@ export class EditRestaurantComponent implements OnInit {
 				title: this.title,
 				image: this.firebase_url,
 			}
-
 			this.firebaseService.updateRestaurant(this.id, restaurant).then(res => {
 				alertFunctions.showSuccess('Sucesso!', 'Loja Salva');
 				this.loading = false;
@@ -191,8 +158,6 @@ export class EditRestaurantComponent implements OnInit {
 		}
 
 		if (this.inputImageUser.nativeElement.value) {
-
-
 			const restaurant = {
 				address: this.address,
 				description: this.description,
@@ -206,9 +171,6 @@ export class EditRestaurantComponent implements OnInit {
 				title: this.title,
 				image: this.inputImageUser.nativeElement.value,
 				firebase_url: this.inputImageUser.nativeElement.value,
-				// image: this.image,
-
-
 			}
 
 			this.firebaseService.updateRestaurantWithImage(this.id, restaurant).then(res => {
@@ -228,8 +190,6 @@ export class EditRestaurantComponent implements OnInit {
 	}
 
 	onChange($event) {
-		//let file = $event.target.files[0]; // <--- File Object for future use.
-		console.log($event);
 		this.image = $event; // <--- File Object for future use.
 	}
 
@@ -241,7 +201,10 @@ export class EditRestaurantComponent implements OnInit {
 
 		const ref = this.storage.ref(filePath);
 		const task = this.storage.upload(filePath, file);
-		this.uploadPercent = task.percentageChanges();
+		task.percentageChanges().subscribe(
+			(percent: number) => {
+				this.percent = percent;
+			});
 		task.snapshotChanges().pipe(finalize(() => this.urlImage = ref.getDownloadURL())).subscribe();
 
 	}

@@ -34,26 +34,14 @@ export class RestaurantsComponent implements OnInit {
     this.firebaseService.getRestaurants().snapshotChanges().subscribe(stores => {
       this.stores = [];
       stores.forEach(item => {
-        console.log(item);
-
-
         const a = item.payload.toJSON();
         a['$key'] = item.key;
-
-        console.log(a);
-
         this.stores.push(a as RestaurantInterface);
-
-
-
       });
     });
   }
 
-
   ngOnInit() { }
-
-
 
   onRestaurantDelete(id) {
 
@@ -63,8 +51,6 @@ export class RestaurantsComponent implements OnInit {
   }
 
   goToRestaurantDetails(store) {
-    console.log(store);
-
     this.router.navigate(['/restaurants']);
   }
 

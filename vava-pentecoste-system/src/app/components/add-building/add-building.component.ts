@@ -64,25 +64,15 @@ export class AddBuildingComponent implements OnInit {
   }
 
    ngOnInit() {
-	  
 		this.firebaseService.getBuildings().snapshotChanges().subscribe(buildings => { // Using snapshotChanges() method to retrieve list of data along with metadata($key)
       this.buildings = [];
       
 	  buildings.forEach(item => {
 		  
-		  console.log(item);
-		  
-	
-		 let a = item.payload.toJSON(); 
+		 let a = item.payload.toJSON();
         a['$key'] = item.key;
-		
-		console.log(a);
-		
         this.buildings.push(a as BuildingInterface);
-		
-		
-        
-      })
+      });
     });
 	  
   }

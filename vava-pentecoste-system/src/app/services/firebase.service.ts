@@ -141,19 +141,13 @@ export class FirebaseService {
   }
 
   getItemEditExtraDetail(id) {
-
-    console.log(this.productId);
-
     this.extraItemDetail = this.af.object('/items/' + this.productId + '/extraOptions/' + id) as AngularFireObject<Extra>;
     return this.extraItemDetail;
-
   }
 
   getItemExtraDetail(id) {
-
     this.extraItemList = this.af.list('/items/' + id + '/extraOptions/') as AngularFireList<Extra[]>
     return this.extraItemList;
-
   }
 
   setProductId(id) {
@@ -165,9 +159,6 @@ export class FirebaseService {
   }
 
   addExtraItem(id, extraItem) {
-    console.log(id);
-    console.log(extraItem);
-
     return firebase.database().ref('/items').child(id).child("extraOptions").push({
       name: extraItem.name,
       selected: "false",
@@ -176,8 +167,6 @@ export class FirebaseService {
   }
 
   addStripeConfiguration(stripe) {
-    console.log(stripe);
-
     this.stripe.set({
       publishable: stripe.publishable,
       secret: stripe.secret
@@ -185,8 +174,6 @@ export class FirebaseService {
   }
 
   addPaypalConfiguration(paypal) {
-    console.log(paypal);
-
     this.paypal.set({
       sandbox: paypal.sandbox,
       production: paypal.production
@@ -235,11 +222,11 @@ export class FirebaseService {
   }
 
   addNewUser(user) {
-    return this.users.push(user.email.split('@')[0]).update(user);
+    return this.af.object('/users/' + user.email.split('@')[0]).update(user);
   }
 
-  getUserDetails(id) {
-    this.userDetail = this.af.object('/users/' + id) as AngularFireObject<User>;
+  getUserDetails(user) {
+    this.userDetail =  this.af.object('/users/' + user.email.split('@')[0]) as AngularFireObject<User>;
     return this.userDetail;
   }
 
@@ -267,7 +254,6 @@ export class FirebaseService {
 
   deleteStreet(streetKey) {
     return this.streets.remove(streetKey);
-
   }
 
   getStreets() {
@@ -280,7 +266,6 @@ export class FirebaseService {
 
   deleteDistrict(districtKey) {
     return this.districts.remove(districtKey);
-
   }
 
   getCities() {
@@ -294,9 +279,6 @@ export class FirebaseService {
 
 
   updateRestaurantOrderStatus(id, order_details) {
-
-    console.log(id);
-    console.log(order_details);
     return firebase.database().ref('/orders').child(id).update({
       status: order_details.status
     });
@@ -318,134 +300,75 @@ export class FirebaseService {
   }
 
   addItem(item) {
-
     let storageRefItem = firebase.storage().ref();
-    for (let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]) {
-
-      //let path = '/${this.folder}/${selectedFile.name}';
-      let pathItem = `/${this.itemFolder}/${selectedItemFile.name}`;
-      let iRefItem = storageRefItem.child(pathItem);
-      return iRefItem.put(selectedItemFile).then((snapshot) => {
+    let selectedItemFile = item.image;
+    let pathItem = `/${this.itemFolder}/${selectedItemFile.name}`;
+    let iRefItem = storageRefItem.child(pathItem);
+    return iRefItem.put(selectedItemFile).then((snapshot) => {
         item.image = pathItem;
-
         let storageRef = firebase.storage().ref();
         let spaceRef = storageRef.child(item.image);
-
-        console.log(item.image);
         return storageRef.child(item.image).getDownloadURL().then((url) => {
-          // Set image url
-          console.log(url);
-
-
           item.image_firebase_url = url;
-
           return this.items.push(item);
-
-        }).catch((error) => {
-          console.log(error);
         });
-
-        //return this.items.push(item);
       });
-    }
-
   }
 
   updateItemWithImage(id, item) {
-
     return this.items.update(id, item);
-
   }
 
   updateItem(id, item) {
-
     return this.items.update(id, item);
-
   }
 
   deleteItem(id) {
-
     return this.items.remove(id);
-
   }
 
   getItemDetails(id) {
-
-    this.item_details = this.af.object('/items/' + id) as AngularFireObject<Item>
+    this.item_details = this.af.object('/items/' + id) as AngularFireObject<Item>;
     return this.item_details;
   }
 
   getItems() {
     return this.items;
-
   }
 
 
   deleteCategory(id) {
-
     return this.categories.remove(id);
-
   }
 
   updateCategoryWithImage(id, category) {
-
-
     return this.categories.update(id, category);
-
-
-
   }
 
   updateCategory(id, category) {
     return this.categories.update(id, category);
   }
 
-
   getCategoryDetails(cat_id) {
     this.category_details = this.af.object('/category/' + cat_id) as AngularFireObject<Category>
     return this.category_details;
-
   }
 
   addCategory(category) {
-
-
-    let storageRefItem = firebase.storage().ref();
-    for (let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]) {
-
-      
-      let pathItem = `/${this.categoryFolder}/${selectedItemFile.name}`;
-      let iRefItem = storageRefItem.child(pathItem);
+    const storageRefItem = firebase.storage().ref();
+    const selectedItemFile = category.image;
+    const pathItem = `/${this.categoryFolder}/${selectedItemFile.name}`;
+      const iRefItem = storageRefItem.child(pathItem);
       return iRefItem.put(selectedItemFile).then((snapshot) => {
         category.image = pathItem;
-
-        let storageRef = firebase.storage().ref();
-        let spaceRef = storageRef.child(category.image);
-
-        console.log(category.image);
+        const storageRef = firebase.storage().ref();
+        const spaceRef = storageRef.child(category.image);
         return storageRef.child(category.image).getDownloadURL().then((url) => {
-
-          console.log(url);
-
-
           category.firebase_url = url;
-
           return this.categories.push(category);
-
-        }).catch((error) => {
-          console.log(error);
         });
-
-
-
       });
-    }
-
-
-
-
   }
-
 
   getCategories() {
     this.categories = this.af.list('/category') as AngularFireList<Category[]>
@@ -453,19 +376,11 @@ export class FirebaseService {
   }
 
   updateRestaurant(id, restaurant) {
-
     return this.restaurants.update(id, restaurant);
-
   }
 
-
   updateRestaurantWithImage(id, restaurant) {
-
-
     return this.restaurants.update(id, restaurant);
-
-
-
   }
 
   getRestaurantDetails(id) {
@@ -475,77 +390,34 @@ export class FirebaseService {
 
   restaurantCategory: AngularFireList<any>;
   getRestaurantCategories(id) {
-
-    //const uid = this.authService.getUserId();
-
     this.restaurantCategory = this.af.list('/category/', ref => ref.orderByChild('res_name').equalTo(id)) as AngularFireList<Category>;
-    // .subscribe(data => {
-    //  console.log(data);
-    //});
     return this.restaurantCategory;
   }
 
-  /**
-      this.restaurantCategory = this.af.list('/category/',
-              {
-            query: {
-              orderByChild: 'res_name',
-              equalTo: id
-            }
-            }) as AngularFireList<Category>;
-        return this.restaurantCategory;
-      }
-  	
-    */
-
   deleteRestaurant(id) {
-
     return this.restaurants.remove(id);
-
-
-
   }
 
   getRestaurants() {
-
     return this.restaurants;
   }
 
   addRestaurant(restaurant) {
     let storageRefItem = firebase.storage().ref();
     for (let selectedItemFile of [(<HTMLInputElement>document.getElementById('image')).files[0]]) {
-
-      //let path = '/${this.folder}/${selectedFile.name}';
       let pathItem = `/${this.restaurantFolder}/${selectedItemFile.name}`;
       let iRefItem = storageRefItem.child(pathItem);
       return iRefItem.put(selectedItemFile).then((snapshot) => {
         restaurant.image = pathItem;
-
         let storageRef = firebase.storage().ref();
         let spaceRef = storageRef.child(restaurant.image);
-
-        console.log(restaurant.image);
         return storageRef.child(restaurant.image).getDownloadURL().then((url) => {
-          // Set image url
-          console.log(url);
-
-
           restaurant.firebase_url = url;
-
           return this.restaurants.push(restaurant);
-
-        }).catch((error) => {
-          console.log(error);
         });
-
-
-
       });
     }
-
-
   }
-
 
   getNotifications() {
     return this.notifications;
@@ -564,12 +436,10 @@ export class FirebaseService {
     return this.restaurant;
   }
 
-
   getDashBoardData() {
     this.dashboard = this.af.object('/dashboard') as AngularFireObject<Dashboard>;
     return this.dashboard;
   }
-
 }
 
 
@@ -656,6 +526,7 @@ interface User {
   lat?: string;
   lng?: string;
   phone?: string;
+  role?: string;
 }
 
 
