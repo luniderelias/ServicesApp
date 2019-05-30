@@ -60,7 +60,7 @@ export class OrderDetailsComponent implements OnInit {
 				});
 			}
 			switch (this.order_details.payments.PaymentType) {
-				case 'card':
+				case 'credit':
 				this.paymentType = 'Cartão de Crédito';
 				break;
 				case 'debit':

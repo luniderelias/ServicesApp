@@ -48,9 +48,8 @@ export class OrdersPage implements OnInit {
 		this.service.getMyOrderList().snapshotChanges().subscribe(snapshot => {
 			this.myOrderList = [];
 			snapshot.forEach(snap => {
-					 let a = snap.payload.val();
+					let a = snap.payload.val();
 					a['$key'] = snap.key;
-					a['total'] = this.formatMoney(a['total']);
 					this.myOrderList.push(a as OrderInterface);
 				});
 			this.myOrderList = this.myOrderList.reverse();
@@ -59,34 +58,39 @@ export class OrdersPage implements OnInit {
 	  }
 	  
 	  
-	formatMoney(n) {
-		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+	  formatMoney(n) {
+		if (n) {
+		  const num = parseFloat(n);
+		  return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+		} else {
+		  return;
+		}
 	}
 
 }
 
 export interface OrderInterface {
 
-	$key?:string;
-	addresses?:any;
+	$key?: string;
+	addresses?: any;
 	customerDetails?: any;
 	items?: any;
 	payments: any;
-	address_id?:string;
-	created?:string;
-	item_qty?:string;
-	order_date_time?:string;
-	payment_id?:string;
-	product_firebase?:string;
-	product_id?:string;
-	product_image?:string;
-	product_price?:string;
-	product_total_price?:string;
-	restaurant_id?:string;
-	restaurant_name?:string;
-	status?:string;
-	user_id?:string;
-	user_name?:string;
-	restaurant_owner_id?:string;
-	checked?:string;
-  }
+	address_id?: string;
+	created?: string;
+	item_qty?: string;
+	order_date_time?: string;
+	payment_id?: string;
+	product_firebase?: string;
+	product_id?: string;
+	product_image?: string;
+	product_price?: string;
+	product_total_price?: string;
+	restaurant_id?: string;
+	restaurant_name?: string;
+	status?: string;
+	user_id?: string;
+	user_name?: string;
+	restaurant_owner_id?: string;
+	checked?: string;
+}

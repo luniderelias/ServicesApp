@@ -3,32 +3,34 @@ const admin = require('firebase-admin');
 const app = admin.initializeApp();
 
 exports.onOrderStatusChange = functions.database.ref('/orders/{order_id}')
-.onWrite(async (change: any, context: any) => {
-  const order: any = change.after.val();
-  if (change.before.val().status !== null) {
-    const order_id = context.params.order_id;
-    const status = order.status;
-    if(status !== 'Pendente'){
-    sendNotificationToUser(
-      admin.database().ref(`/devices/` + order.uid).once('value'),
-      getStatusChangePayload(order_id, getStatusString(status))).catch(res => {
-        // teste
-       });
+  .onWrite(async (change: any, context: any) => {
+    const order: any = change.after.val();
+    if (change.before.val()) {
+      if (change.before.val().status !== null) {
+        const order_id = context.params.order_id;
+        const status = order.status;
+        if (status !== 'Pendente') {
+          sendNotificationToUser(
+            admin.database().ref(`/devices/` + order.uid).once('value'),
+            getStatusChangePayload(order_id, getStatusString(status))).catch(res => {
+              // teste
+            });
+        }
+      }
     }
-  }
 
-  if(order.status === 'Finalizado') {
-    saveTotalFinishedSales(order);
-    saveTotalFinishedOrders();
-  }
+    if (order.status === 'Finalizado') {
+      saveTotalFinishedSales(order);
+      saveTotalFinishedOrders();
+    }
 
-  if(order.status === 'Cancelado Pela Loja') {
-    retrieveStock(order);
-  }
-  return true;
-});
+    if (order.status === 'Cancelado Pela Loja') {
+      retrieveStock(order);
+    }
+    return true;
+  });
 
-function getStatusChangePayload(order_id: any, status: string){
+function getStatusChangePayload(order_id: any, status: string) {
   return {
     'notification': {
       'title': 'Pedido Atualizado',
@@ -40,8 +42,8 @@ function getStatusChangePayload(order_id: any, status: string){
   };
 }
 
-function getStatusString(status:string){
-  switch(status){
+function getStatusString(status: string) {
+  switch (status) {
     case 'Pendente':
       return 'está aguardando confirmação';
     case 'Em Andamento':
@@ -49,52 +51,63 @@ function getStatusString(status:string){
     case 'Saiu para Entrega':
       return 'saiu para entrega';
     case 'Finalizado':
-        return 'foi finalizado';
+      return 'foi finalizado';
     case 'Cancelado Pela Loja':
-        return 'foi cancelado pela loja, entre em contato para mais informações';
+      return 'foi cancelado pela loja, entre em contato para mais informações';
     default:
       return 'está aguardando confirmação';
   }
 }
 
 exports.onNewOrderReceived = functions.database.ref('/orders/{order_id}')
-.onWrite(async (change: any, context: any) => {
-  const order: any = change.after.val();
-  if (change.before.val() === null) {
-    const order_id = context.params.order_id;
-    dealWithNotifications(getNewOrderPayload(order, order_id)).catch(res => {
-      // teste
-     });
-     
-    saveStock(order);
+  .onWrite(async (change: any, context: any) => {
+    const order: any = change.after.val();
+    if (change.before.val() === null) {
+      const order_id = context.params.order_id;
+      try {
+        dealWithNotifications(getNewOrderPayload(order, order_id)).catch(res => {
+          console.log(res);
+        });
+      } catch (error) {
+        console.log(error);
+      };
+      try {
+        saveStock(order);
+      } catch (error) {
+        console.log(error);
+      }
 
-    saveDashboardData(order);
-  }
-  return true;
-});
+      try {
+        saveDashboardData(order);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    return true;
+  });
 
-async function dealWithNotifications(payload:any) {
-  saveNotification('/notifications/admin',payload);
-  saveNotification('/notifications/store_one',payload);
+async function dealWithNotifications(payload: any) {
+  saveNotification('/notifications/admin', payload);
+  saveNotification('/notifications/store_one', payload);
 
   sendNotificationToUser(
-    admin.database().ref(`/fcmTokens/admin`).once('value'),payload).catch(res => {
-      //
+    admin.database().ref(`/fcmTokens/admin`).once('value'), payload).catch(res => {
+      console.log(res);
     });
-  
-  
+
+
   sendNotificationToUser(
-    admin.database().ref(`/fcmTokens/store_one`).once('value'),payload).catch(res => {
-      //
+    admin.database().ref(`/fcmTokens/store_one`).once('value'), payload).catch(res => {
+      console.log(res)
     });
 }
 
-function getNewOrderPayload(order: any, order_id: any){
+function getNewOrderPayload(order: any, order_id: any) {
   return {
     'notification': {
       'title': 'Novo Pedido',
       'body': 'Novo Pedido de ' + order.customerDetails.displayName + ' │  Valor R$' + formatMoney(order.total) + ' │ Entregar em: ' + order.addresses.street + ', ' + order.addresses.number
-      + ' │ Telefone: '+ order.addresses.phone + getPaymentTypeText(order),
+        + ' │ Telefone: ' + order.addresses.phone + getPaymentTypeText(order),
     },
     'data': {
       'order_id': order_id
@@ -102,8 +115,8 @@ function getNewOrderPayload(order: any, order_id: any){
   };
 }
 
-function getPaymentTypeText(order:any){
-  switch(order.payments.PaymentType){
+function getPaymentTypeText(order: any) {
+  switch (order.payments.PaymentType) {
     case 'cash':
       return ' │ Pagamento: À vista, troco para : R$' + formatMoney(order.payments.PaymentChange);
     case 'credit':
@@ -115,12 +128,12 @@ function getPaymentTypeText(order:any){
   }
 }
 
-function saveNotification(path:string, payload:any){
+function saveNotification(path: string, payload: any) {
   admin.database()
-  .ref(path).push(payload);
+    .ref(path).push(payload);
 }
 
-async function sendNotificationToUser(tokensPromise:any,payload:any) {
+async function sendNotificationToUser(tokensPromise: any, payload: any) {
   let tokensSnapshot;
   let tokens: any;
   const results = await Promise.all([tokensPromise]);
@@ -128,127 +141,131 @@ async function sendNotificationToUser(tokensPromise:any,payload:any) {
 
   tokens = tokensSnapshot.val();
 
-const response = await admin.messaging().sendToDevice(tokens, payload);
-response.results.forEach((result: any, index: any) => {
-  const error = result.error;
-  if (error) {
-    console.error('Failure sending notification to', tokens[index], error);
-  }
-});
-return true;
+  const response = await admin.messaging().sendToDevice(tokens, payload);
+  response.results.forEach((result: any, index: any) => {
+    const error = result.error;
+    if (error) {
+      console.error('Failure sending notification to', tokens[index], error);
+    }
+  });
+  return true;
 }
 
-function saveDashboardData(order:any) {
+function saveDashboardData(order: any) {
   saveTotalSales(order);
   saveTotalOrders();
   saveDailyRevenue(order);
   saveDailyOrders(order);
 }
 
-function saveTotalSales(order:any){
-  admin.database().ref(`/dashboard/totalSales`).once('value').then(function (snap:any) {
-      const totalSales = snap.val() + order.total;
-      admin.database()
-      .ref(`/dashboard`).update({'totalSales': totalSales});
+function saveTotalSales(order: any) {
+  admin.database().ref(`/dashboard/totalSales`).once('value').then(function (snap: any) {
+    const totalSales = snap.val() + order.total;
+    admin.database()
+      .ref(`/dashboard`).update({ 'totalSales': totalSales });
   });
 }
 
-function saveTotalOrders(){
-  admin.database().ref(`/dashboard/totalOrders`).once('value').then(function (snap:any) {
+function saveTotalOrders() {
+  admin.database().ref(`/dashboard/totalOrders`).once('value').then(function (snap: any) {
     const totalOrders = snap.val() + 1;
     admin.database()
-    .ref(`/dashboard`).update({'totalOrders':totalOrders});
+      .ref(`/dashboard`).update({ 'totalOrders': totalOrders });
   });
 }
 
-function saveDailyRevenue(order:any){
-  admin.database().ref(`/dashboard/dailyRevenue`).once('value').then(function (snap:any) {
+function saveDailyRevenue(order: any) {
+  admin.database().ref(`/dashboard/dailyRevenue`).once('value').then(function (snap: any) {
     const currentTime = order.timeStamp;
     const dailyRevenue = snap.val();
-    const currentDay = Math.floor(currentTime/86400000);
-    const lastDay = Math.floor(dailyRevenue.labels[dailyRevenue.labels.length - 1]/86400000);
-    if(currentDay > lastDay){
+    const currentDay = Math.floor(currentTime / 86400000);
+    const lastDay = Math.floor(dailyRevenue.labels[dailyRevenue.labels.length - 1] / 86400000);
+    if (currentDay > lastDay) {
       dailyRevenue.labels.push(currentTime);
       dailyRevenue.series.push(order.total);
       admin.database()
-        .ref(`/dashboard`).update({'dailyRevenue':dailyRevenue});
-    }else {
+        .ref(`/dashboard`).update({ 'dailyRevenue': dailyRevenue });
+    } else {
       dailyRevenue.labels[dailyRevenue.series.length - 1] = currentTime;
       dailyRevenue.series[dailyRevenue.series.length - 1] += order.total;
       admin.database()
-        .ref(`/dashboard`).update({'dailyRevenue':dailyRevenue});
+        .ref(`/dashboard`).update({ 'dailyRevenue': dailyRevenue });
     }
   });
 }
 
-function saveDailyOrders(order:any){
-  admin.database().ref(`/dashboard/dailyOrders`).once('value').then(function (snap:any) {
+function saveDailyOrders(order: any) {
+  admin.database().ref(`/dashboard/dailyOrders`).once('value').then(function (snap: any) {
     const currentTime = order.timeStamp;
     const dailyOrders = snap.val();
-    const currentDay = Math.floor(currentTime/86400000);
-    const lastDay = Math.floor(dailyOrders.labels[dailyOrders.labels.length - 1]/86400000);
-    if(currentDay > lastDay){
+    const currentDay = Math.floor(currentTime / 86400000);
+    const lastDay = Math.floor(dailyOrders.labels[dailyOrders.labels.length - 1] / 86400000);
+    if (currentDay > lastDay) {
       dailyOrders.labels.push(currentTime);
       dailyOrders.series.push(1);
       admin.database()
-        .ref(`/dashboard`).update({'dailyOrders':dailyOrders});
-    }else {
+        .ref(`/dashboard`).update({ 'dailyOrders': dailyOrders });
+    } else {
       dailyOrders.labels[dailyOrders.series.length - 1] = currentTime;
       dailyOrders.series[dailyOrders.series.length - 1] += 1;
       admin.database()
-        .ref(`/dashboard`).update({'dailyOrders':dailyOrders});
+        .ref(`/dashboard`).update({ 'dailyOrders': dailyOrders });
     }
   });
 }
 
-  
-function saveTotalFinishedSales(order:any){
-admin.database().ref(`/dashboard/finishedSales`).once('value').then(function (snap:any) {
+
+function saveTotalFinishedSales(order: any) {
+  admin.database().ref(`/dashboard/finishedSales`).once('value').then(function (snap: any) {
     const finishedSales = snap.val() + order.total;
     admin.database()
-    .ref(`/dashboard`).update({'finishedSales': finishedSales});
-});
+      .ref(`/dashboard`).update({ 'finishedSales': finishedSales });
+  });
 }
 
-function saveTotalFinishedOrders(){
-  admin.database().ref(`/dashboard/finishedOrders`).once('value').then(function (snap:any) {
+function saveTotalFinishedOrders() {
+  admin.database().ref(`/dashboard/finishedOrders`).once('value').then(function (snap: any) {
     const finishedOrders = snap.val() + 1;
     admin.database()
-    .ref(`/dashboard`).update({'finishedOrders':finishedOrders});
+      .ref(`/dashboard`).update({ 'finishedOrders': finishedOrders });
   });
 }
 
-function saveStock(order:any){
-  order.items.forEach((item:any) => {
-    admin.database().ref(`/items`).child(item.product_id).once('value').then(function (snap:any) {
-    let stockLeft = snap.val().stock - item.quantity;
-    if(stockLeft <= 0){
-      stockLeft = 0;
-      saveNotification('/notifications/admin', getNoStockPayload(item));
-      sendNotificationToUser(admin.database().ref(`/fcmTokens/admin`).once('value'),getNoStockPayload(item)).catch(res => {
-        //return;
-      });
-    } else if(stockLeft < 5){
-      saveNotification('/notifications/admin', getLowStockPayload(item, stockLeft));
-      sendNotificationToUser(admin.database().ref(`/fcmTokens/admin`).once('value'),getLowStockPayload(item, stockLeft)).catch(res => {
-        //return;
-      });
-    }
-    admin.database().ref(`/items`).child(item.product_id).update({'stock': stockLeft});
+function saveStock(order: any) {
+  order.items.forEach((item: any) => {
+    admin.database().ref(`/items`).child(item.product_id).once('value').then(function (snap: any) {
+      let stockLeft = snap.val().stock - item.quantity;
+      const popularity = snap.val().popularity + item.quantity;
+      if (stockLeft <= 0) {
+        stockLeft = 0;
+        saveNotification('/notifications/admin', getNoStockPayload(item));
+        sendNotificationToUser(admin.database().ref(`/fcmTokens/admin`).once('value'), getNoStockPayload(item)).catch(res => {
+          //return;
+        });
+      } else if (stockLeft < 5) {
+        saveNotification('/notifications/admin', getLowStockPayload(item, stockLeft));
+        sendNotificationToUser(admin.database().ref(`/fcmTokens/admin`).once('value'), getLowStockPayload(item, stockLeft)).catch(res => {
+          //return;
+        });
+      }
+      admin.database().ref(`/items`).child(item.product_id).update({ 'stock': stockLeft });
+      admin.database().ref(`/items`).child(item.product_id).update({ 'popularity': popularity });
     });
   });
 }
 
-function retrieveStock(order:any){
-  order.items.forEach((item:any) => {
-    admin.database().ref(`/items`).child(item.product_id).once('value').then(function (snap:any) {
+function retrieveStock(order: any) {
+  order.items.forEach((item: any) => {
+    admin.database().ref(`/items`).child(item.product_id).once('value').then(function (snap: any) {
       const newStock = snap.val().stock + item.quantity;
-      admin.database().ref(`/items`).child(item.product_id).update({'stock': newStock});
+      const newPopularity = snap.val().popularity - item.quantity;
+      admin.database().ref(`/items`).child(item.product_id).update({ 'stock': newStock });
+      admin.database().ref(`/items`).child(item.product_id).update({ 'popularity': newPopularity });
     });
   });
 }
 
-function getLowStockPayload(item:any, stockLeft:any){
+function getLowStockPayload(item: any, stockLeft: any) {
   return {
     'notification': {
       'title': 'Produto com estoque baixo',
@@ -260,7 +277,7 @@ function getLowStockPayload(item:any, stockLeft:any){
   };
 }
 
-function getNoStockPayload(item:any){
+function getNoStockPayload(item: any) {
   return {
     'notification': {
       'title': 'Produto Esgotado!',
@@ -272,8 +289,13 @@ function getNoStockPayload(item:any){
   };
 }
 
-function formatMoney(n:any) {
-  return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+function formatMoney(n: any) {
+  if(n) {
+    const number = parseFloat(n);
+    return number.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+  } else {
+    return;
+  }
 }
 
 

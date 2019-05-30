@@ -140,12 +140,12 @@ export class ChooseAddressPage implements OnInit {
   placeOrder(item) {
     if (this.values.isLoggedIn) {
       this.currentUser = firebase.auth().currentUser;
-      if (this.cod === 'cash' || this.cod === 'debit' || this.cod === 'card') {
+      if (this.cod === 'cash' || this.cod === 'debit' || this.cod === 'credit') {
         if (this.cod === 'cash') {
           this.finalPrice = this.formatMoney(this.service.total - (0.1 * this.service.total)
             + this.currentUserAddress.fare);
           this.presentNeedsChange(item);
-        } else if (this.cod === 'card') {
+        } else if (this.cod === 'credit') {
           this.finalPrice = this.formatMoney(this.service.total + this.currentUserAddress.fare);
           this.presentConfirmAlert(item, 'Total a pagar com Frete: R$' + this.finalPrice);
         } else if (this.cod === 'debit') {
@@ -330,6 +330,11 @@ async presentNeedsPhone(item) {
 
   
 	formatMoney(n) {
-		return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+    if (n) {
+      const num = parseFloat(n);
+      return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+    } else {
+      return;
+    }
 	}
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ROUTES_ADMIN, ROUTES_STORE_ONE } from './sidebar-routes.config';
-import { RouteInfo } from "./sidebar.metadata";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ROUTES_ADMIN, ROUTES_STORE_ONE, ROUTES_SUPER_ADMIN } from './sidebar-routes.config';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 declare var $: any;
@@ -22,6 +21,9 @@ export class SidebarComponent implements OnInit {
     ngOnInit() {
         $.getScript('./assets/js/app-sidebar.js');
         switch (localStorage.getItem('current_user_role')) {
+            case 'super_admin':
+                this.menuItems = ROUTES_SUPER_ADMIN.filter(menuItem => menuItem);
+                break;
             case 'admin':
                 this.menuItems = ROUTES_ADMIN.filter(menuItem => menuItem);
                 break;
