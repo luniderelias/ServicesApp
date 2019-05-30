@@ -344,7 +344,7 @@ export class ServiceProvider {
 
 	getAllChooseItems(): any {
 		return this.af.list('/items', (ref) => {
-			return ref.limitToFirst(20).orderByChild('popularity');
+			return ref.limitToLast(20).orderByChild('popularity');
 		});
 	}
 

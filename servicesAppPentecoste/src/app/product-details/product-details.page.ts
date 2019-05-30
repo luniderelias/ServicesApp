@@ -101,7 +101,7 @@ export class ProductDetailsPage implements OnInit {
 				this.params.data.name = snapshot.val().name;
 				this.params.data.percent = snapshot.val().percent;
 				this.params.data.price = snapshot.val().price;
-				this.params.data.real_price =  snapshot.val().price;
+				this.params.data.real_price = snapshot.val().price;
 				this.productPrice = this.formatMoney(snapshot.val().price);
 				this.params.data.stock = snapshot.val().stock;
 				this.params.data.cod = snapshot.val().product_id;
@@ -118,7 +118,7 @@ export class ProductDetailsPage implements OnInit {
 
 	addToCart(cod, categories, category, stock, name, price, image, extra) {
 		let itemAdded = false;
-		
+
 		for (const item in this.service.cart.line_items) {
 			if (this.id === this.service.cart.line_items[item].product_id) {
 				if (stock <= 0) {
@@ -242,14 +242,18 @@ export class ProductDetailsPage implements OnInit {
 	}
 
 	getFavoriteItem() {
-		this.service.getFavoriteItem(this.id).on('value', (snapshot) => {
-			if (snapshot.val() == null) {
-				this.favorite = false;
-			} else {
-				this.favorite = true;
-			}
+		try {
+			this.service.getFavoriteItem(this.id).on('value', (snapshot) => {
+				if (snapshot.val() == null) {
+					this.favorite = false;
+				} else {
+					this.favorite = true;
+				}
+				this.loading = false;
+			});
+		} catch (error) {
 			this.loading = false;
-		});
+		}
 	}
 
 	addToFavourite(data) {
@@ -301,7 +305,7 @@ export class ProductDetailsPage implements OnInit {
 			}
 		}
 	}
-	
+
 
 	async presentConfirmAlert(cod, categories, category, stock, name, price, image, extra) {
 		if (stock <= 0) {
@@ -331,10 +335,10 @@ export class ProductDetailsPage implements OnInit {
 
 	formatMoney(n) {
 		if (n) {
-		  const num = parseFloat(n);
-		  return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+			const num = parseFloat(n);
+			return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
 		} else {
-		  return;
+			return;
 		}
 	}
 }
