@@ -29,7 +29,7 @@
         <ion-virtual-scroll [items]="productsList">
             <div class="movie" *virtualItem="let item">
                 <div class="poster" [routerLink]="['/product-details',{id: item.$key, title: item.name, owner_id: item.res_id, cat_id: item.categories, res_name: item.restaurant_name}]">
-                    <img class="poster-effect" [src]="item.image">
+                    <img class="poster-effect" [src]="item.image_firebase_url">
                 </div>
                 <div class="data" [routerLink]="['/product-details',{id: item.$key, title: item.name, owner_id: item.res_id, cat_id: item.categories, res_name: item.restaurant_name}]">
                     <div class="title max-lines">{{item.name}}</div>

@@ -229,9 +229,7 @@ export class ServiceProvider {
 
 
 	getFavoriteItem(id): any {
-		var uid = firebase.auth().currentUser.uid;
-
-		this.favoriteItem = this.restaurantUserInfo.child(uid).child('favorites').child(id);
+		this.favoriteItem = this.restaurantUserInfo.child(firebase.auth().currentUser.uid).child('favorites').child(id);
 		return this.favoriteItem;
 	}
 
