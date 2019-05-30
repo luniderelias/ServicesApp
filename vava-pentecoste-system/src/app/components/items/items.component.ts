@@ -68,11 +68,12 @@ export class ItemsComponent implements OnInit {
   }
   
 	formatMoney(n) {
-    if (n) {
-      return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
-      } else {
-          return '';
-      }
-    }
+		if (n) {
+			const num = parseFloat(n);
+		    return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+        } else {
+            return '';
+        }
+	}
 
 }

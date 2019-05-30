@@ -5512,7 +5512,8 @@ var EcommerceComponent = /** @class */ (function () {
     };
     EcommerceComponent.prototype.formatMoney = function (n) {
         if (n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+            var num = parseFloat(n);
+            return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
         }
         else {
             return '';

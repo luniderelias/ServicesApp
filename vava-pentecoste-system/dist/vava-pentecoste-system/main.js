@@ -3814,7 +3814,8 @@ var ItemDetailsComponent = /** @class */ (function () {
     };
     ItemDetailsComponent.prototype.formatMoney = function (n) {
         if (n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+            var num = parseFloat(n);
+            return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
         }
         else {
             return '';
@@ -3927,7 +3928,8 @@ var ItemsComponent = /** @class */ (function () {
     };
     ItemsComponent.prototype.formatMoney = function (n) {
         if (n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+            var num = parseFloat(n);
+            return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
         }
         else {
             return '';
@@ -4501,7 +4503,8 @@ var OrderDetailsComponent = /** @class */ (function () {
     };
     OrderDetailsComponent.prototype.formatMoney = function (n) {
         if (n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+            var num = parseFloat(n);
+            return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
         }
         else {
             return '';
@@ -4633,7 +4636,8 @@ var OrdersComponent = /** @class */ (function () {
     };
     OrdersComponent.prototype.formatMoney = function (n) {
         if (n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+            var num = parseFloat(n);
+            return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
         }
         else {
             return '';
@@ -6396,7 +6400,8 @@ var ViewExtraFoodComponent = /** @class */ (function () {
     };
     ViewExtraFoodComponent.prototype.formatMoney = function (n) {
         if (n) {
-            return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+            var num = parseFloat(n);
+            return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
         }
         else {
             return '';

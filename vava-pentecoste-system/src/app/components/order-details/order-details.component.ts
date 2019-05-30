@@ -134,7 +134,8 @@ export class OrderDetailsComponent implements OnInit {
 	
 	formatMoney(n) {
 		if (n) {
-		    return n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+			const num = parseFloat(n);
+		    return num.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
         } else {
             return '';
         }
