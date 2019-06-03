@@ -47,7 +47,7 @@ export class AppComponent {
     this.fireAuth = firebase.auth();
 
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
+      if (user !== null && user !== undefined) {
         this.notificationSetup(user.uid);
         this.values.userRole = firebase.database().ref('/users').child(user.uid).on('value', snapshot => {
           if (snapshot.val()) {
@@ -59,8 +59,8 @@ export class AppComponent {
     });
 
 
-    const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user !== null && user !== undefined) {
         this.values.isLoggedIn = true;
         this.values.userRole = firebase.database().ref('/Customer-Role').child(user.uid).on('value', snapshot => {
           if (snapshot.val()) {
@@ -73,7 +73,7 @@ export class AppComponent {
     });
 
     this.events.subscribe('user: change', (user) => {
-      if (user || user != null) {
+      if (user !== null && user !== undefined) {
         this.user = user;
 
         this.values.isLoggedIn = true;
@@ -91,7 +91,7 @@ export class AppComponent {
 
     this.storage.ready().then(() => {
       this.storage.get('user').then((val) => {
-        if (val != null) {
+        if (val !== null && val !== undefined) {
           this.user = val;
           this.router.navigateByUrl('home');
           this.menuCtrl.enable(true);
