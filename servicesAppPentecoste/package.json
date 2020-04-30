@@ -79,7 +79,7 @@
     "firebase": "^5.8.0",
     "font-awesome": "^4.7.0",
     "intl": "1.2.5",
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "mx.ferreyra.callnumber": "~0.0.2",
     "ng-chartist": "1.1.1",
     "ng-snotify": "4.3.1",
