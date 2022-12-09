@@ -59,7 +59,7 @@
     "classlist.js": "1.1.20150312",
     "color": "^3.1.1",
     "cordova-android": "^8.0.0",
-    "cordova-browser": "5.0.4",
+    "cordova-browser": "6.0.0",
     "cordova-multidex": "git+https://github.com/jwall149/cordova-multidex.git",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-facebook4": "4.2.1",
